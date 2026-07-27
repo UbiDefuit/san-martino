@@ -13,6 +13,9 @@ export default function Gemello() {
   const [sel, setSel] = useState<Progetto | null>(null);
   const [panorama, setPanorama] = useState<{ foto: string; titolo: string } | null>(null);
   const [zoomed, setZoomed] = useState(false);
+  const [racconto, setRacconto] = useState(false);
+  const [sottotitolo, setSottotitolo] = useState('');
+  const raccontoRef = useRef(false);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -96,6 +99,26 @@ export default function Gemello() {
           .setLngLat([p.geo[1], p.geo[0]])
           .addTo(map);
       });
+      // strato notte + luci dei nuclei (per il finale del racconto)
+      map.addLayer({ id: 'notte', type: 'background', paint: { 'background-color': '#04070c', 'background-opacity': 0 } });
+      const NUCLEI: [number, number][] = [
+        [44.3872, 10.6893], [44.38848, 10.68408], [44.38401, 10.69270],
+        [44.3875, 10.6819], [44.38907, 10.66892],
+      ];
+      map.addSource('luci', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: NUCLEI.map((n, i) => ({ type: 'Feature', properties: { idx: i }, geometry: { type: 'Point', coordinates: [n[1], n[0]] } })) },
+      });
+      map.addLayer({
+        id: 'luci-glow', type: 'circle', source: 'luci',
+        filter: ['<', ['get', 'idx'], -1],
+        paint: { 'circle-color': '#ffd9a0', 'circle-radius': 18, 'circle-blur': 1, 'circle-opacity': 0.9 },
+      });
+      map.addLayer({
+        id: 'luci-core', type: 'circle', source: 'luci',
+        filter: ['<', ['get', 'idx'], -1],
+        paint: { 'circle-color': '#fff3d6', 'circle-radius': 4, 'circle-opacity': 1 },
+      });
       setReady(true);
     });
     mapRef.current = map;
@@ -110,6 +133,63 @@ export default function Gemello() {
     if (flyTimer.current) clearInterval(flyTimer.current);
     flyTimer.current = null;
     setFlying(false);
+  };
+
+  // "Il racconto della valle": tour cinematico con sottotitoli e finale notturno
+  const attesa = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  const stopRacconto = () => {
+    raccontoRef.current = false;
+    setRacconto(false); setSottotitolo('');
+    const map = mapRef.current;
+    if (map) {
+      map.setPaintProperty('notte', 'background-opacity', 0);
+      map.setFilter('luci-glow', ['<', ['get', 'idx'], -1]);
+      map.setFilter('luci-core', ['<', ['get', 'idx'], -1]);
+      map.easeTo({ center: [10.6905, 44.3838], zoom: 12.8, pitch: 60, bearing: 168, duration: 2000 });
+    }
+  };
+  const avviaRacconto = async () => {
+    const map = mapRef.current;
+    if (!map || racconto) return;
+    setRacconto(true);
+    raccontoRef.current = true;
+    const tappe: { c: [number, number]; z: number; p: number; b: number; t: string; hold: number }[] = [
+      { c: [10.66892, 44.38907], z: 15.6, p: 55, b: 150, t: 'La valle si apre a ovest — Croce di Santa Giulia, dove i campi incontrano il bosco.', hold: 2200 },
+      { c: [10.6819, 44.3875], z: 16.2, p: 55, b: 160, t: 'Carponi. Pietre che resistono da secoli.', hold: 2200 },
+      { c: [10.6893, 44.3872], z: 16.6, p: 55, b: 168, t: 'Il borgo di San Martino: la chiesa, il ritrovo, il cuore della frazione.', hold: 2600 },
+      { c: [10.69270, 44.38401], z: 16.6, p: 55, b: 175, t: 'Il Poggio — i tetti che vogliamo rivedere abitati.', hold: 2400 },
+      { c: [10.68408, 44.38848], z: 16.4, p: 55, b: 160, t: 'Ca\u2019 Rossi, sulla via che cuce la vallata.', hold: 2200 },
+      { c: [10.6894, 44.3790], z: 14.6, p: 62, b: 168, t: 'E sopra tutto il Monte San Martino: 6,2 km di sentieri riaperti a mano dai volontari.', hold: 2800 },
+    ];
+    try {
+      for (const tp of tappe) {
+        if (!raccontoRef.current) return;
+        setSottotitolo(tp.t);
+        map.flyTo({ center: tp.c, zoom: tp.z, pitch: tp.p, bearing: tp.b, duration: 3400 });
+        await attesa(3400 + tp.hold);
+      }
+      if (!raccontoRef.current) return;
+      // il finale: cala la notte, la valle si riaccende
+      setSottotitolo('Poi, una casa alla volta, la valle si è spenta.');
+      map.easeTo({ center: [10.6905, 44.3850], zoom: 13.3, pitch: 58, bearing: 168, duration: 3000 });
+      map.setPaintProperty('notte', 'background-opacity-transition' as any, { duration: 3500 } as any);
+      map.setPaintProperty('notte', 'background-opacity', 0.78);
+      await attesa(4800);
+      if (!raccontoRef.current) return;
+      setSottotitolo('Ogni progetto riaccende una luce.');
+      for (let i = 0; i < 5; i++) {
+        if (!raccontoRef.current) return;
+        map.setFilter('luci-glow', ['<=', ['get', 'idx'], i]);
+        map.setFilter('luci-core', ['<=', ['get', 'idx'], i]);
+        await attesa(900);
+      }
+      await attesa(1200);
+      if (!raccontoRef.current) return;
+      setSottotitolo('SAN MARTINO 2030 — LA VALLE CHE NON SI ARRENDE');
+      await attesa(4000);
+    } finally {
+      if (raccontoRef.current) stopRacconto();
+    }
   };
 
   const flyover = () => {
@@ -163,6 +243,13 @@ export default function Gemello() {
             ← Torna alla valle
           </button>
         )}
+        {sottotitolo && (
+          <div className="absolute inset-x-0 bottom-5 text-center px-10 pointer-events-none z-10">
+            <span className="inline-block bg-black/75 text-white text-sm sm:text-base px-5 py-3 leading-relaxed backdrop-blur animate-fade-in-up" key={sottotitolo}>
+              {sottotitolo}
+            </span>
+          </div>
+        )}
         {!ready && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-neutral-300 text-xs uppercase tracking-[0.2em]">
             Carico la valle…
@@ -198,6 +285,10 @@ export default function Gemello() {
             className="absolute top-4 right-4 bg-black/70 border border-neutral-600 text-white w-10 h-10 text-lg">✕</button>
         </div>
       )}
+      <button onClick={racconto ? stopRacconto : avviaRacconto} disabled={!ready}
+        className="w-full bg-white text-black px-3 py-3.5 font-semibold uppercase tracking-[0.15em] text-xs transition disabled:opacity-40 hover:bg-neutral-200">
+        {racconto ? 'Ferma il racconto' : '▶ Il racconto della valle (60s)'}
+      </button>
       <div className="grid grid-cols-2 gap-3">
         <button onClick={flyover}
           className="border border-neutral-700 text-white hover:border-white px-3 py-3.5 font-semibold uppercase tracking-[0.15em] text-xs transition">

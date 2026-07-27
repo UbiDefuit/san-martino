@@ -6,6 +6,18 @@ import { PROGETTI, Progetto } from './data';
 
 const eur = (n: number) => n.toLocaleString('it-IT') + ' €';
 
+// Luoghi verificati della frazione
+export const LUOGHI: { geo: [number, number]; nome: string; big?: boolean; zoom: number }[] = [
+  { geo: [44.38851, 10.68466], nome: 'San Martino', big: true, zoom: 16.8 },
+  { geo: [44.3872, 10.6893], nome: 'La Chiesa', zoom: 17.0 },
+  { geo: [44.38831, 10.69083], nome: 'Oratorio della Rondine', zoom: 17.0 },
+  { geo: [44.38740, 10.69393], nome: 'C\u00e0 Barbino', zoom: 16.8 },
+  { geo: [44.38599, 10.69274], nome: 'C\u00e0 Carloni', zoom: 16.8 },
+  { geo: [44.38437, 10.69189], nome: 'Il Poggio', zoom: 16.8 },
+  { geo: [44.38570, 10.70296], nome: 'C\u00e0 Marastoni', zoom: 16.8 },
+  { geo: [44.3790, 10.6894], nome: 'Monte San Martino', zoom: 15.2 },
+];
+
 export default function Gemello() {
   const mapRef = useRef<maplibregl.Map | null>(null);
   const flyTimer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -14,6 +26,13 @@ export default function Gemello() {
   const [panorama, setPanorama] = useState<{ foto: string; titolo: string } | null>(null);
   const [zoomed, setZoomed] = useState(false);
   const [racconto, setRacconto] = useState(false);
+  const [showSentiero, setShowSentiero] = useState(true);
+  const [showPerimetro, setShowPerimetro] = useState(true);
+  const [showBorghi, setShowBorghi] = useState(false);
+  const [showProgetti, setShowProgetti] = useState(true);
+  const [legenda, setLegenda] = useState(true);
+  const luoghiMk = useRef<maplibregl.Marker[]>([]);
+  const progettiMk = useRef<maplibregl.Marker[]>([]);
   const [sottotitolo, setSottotitolo] = useState('');
   const raccontoRef = useRef(false);
   const [ready, setReady] = useState(false);
@@ -48,17 +67,7 @@ export default function Gemello() {
       map.addSource('route', { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: TRACK.map((p) => [p[1], p[0]]) } } });
       map.addLayer({ id: 'route-glow', type: 'line', source: 'route', paint: { 'line-color': '#ffffff', 'line-width': 9, 'line-opacity': 0.25, 'line-blur': 4 } });
       map.addLayer({ id: 'route', type: 'line', source: 'route', paint: { 'line-color': '#ffffff', 'line-width': 3 } });
-      // toponimi della frazione — cliccabili: picchiata a livello case sull'ortofoto
-      const LUOGHI: { geo: [number, number]; nome: string; big?: boolean; zoom: number }[] = [
-        { geo: [44.38851, 10.68466], nome: 'SAN MARTINO', big: true, zoom: 16.8 },
-        { geo: [44.38740, 10.69393], nome: 'C\u00e0 Barbino', zoom: 16.8 },
-        { geo: [44.38599, 10.69274], nome: 'C\u00e0 Carloni', zoom: 16.8 },
-        { geo: [44.38437, 10.69189], nome: 'Il Poggio', zoom: 16.8 },
-        { geo: [44.3872, 10.6893], nome: 'La Chiesa', zoom: 17.0 },
-        { geo: [44.38831, 10.69083], nome: 'Oratorio della Rondine', zoom: 17.0 },
-        { geo: [44.38570, 10.70296], nome: 'C\u00e0 Marastoni', zoom: 16.8 },
-        { geo: [44.3790, 10.6894], nome: 'Monte San Martino', zoom: 15.2 },
-      ];
+      // toponimi — nascosti di default: si accendono dalla legenda
       LUOGHI.forEach((l) => {
         const el = document.createElement('button');
         el.className = 'gemello-label' + (l.big ? ' gemello-label-big' : '');
@@ -69,9 +78,11 @@ export default function Gemello() {
           setZoomed(true);
           map.flyTo({ center: [l.geo[1], l.geo[0]], zoom: l.zoom, pitch: 55, bearing: 168, duration: 2800 });
         });
-        new maplibregl.Marker({ element: el, anchor: 'center' })
+        el.style.display = 'none';
+        const mk = new maplibregl.Marker({ element: el, anchor: 'center' })
           .setLngLat([l.geo[1], l.geo[0]])
           .addTo(map);
+        luoghiMk.current.push(mk);
       });
 
       // punti panorama: entra nella foto reale del luogo
@@ -84,9 +95,9 @@ export default function Gemello() {
         el.textContent = '📷';
         el.title = pt.titolo;
         el.addEventListener('click', (e) => { e.stopPropagation(); setPanorama(pt); });
-        new maplibregl.Marker({ element: el, anchor: 'bottom' })
+        progettiMk.current.push(new maplibregl.Marker({ element: el, anchor: 'bottom' })
           .setLngLat([pt.geo[1], pt.geo[0]])
-          .addTo(map);
+          .addTo(map));
       });
 
       // pin dei progetti
@@ -96,9 +107,9 @@ export default function Gemello() {
         el.innerHTML = '<span></span>';
         el.title = p.titolo;
         el.addEventListener('click', (e) => { e.stopPropagation(); setSel(p); });
-        new maplibregl.Marker({ element: el, anchor: 'bottom' })
+        progettiMk.current.push(new maplibregl.Marker({ element: el, anchor: 'bottom' })
           .setLngLat([p.geo[1], p.geo[0]])
-          .addTo(map);
+          .addTo(map));
       });
       // perimetro indicativo della frazione di San Martino
       const PERIMETRO: [number, number][] = [
@@ -145,6 +156,28 @@ export default function Gemello() {
       mapRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    luoghiMk.current.forEach((m) => { m.getElement().style.display = showBorghi ? '' : 'none'; });
+  }, [showBorghi]);
+  useEffect(() => {
+    progettiMk.current.forEach((m) => { m.getElement().style.display = showProgetti ? '' : 'none'; });
+  }, [showProgetti]);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !ready) return;
+    const v = (on: boolean) => (on ? 'visible' : 'none');
+    try {
+      map.setLayoutProperty('route', 'visibility', v(showSentiero));
+      map.setLayoutProperty('route-glow', 'visibility', v(showSentiero));
+      map.setLayoutProperty('perimetro', 'visibility', v(showPerimetro));
+    } catch { /* layer non pronti */ }
+  }, [showSentiero, showPerimetro, ready]);
+
+  const diveTo = (l: { geo: [number, number]; zoom: number }) => {
+    setZoomed(true);
+    mapRef.current?.flyTo({ center: [l.geo[1], l.geo[0]], zoom: l.zoom, pitch: 55, bearing: 168, duration: 2800 });
+  };
 
   const stopFly = () => {
     if (flyTimer.current) clearInterval(flyTimer.current);
@@ -259,6 +292,37 @@ export default function Gemello() {
             className="absolute top-3 left-3 z-10 bg-black/80 border border-neutral-600 text-white px-4 py-2.5 text-[11px] uppercase tracking-[0.2em] backdrop-blur hover:border-white transition">
             ← Torna alla valle
           </button>
+        )}
+        {!racconto && (
+          <div className="absolute top-3 right-3 z-10 w-48 bg-black/85 border border-neutral-700 backdrop-blur text-left">
+            <button onClick={() => setLegenda(!legenda)}
+              className="w-full px-3 py-2.5 text-[11px] uppercase tracking-[0.2em] text-white flex justify-between items-center">
+              Legenda <span>{legenda ? '▾' : '▸'}</span>
+            </button>
+            {legenda && (
+              <div className="px-3 pb-3 space-y-2 max-h-72 overflow-y-auto">
+                {([
+                  ['Sentiero (6,2 km)', showSentiero, setShowSentiero],
+                  ['Perimetro frazione', showPerimetro, setShowPerimetro],
+                  ['Nomi dei borghi', showBorghi, setShowBorghi],
+                  ['Progetti e panorami', showProgetti, setShowProgetti],
+                ] as [string, boolean, (v: boolean) => void][]).map(([label, val, set]) => (
+                  <label key={label} className="flex items-center gap-2 text-xs text-neutral-200 cursor-pointer">
+                    <input type="checkbox" checked={val} onChange={() => set(!val)} className="accent-white" />
+                    {label}
+                  </label>
+                ))}
+                <div className="border-t border-neutral-800 pt-2 mt-2 space-y-0.5">
+                  {LUOGHI.map((l) => (
+                    <button key={l.nome} onClick={() => diveTo(l)}
+                      className="block w-full text-left text-xs text-neutral-300 hover:text-white py-1 transition">
+                      → {l.nome}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         )}
         {sottotitolo && (
           <div className="absolute inset-x-0 bottom-5 text-center px-10 pointer-events-none z-10">

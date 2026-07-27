@@ -51,7 +51,7 @@ export const PROGETTI: Progetto[] = [
     fonti: 'Offerte agli eventi, sponsor, quote soci',
   },
   {
-    id: 'cammini', geo: [44.37810, 10.69370], titolo: 'San Martino nei cammini',
+    id: 'cammini', geo: [44.37900, 10.68940], titolo: 'San Martino nei cammini',
     sintesi: 'Una tappa del turismo lento: chi cammina l\'Appennino deve passare di qui.',
     descrizione: 'L\'Appennino è attraversato da cammini sempre più frequentati. Vogliamo che San Martino diventi tappa o deviazione segnalata, con i servizi minimi per accogliere i camminatori.',
     azioni: ['Accordi con le reti dei cammini regionali', 'Punto acqua, ristoro e spazio tenda', 'Pacchetto "weekend a San Martino" con guide locali'],

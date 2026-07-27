@@ -27,8 +27,8 @@ export default function Gemello() {
           { id: 'sat', type: 'raster', source: 'sat' },
         ],
       } as any,
-      center: [TRACK[0][1], TRACK[0][0]],
-      zoom: 13.6, pitch: 62, bearing: 155, maxPitch: 78,
+      center: [10.6905, 44.3838],
+      zoom: 12.8, pitch: 60, bearing: 168, maxPitch: 78,
       attributionControl: { compact: true } as any,
     });
     map.on('style.load', () => {
@@ -36,6 +36,23 @@ export default function Gemello() {
       map.addSource('route', { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: TRACK.map((p) => [p[1], p[0]]) } } });
       map.addLayer({ id: 'route-glow', type: 'line', source: 'route', paint: { 'line-color': '#ffffff', 'line-width': 9, 'line-opacity': 0.25, 'line-blur': 4 } });
       map.addLayer({ id: 'route', type: 'line', source: 'route', paint: { 'line-color': '#ffffff', 'line-width': 3 } });
+      // toponimi della frazione
+      const LUOGHI: { geo: [number, number]; nome: string; big?: boolean }[] = [
+        { geo: [44.3872, 10.6893], nome: 'SAN MARTINO', big: true },
+        { geo: [44.3875, 10.6819], nome: 'Carponi' },
+        { geo: [44.3883, 10.6793], nome: 'Croce di S. Giulia' },
+        { geo: [44.3790, 10.6894], nome: 'Monte San Martino' },
+        { geo: [44.3860, 10.7020], nome: 'Val Rossenna' },
+      ];
+      LUOGHI.forEach((l) => {
+        const el = document.createElement('div');
+        el.className = 'gemello-label' + (l.big ? ' gemello-label-big' : '');
+        el.textContent = l.nome;
+        new maplibregl.Marker({ element: el, anchor: 'center' })
+          .setLngLat([l.geo[1], l.geo[0]])
+          .addTo(map);
+      });
+
       // pin dei progetti
       PROGETTI.forEach((p) => {
         const el = document.createElement('button');
@@ -66,7 +83,7 @@ export default function Gemello() {
   const flyover = () => {
     const map = mapRef.current;
     if (!map) return;
-    if (flying) { stopFly(); map.easeTo({ center: [TRACK[0][1], TRACK[0][0]], zoom: 13.6, pitch: 62, bearing: 155, duration: 2000 }); return; }
+    if (flying) { stopFly(); map.easeTo({ center: [10.6905, 44.3838], zoom: 12.8, pitch: 60, bearing: 168, duration: 2000 }); return; }
     setFlying(true);
     const len = TRACK.length;
     let i = 0;
@@ -80,7 +97,7 @@ export default function Gemello() {
     flyTimer.current = setInterval(() => {
       try {
         i += 4;
-        if (i >= len - 6) { stopFly(); map.easeTo({ center: [TRACK[0][1], TRACK[0][0]], zoom: 13.6, pitch: 62, bearing: 155, duration: 2500 }); return; }
+        if (i >= len - 6) { stopFly(); map.easeTo({ center: [10.6905, 44.3838], zoom: 12.8, pitch: 60, bearing: 168, duration: 2500 }); return; }
         const camIdx = Math.max(0, i - 22), lookIdx = Math.min(i + 14, len - 1);
         const pos = avg(camIdx, 10), look = avg(lookIdx, 6);
         const alt = Math.max(...ELES.slice(camIdx, lookIdx + 1)) + 220;
@@ -98,8 +115,9 @@ export default function Gemello() {
     <div className="animate-fade-in-up pt-10 space-y-5">
       <h1 className="text-3xl font-bold text-white">Il gemello digitale</h1>
       <p className="text-neutral-300 text-[15px] max-w-2xl">
-        Questo non è un rendering: è San Martino — il rilievo vero della valle, il satellite,
-        i 6,2 km di sentieri riaperti dai volontari. E ogni progetto di rigenerazione è lì,
+        Questo non è un rendering: è il territorio di San Martino Vallata — il borgo lungo la via,
+        i nuclei di Carponi e Croce di Santa Giulia, il Monte San Martino, la Val Rossenna.
+        In bianco, i 6,2 km di sentieri riaperti dai volontari. E ogni progetto di rigenerazione è lì,
         al suo posto sul territorio: <span className="text-white">tocca i pin bianchi</span> per esplorarli.
       </p>
       <div className="relative">

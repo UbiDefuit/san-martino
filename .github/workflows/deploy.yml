@@ -27,7 +27,6 @@ jobs:
           node-version: '22.x'
       - run: npm ci
       - run: npm run build
-        env:
       - uses: actions/configure-pages@v5
         with:
           enablement: true

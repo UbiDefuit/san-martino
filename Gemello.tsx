@@ -12,6 +12,7 @@ export default function Gemello() {
   const [flying, setFlying] = useState(false);
   const [sel, setSel] = useState<Progetto | null>(null);
   const [panorama, setPanorama] = useState<{ foto: string; titolo: string } | null>(null);
+  const [zoomed, setZoomed] = useState(false);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -44,18 +45,26 @@ export default function Gemello() {
       map.addSource('route', { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: TRACK.map((p) => [p[1], p[0]]) } } });
       map.addLayer({ id: 'route-glow', type: 'line', source: 'route', paint: { 'line-color': '#ffffff', 'line-width': 9, 'line-opacity': 0.25, 'line-blur': 4 } });
       map.addLayer({ id: 'route', type: 'line', source: 'route', paint: { 'line-color': '#ffffff', 'line-width': 3 } });
-      // toponimi della frazione
-      const LUOGHI: { geo: [number, number]; nome: string; big?: boolean }[] = [
-        { geo: [44.3872, 10.6893], nome: 'SAN MARTINO', big: true },
-        { geo: [44.3875, 10.6819], nome: 'Carponi' },
-        { geo: [44.3883, 10.6793], nome: 'Croce di S. Giulia' },
-        { geo: [44.3790, 10.6894], nome: 'Monte San Martino' },
-        { geo: [44.3860, 10.7020], nome: 'Val Rossenna' },
+      // toponimi della frazione — cliccabili: picchiata a livello case sull'ortofoto
+      const LUOGHI: { geo: [number, number]; nome: string; big?: boolean; zoom: number }[] = [
+        { geo: [44.3872, 10.6893], nome: 'SAN MARTINO', big: true, zoom: 16.8 },
+        { geo: [44.38848, 10.68408], nome: 'Ca\u2019 Rossi', zoom: 16.8 },
+        { geo: [44.38401, 10.69270], nome: 'Poggio', zoom: 16.8 },
+        { geo: [44.3875, 10.6819], nome: 'Carponi', zoom: 16.5 },
+        { geo: [44.38907, 10.66892], nome: 'Croce di S. Giulia', zoom: 16.5 },
+        { geo: [44.3790, 10.6894], nome: 'Monte San Martino', zoom: 15.2 },
+        { geo: [44.3860, 10.7020], nome: 'Val Rossenna', zoom: 14.4 },
       ];
       LUOGHI.forEach((l) => {
-        const el = document.createElement('div');
+        const el = document.createElement('button');
         el.className = 'gemello-label' + (l.big ? ' gemello-label-big' : '');
         el.textContent = l.nome;
+        el.title = 'Vai a ' + l.nome;
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          setZoomed(true);
+          map.flyTo({ center: [l.geo[1], l.geo[0]], zoom: l.zoom, pitch: 55, bearing: 168, duration: 2800 });
+        });
         new maplibregl.Marker({ element: el, anchor: 'center' })
           .setLngLat([l.geo[1], l.geo[0]])
           .addTo(map);
@@ -141,10 +150,19 @@ export default function Gemello() {
         Questo non è un rendering: è il territorio di San Martino Vallata — il borgo lungo la via,
         i nuclei di Carponi e Croce di Santa Giulia, il Monte San Martino, la Val Rossenna.
         In bianco, i 6,2 km di sentieri riaperti dai volontari. E ogni progetto di rigenerazione è lì,
-        al suo posto sul territorio: <span className="text-white">tocca i pin bianchi</span> per esplorarli.
+        al suo posto sul territorio: <span className="text-white">tocca i pin bianchi</span> per i progetti, <span className="text-white">tocca i nomi dei borghi</span> per scendere a livello delle case.
       </p>
       <div className="relative">
         <div id="gemello" className="h-[62vh] border border-neutral-800" />
+        {zoomed && (
+          <button onClick={() => {
+            setZoomed(false);
+            mapRef.current?.easeTo({ center: [10.6905, 44.3838], zoom: 12.8, pitch: 60, bearing: 168, duration: 2500 });
+          }}
+            className="absolute top-3 left-3 z-10 bg-black/80 border border-neutral-600 text-white px-4 py-2.5 text-[11px] uppercase tracking-[0.2em] backdrop-blur hover:border-white transition">
+            ← Torna alla valle
+          </button>
+        )}
         {!ready && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-neutral-300 text-xs uppercase tracking-[0.2em]">
             Carico la valle…

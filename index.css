@@ -21,8 +21,10 @@ html { scroll-behavior: smooth; }
 .gemello-label {
   color: #ffffff; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
   text-shadow: 0 1px 4px rgba(0,0,0,0.95), 0 0 12px rgba(0,0,0,0.8);
-  pointer-events: none; white-space: nowrap; opacity: 0.85;
+  white-space: nowrap; opacity: 0.9;
+  background: none; border: none; cursor: pointer; padding: 2px 4px;
 }
+.gemello-label:hover { text-decoration: underline; text-underline-offset: 4px; opacity: 1; }
 .gemello-label-big { font-size: 14px; font-weight: 700; opacity: 1; }
 
 /* Punti panorama e zoom immersivo */

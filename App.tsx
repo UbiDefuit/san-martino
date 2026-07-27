@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { PROGETTI, STORIE, EVENTO_URL, WHATSAPP_URL, EMAIL, Progetto } from './data';
+import Gemello from './Gemello';
 
-type Route = 'home' | 'progetti' | 'storie' | 'sostienici' | 'chisiamo';
+type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'sostienici' | 'chisiamo';
 
 const routeFromHash = (): Route => {
   const h = location.hash.replace('#/', '');
-  return (['progetti', 'storie', 'sostienici', 'chisiamo'].includes(h) ? h : 'home') as Route;
+  return (['progetti', 'gemello', 'storie', 'sostienici', 'chisiamo'].includes(h) ? h : 'home') as Route;
 };
 
 const eur = (n: number) => n.toLocaleString('it-IT') + ' €';
@@ -71,6 +72,20 @@ function Home() {
             <div className="text-[11px] uppercase tracking-[0.15em] text-neutral-400 mt-2">{l}</div>
           </Card>
         ))}
+      </section>
+
+      <section>
+        <a href="#/gemello" className="block">
+          <Card className="border-white/30 hover:border-white transition text-center py-10">
+            <Label>Innovazione</Label>
+            <h2 className="text-2xl font-bold text-white">Esplora il gemello digitale</h2>
+            <p className="text-neutral-300 text-sm mt-2 max-w-md mx-auto">
+              La valle in 3D — rilievo reale, satellite, sentieri — con i progetti di rigenerazione
+              georeferenziati sul territorio. Toccali, sorvolali.
+            </p>
+            <span className="inline-block mt-5 bg-white text-black px-6 py-3 font-semibold uppercase tracking-[0.15em] text-xs">Entra nel gemello</span>
+          </Card>
+        </a>
       </section>
 
       <section>
@@ -266,6 +281,7 @@ export default function App() {
   const nav: { r: Route; label: string }[] = [
     { r: 'home', label: 'Home' },
     { r: 'progetti', label: 'Progetti' },
+    { r: 'gemello', label: 'Gemello' },
     { r: 'storie', label: 'Storie' },
     { r: 'sostienici', label: 'Sostienici' },
     { r: 'chisiamo', label: 'Chi siamo' },
@@ -290,6 +306,7 @@ export default function App() {
       <main className="max-w-3xl mx-auto px-5 pb-20">
         {route === 'home' && <Home />}
         {route === 'progetti' && <Progetti />}
+        {route === 'gemello' && <Gemello />}
         {route === 'storie' && <Storie />}
         {route === 'sostienici' && <Sostienici />}
         {route === 'chisiamo' && <ChiSiamo />}

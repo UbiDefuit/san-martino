@@ -1,0 +1,15 @@
+{
+  "name": "San Martino 2030 — The Valley",
+  "short_name": "San Martino",
+  "description": "La piattaforma della comunità di San Martino Vallata: progetti di rigenerazione, eventi, storie e memoria del borgo.",
+  "start_url": "./?source=pwa",
+  "id": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

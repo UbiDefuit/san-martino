@@ -274,23 +274,34 @@ export default function Gemello() {
 
     // PRECARICO: percorro la rotta dietro il sipario, le tile entrano in cache
     setPreparo(0);
-    const N = 24;
+    const N = 30;
     const avgP = (idx: number, r: number): [number, number] => {
       const a = Math.max(0, idx - r), b = Math.min(len - 1, idx + r);
       let la = 0, lo = 0, n = 0;
       for (let k = a; k <= b; k++) { la += TRACK[k][0]; lo += TRACK[k][1]; n++; }
       return [la / n, lo / n];
     };
+    // simulo la STESSA traiettoria smussata del volo (sottopassi senza render)
+    let pPos: [number, number] | null = null, pLook: [number, number] | null = null, pAlt: number | null = null;
+    const SUB = 18; // sottopassi di smussamento fra un campione e l'altro
     for (let k = 0; k <= N; k++) {
       if (voloAnnullato.current) { setPreparo(null); return; }
-      const i = Math.min(len - 7, Math.floor((k / N) * (len - 7)));
-      const camIdx = Math.max(0, i - 22), lookIdx = Math.min(i + 16, len - 1);
-      const pos = avgP(camIdx, 10), look = avgP(lookIdx, 6);
-      const alt = Math.max(...ELES.slice(camIdx, lookIdx + 1)) + 240;
+      for (let q = 0; q < SUB; q++) {
+        const p = Math.min(1, (k + q / SUB) / N);
+        const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        const i = Math.min(len - 7, Math.max(0, Math.floor(e * (len - 7))));
+        const camIdx = Math.max(0, i - 22), lookIdx = Math.min(i + 16, len - 1);
+        const pos = avgP(camIdx, 10), look = avgP(lookIdx, 6);
+        const alt = Math.max(...ELES.slice(camIdx, lookIdx + 1)) + 240;
+        pPos = pPos ? [pPos[0] + (pos[0] - pPos[0]) * 0.08, pPos[1] + (pos[1] - pPos[1]) * 0.08] : pos;
+        pLook = pLook ? [pLook[0] + (look[0] - pLook[0]) * 0.12, pLook[1] + (look[1] - pLook[1]) * 0.12] : look;
+        pAlt = pAlt !== null ? pAlt + (alt - pAlt) * 0.06 : alt;
+      }
+      const lookIdxK = Math.min(Math.floor(((k / N) * (len - 7))) + 16, len - 1);
       try {
         map.jumpTo(map.calculateCameraOptionsFromTo(
-          new maplibregl.LngLat(pos[1], pos[0]), alt,
-          new maplibregl.LngLat(look[1], look[0]), ELES[lookIdx]));
+          new maplibregl.LngLat(pPos![1], pPos![0]), pAlt!,
+          new maplibregl.LngLat(pLook![1], pLook![0]), ELES[lookIdxK]));
       } catch { /* continua */ }
       await new Promise<void>((res) => {
         const to = setTimeout(res, 750);

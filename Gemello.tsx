@@ -50,13 +50,12 @@ export default function Gemello() {
       map.addLayer({ id: 'route', type: 'line', source: 'route', paint: { 'line-color': '#ffffff', 'line-width': 3 } });
       // toponimi della frazione — cliccabili: picchiata a livello case sull'ortofoto
       const LUOGHI: { geo: [number, number]; nome: string; big?: boolean; zoom: number }[] = [
-        { geo: [44.3872, 10.6893], nome: 'SAN MARTINO', big: true, zoom: 16.8 },
-        { geo: [44.38848, 10.68408], nome: 'Ca\u2019 Rossi', zoom: 16.8 },
-        { geo: [44.38401, 10.69270], nome: 'Poggio', zoom: 16.8 },
-        { geo: [44.3875, 10.6819], nome: 'Carponi', zoom: 16.5 },
-        { geo: [44.38907, 10.66892], nome: 'Croce di S. Giulia', zoom: 16.5 },
+        { geo: [44.38851, 10.68466], nome: 'SAN MARTINO', big: true, zoom: 16.8 },
+        { geo: [44.38740, 10.69393], nome: 'C\u00e0 Barbino', zoom: 16.8 },
+        { geo: [44.38599, 10.69274], nome: 'C\u00e0 Carloni', zoom: 16.8 },
+        { geo: [44.38437, 10.69189], nome: 'Il Poggio', zoom: 16.8 },
+        { geo: [44.3872, 10.6893], nome: 'La Chiesa', zoom: 17.0 },
         { geo: [44.3790, 10.6894], nome: 'Monte San Martino', zoom: 15.2 },
-        { geo: [44.3860, 10.7020], nome: 'Val Rossenna', zoom: 14.4 },
       ];
       LUOGHI.forEach((l) => {
         const el = document.createElement('button');
@@ -99,11 +98,26 @@ export default function Gemello() {
           .setLngLat([p.geo[1], p.geo[0]])
           .addTo(map);
       });
+      // perimetro indicativo della frazione di San Martino
+      const PERIMETRO: [number, number][] = [
+        [10.6795, 44.3925], [10.6980, 44.3925], [10.7000, 44.3880],
+        [10.6980, 44.3820], [10.6940, 44.3760], [10.6860, 44.3755],
+        [10.6800, 44.3800], [10.6780, 44.3870], [10.6795, 44.3925],
+      ];
+      map.addSource('perimetro', {
+        type: 'geojson',
+        data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: PERIMETRO } },
+      });
+      map.addLayer({
+        id: 'perimetro', type: 'line', source: 'perimetro',
+        paint: { 'line-color': '#ffffff', 'line-width': 1.5, 'line-dasharray': [3, 3], 'line-opacity': 0.55 },
+      });
+
       // strato notte + luci dei nuclei (per il finale del racconto)
       map.addLayer({ id: 'notte', type: 'background', paint: { 'background-color': '#04070c', 'background-opacity': 0 } });
       const NUCLEI: [number, number][] = [
-        [44.3872, 10.6893], [44.38848, 10.68408], [44.38401, 10.69270],
-        [44.3875, 10.6819], [44.38907, 10.66892],
+        [44.38851, 10.68466], [44.38740, 10.69393], [44.38599, 10.69274],
+        [44.38437, 10.69189], [44.3872, 10.6893],
       ];
       map.addSource('luci', {
         type: 'geojson',
@@ -154,11 +168,11 @@ export default function Gemello() {
     setRacconto(true);
     raccontoRef.current = true;
     const tappe: { c: [number, number]; z: number; p: number; b: number; t: string; hold: number }[] = [
-      { c: [10.66892, 44.38907], z: 15.6, p: 55, b: 150, t: 'La valle si apre a ovest — Croce di Santa Giulia, dove i campi incontrano il bosco.', hold: 2200 },
-      { c: [10.6819, 44.3875], z: 16.2, p: 55, b: 160, t: 'Carponi. Pietre che resistono da secoli.', hold: 2200 },
-      { c: [10.6893, 44.3872], z: 16.6, p: 55, b: 168, t: 'Il borgo di San Martino: la chiesa, il ritrovo, il cuore della frazione.', hold: 2600 },
-      { c: [10.69270, 44.38401], z: 16.6, p: 55, b: 175, t: 'Il Poggio — i tetti che vogliamo rivedere abitati.', hold: 2400 },
-      { c: [10.68408, 44.38848], z: 16.4, p: 55, b: 160, t: 'Ca\u2019 Rossi, sulla via che cuce la vallata.', hold: 2200 },
+      { c: [10.68466, 44.38851], z: 16.6, p: 55, b: 160, t: 'San Martino. Il nucleo che d\u00e0 il nome alla frazione, sulla via che cuce la vallata.', hold: 2400 },
+      { c: [10.6893, 44.3872], z: 17.0, p: 55, b: 168, t: 'La chiesa parrocchiale: il ritrovo, il cuore, il punto di partenza di tutto.', hold: 2600 },
+      { c: [10.69393, 44.38740], z: 16.6, p: 55, b: 170, t: 'C\u00e0 Barbino — pietre che resistono da secoli.', hold: 2200 },
+      { c: [10.69274, 44.38599], z: 16.6, p: 55, b: 172, t: 'C\u00e0 Carloni, affacciata sui campi.', hold: 2200 },
+      { c: [10.69189, 44.38437], z: 16.6, p: 55, b: 175, t: 'Il Poggio — i tetti che vogliamo rivedere abitati.', hold: 2400 },
       { c: [10.6894, 44.3790], z: 14.6, p: 62, b: 168, t: 'E sopra tutto il Monte San Martino: 6,2 km di sentieri riaperti a mano dai volontari.', hold: 2800 },
     ];
     try {
@@ -227,8 +241,8 @@ export default function Gemello() {
     <div className="animate-fade-in-up pt-10 space-y-5">
       <h1 className="text-3xl font-bold text-white">Il gemello digitale</h1>
       <p className="text-neutral-300 text-[15px] max-w-2xl">
-        Questo non è un rendering: è il territorio di San Martino Vallata — il borgo lungo la via,
-        i nuclei di Carponi e Croce di Santa Giulia, il Monte San Martino, la Val Rossenna.
+        Questo non è un rendering: è il territorio della frazione di San Martino — il nucleo storico,
+        Cà Barbino, Cà Carloni, il Poggio, la chiesa e il Monte San Martino (perimetro indicativo tratteggiato).
         In bianco, i 6,2 km di sentieri riaperti dai volontari. E ogni progetto di rigenerazione è lì,
         al suo posto sul territorio: <span className="text-white">tocca i pin bianchi</span> per i progetti, <span className="text-white">tocca i nomi dei borghi</span> per scendere a livello delle case.
       </p>

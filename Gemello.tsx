@@ -15,6 +15,8 @@ export const LUOGHI: { geo: [number, number]; nome: string; big?: boolean; zoom:
   { geo: [44.38599, 10.69274], nome: 'C\u00e0 Carloni', zoom: 16.8 },
   { geo: [44.38437, 10.69189], nome: 'Il Poggio', zoom: 16.8 },
   { geo: [44.38570, 10.70296], nome: 'C\u00e0 Marastoni', zoom: 16.8 },
+  { geo: [44.38946, 10.68199], nome: 'C\u00e0 dei Rossi', zoom: 16.8 },
+  { geo: [44.39180, 10.68252], nome: 'C\u00e0 Lunga', zoom: 16.8 },
   { geo: [44.3790, 10.6894], nome: 'Monte San Martino', zoom: 15.2 },
 ];
 

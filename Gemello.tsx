@@ -246,7 +246,11 @@ export default function Gemello() {
   };
 
   const rafRef = useRef<number | null>(null);
+  const [preparo, setPreparo] = useState<number | null>(null);
+  const voloAnnullato = useRef(false);
   const stopVolo = () => {
+    voloAnnullato.current = true;
+    setPreparo(null);
     if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     rafRef.current = null;
     setFlying(false);
@@ -257,15 +261,45 @@ export default function Gemello() {
     }
   };
 
-  const flyover = () => {
+  const flyover = async () => {
     const map = mapRef.current;
     if (!map) return;
     if (flying) { stopVolo(); return; }
     setFlying(true);
+    voloAnnullato.current = false;
     // niente ortofoto WMS durante il volo veloce: il satellite su CDN tiene il passo
     try { map.setLayoutProperty('ortofoto', 'visibility', 'none'); } catch { /* ok */ }
     const len = TRACK.length;
     const DUR = 24000;
+
+    // PRECARICO: percorro la rotta dietro il sipario, le tile entrano in cache
+    setPreparo(0);
+    const N = 24;
+    const avgP = (idx: number, r: number): [number, number] => {
+      const a = Math.max(0, idx - r), b = Math.min(len - 1, idx + r);
+      let la = 0, lo = 0, n = 0;
+      for (let k = a; k <= b; k++) { la += TRACK[k][0]; lo += TRACK[k][1]; n++; }
+      return [la / n, lo / n];
+    };
+    for (let k = 0; k <= N; k++) {
+      if (voloAnnullato.current) { setPreparo(null); return; }
+      const i = Math.min(len - 7, Math.floor((k / N) * (len - 7)));
+      const camIdx = Math.max(0, i - 22), lookIdx = Math.min(i + 16, len - 1);
+      const pos = avgP(camIdx, 10), look = avgP(lookIdx, 6);
+      const alt = Math.max(...ELES.slice(camIdx, lookIdx + 1)) + 240;
+      try {
+        map.jumpTo(map.calculateCameraOptionsFromTo(
+          new maplibregl.LngLat(pos[1], pos[0]), alt,
+          new maplibregl.LngLat(look[1], look[0]), ELES[lookIdx]));
+      } catch { /* continua */ }
+      await new Promise<void>((res) => {
+        const to = setTimeout(res, 750);
+        map.once('idle', () => { clearTimeout(to); res(); });
+      });
+      setPreparo(Math.round((k / N) * 100));
+    }
+    if (voloAnnullato.current) { setPreparo(null); return; }
+    setPreparo(null);
     const avg = (idx: number, r: number): [number, number] => {
       const a = Math.max(0, idx - r), b = Math.min(len - 1, idx + r);
       let la = 0, lo = 0, n = 0;
@@ -344,6 +378,15 @@ export default function Gemello() {
                 </div>
               </div>
             )}
+          </div>
+        )}
+        {preparo !== null && (
+          <div className="absolute inset-0 z-20 bg-black flex flex-col items-center justify-center gap-4">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-neutral-300">Preparo il volo</p>
+            <div className="w-52 h-1 bg-neutral-800 overflow-hidden">
+              <div className="h-full bg-white transition-all" style={{ width: preparo + '%' }} />
+            </div>
+            <p className="text-white text-2xl font-light tabular-nums">{preparo}%</p>
           </div>
         )}
         {sottotitolo && (

@@ -24,3 +24,12 @@ html { scroll-behavior: smooth; }
   pointer-events: none; white-space: nowrap; opacity: 0.85;
 }
 .gemello-label-big { font-size: 14px; font-weight: 700; opacity: 1; }
+
+/* Punti panorama e zoom immersivo */
+.gemello-cam {
+  background: #ffffff; border: 2px solid #0a0a0a; border-radius: 4px;
+  width: 30px; height: 30px; font-size: 15px; line-height: 1;
+  cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+}
+@keyframes kenburnsSlow { 0% { transform: scale(1.02); } 100% { transform: scale(1.14); } }
+.kenburns-slow { animation: kenburnsSlow 16s ease-out forwards; }

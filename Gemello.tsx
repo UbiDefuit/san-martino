@@ -11,6 +11,7 @@ export default function Gemello() {
   const flyTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const [flying, setFlying] = useState(false);
   const [sel, setSel] = useState<Progetto | null>(null);
+  const [panorama, setPanorama] = useState<{ foto: string; titolo: string } | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -21,10 +22,17 @@ export default function Gemello() {
         sources: {
           sat: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, attribution: 'Esri, Maxar, Earthstar Geographics', maxzoom: 18 },
           dem: { type: 'raster-dem', tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'], encoding: 'terrarium', tileSize: 256, maxzoom: 14 },
+          ortofoto: {
+            type: 'raster',
+            tiles: ['https://servizigis.regione.emilia-romagna.it/wms/agea2023_rgb?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=Agea2023_RGB&STYLES=&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/jpeg'],
+            tileSize: 256,
+            attribution: 'Ortofoto AGEA 2023 — Regione Emilia-Romagna',
+          },
         },
         layers: [
           { id: 'bg', type: 'background', paint: { 'background-color': '#181a17' } },
           { id: 'sat', type: 'raster', source: 'sat' },
+          { id: 'ortofoto', type: 'raster', source: 'ortofoto', minzoom: 13, paint: { 'raster-fade-duration': 300 } },
         ],
       } as any,
       center: [10.6905, 44.3838],
@@ -50,6 +58,21 @@ export default function Gemello() {
         el.textContent = l.nome;
         new maplibregl.Marker({ element: el, anchor: 'center' })
           .setLngLat([l.geo[1], l.geo[0]])
+          .addTo(map);
+      });
+
+      // punti panorama: entra nella foto reale del luogo
+      const PANORAMI: { geo: [number, number]; foto: string; titolo: string }[] = [
+        { geo: [44.38718, 10.68933], foto: './canonica.jpg', titolo: 'La Chiesa di San Martino — il ritrovo' },
+      ];
+      PANORAMI.forEach((pt) => {
+        const el = document.createElement('button');
+        el.className = 'gemello-cam';
+        el.textContent = '📷';
+        el.title = pt.titolo;
+        el.addEventListener('click', (e) => { e.stopPropagation(); setPanorama(pt); });
+        new maplibregl.Marker({ element: el, anchor: 'bottom' })
+          .setLngLat([pt.geo[1], pt.geo[0]])
           .addTo(map);
       });
 
@@ -147,6 +170,16 @@ export default function Gemello() {
           </div>
         )}
       </div>
+      {panorama && (
+        <div className="fixed inset-0 z-50 bg-black flex items-center justify-center" onClick={() => setPanorama(null)}>
+          <img src={panorama.foto} alt={panorama.titolo} className="w-full h-full object-cover kenburns-slow" />
+          <div className="absolute bottom-10 inset-x-0 text-center px-14 pointer-events-none">
+            <span className="bg-black/70 text-white text-[11px] uppercase tracking-[0.25em] px-4 py-2">{panorama.titolo}</span>
+          </div>
+          <button onClick={() => setPanorama(null)}
+            className="absolute top-4 right-4 bg-black/70 border border-neutral-600 text-white w-10 h-10 text-lg">✕</button>
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-3">
         <button onClick={flyover}
           className="border border-neutral-700 text-white hover:border-white px-3 py-3.5 font-semibold uppercase tracking-[0.15em] text-xs transition">

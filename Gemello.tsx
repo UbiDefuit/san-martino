@@ -88,8 +88,8 @@ export default function Gemello() {
         smLook = smLook ? [smLook[0] + (look[0] - smLook[0]) * 0.2, smLook[1] + (look[1] - smLook[1]) * 0.2] : look;
         smAlt = smAlt !== null ? smAlt + (alt - smAlt) * 0.1 : alt;
         map.jumpTo(map.calculateCameraOptionsFromTo(
-          { lng: smPos[1], lat: smPos[0] }, smAlt,
-          { lng: smLook[1], lat: smLook[0] }, ELES[lookIdx]));
+          new maplibregl.LngLat(smPos[1], smPos[0]), smAlt,
+          new maplibregl.LngLat(smLook[1], smLook[0]), ELES[lookIdx]));
       } catch { stopFly(); }
     }, 70);
   };

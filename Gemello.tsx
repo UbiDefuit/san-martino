@@ -154,6 +154,7 @@ export default function Gemello() {
     mapRef.current = map;
     return () => {
       if (flyTimer.current) clearInterval(flyTimer.current);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       map.remove();
       mapRef.current = null;
     };
@@ -244,35 +245,54 @@ export default function Gemello() {
     }
   };
 
+  const rafRef = useRef<number | null>(null);
+  const stopVolo = () => {
+    if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    rafRef.current = null;
+    setFlying(false);
+    const map = mapRef.current;
+    if (map) {
+      try { map.setLayoutProperty('ortofoto', 'visibility', 'visible'); } catch { /* ok */ }
+      map.easeTo({ center: [10.6905, 44.3838], zoom: 12.8, pitch: 60, bearing: 168, duration: 2500 });
+    }
+  };
+
   const flyover = () => {
     const map = mapRef.current;
     if (!map) return;
-    if (flying) { stopFly(); map.easeTo({ center: [10.6905, 44.3838], zoom: 12.8, pitch: 60, bearing: 168, duration: 2000 }); return; }
+    if (flying) { stopVolo(); return; }
     setFlying(true);
+    // niente ortofoto WMS durante il volo veloce: il satellite su CDN tiene il passo
+    try { map.setLayoutProperty('ortofoto', 'visibility', 'none'); } catch { /* ok */ }
     const len = TRACK.length;
-    let i = 0;
-    let smPos: [number, number] | null = null, smLook: [number, number] | null = null, smAlt: number | null = null;
+    const DUR = 24000;
     const avg = (idx: number, r: number): [number, number] => {
       const a = Math.max(0, idx - r), b = Math.min(len - 1, idx + r);
       let la = 0, lo = 0, n = 0;
       for (let k = a; k <= b; k++) { la += TRACK[k][0]; lo += TRACK[k][1]; n++; }
       return [la / n, lo / n];
     };
-    flyTimer.current = setInterval(() => {
+    let smPos: [number, number] | null = null, smLook: [number, number] | null = null, smAlt: number | null = null;
+    const t0 = performance.now();
+    const step = (now: number) => {
+      const p = (now - t0) / DUR;
+      if (p >= 1) { stopVolo(); return; }
+      const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      const i = Math.min(len - 7, Math.max(0, Math.floor(e * (len - 7))));
+      const camIdx = Math.max(0, i - 22), lookIdx = Math.min(i + 16, len - 1);
+      const pos = avg(camIdx, 10), look = avg(lookIdx, 6);
+      const alt = Math.max(...ELES.slice(camIdx, lookIdx + 1)) + 240;
+      smPos = smPos ? [smPos[0] + (pos[0] - smPos[0]) * 0.08, smPos[1] + (pos[1] - smPos[1]) * 0.08] : pos;
+      smLook = smLook ? [smLook[0] + (look[0] - smLook[0]) * 0.12, smLook[1] + (look[1] - smLook[1]) * 0.12] : look;
+      smAlt = smAlt !== null ? smAlt + (alt - smAlt) * 0.06 : alt;
       try {
-        i += 4;
-        if (i >= len - 6) { stopFly(); map.easeTo({ center: [10.6905, 44.3838], zoom: 12.8, pitch: 60, bearing: 168, duration: 2500 }); return; }
-        const camIdx = Math.max(0, i - 22), lookIdx = Math.min(i + 14, len - 1);
-        const pos = avg(camIdx, 10), look = avg(lookIdx, 6);
-        const alt = Math.max(...ELES.slice(camIdx, lookIdx + 1)) + 220;
-        smPos = smPos ? [smPos[0] + (pos[0] - smPos[0]) * 0.15, smPos[1] + (pos[1] - smPos[1]) * 0.15] : pos;
-        smLook = smLook ? [smLook[0] + (look[0] - smLook[0]) * 0.2, smLook[1] + (look[1] - smLook[1]) * 0.2] : look;
-        smAlt = smAlt !== null ? smAlt + (alt - smAlt) * 0.1 : alt;
         map.jumpTo(map.calculateCameraOptionsFromTo(
           new maplibregl.LngLat(smPos[1], smPos[0]), smAlt,
           new maplibregl.LngLat(smLook[1], smLook[0]), ELES[lookIdx]));
-      } catch { stopFly(); }
-    }, 70);
+      } catch { stopVolo(); return; }
+      rafRef.current = requestAnimationFrame(step);
+    };
+    rafRef.current = requestAnimationFrame(step);
   };
 
   return (

@@ -55,6 +55,8 @@ export default function Gemello() {
         { geo: [44.38599, 10.69274], nome: 'C\u00e0 Carloni', zoom: 16.8 },
         { geo: [44.38437, 10.69189], nome: 'Il Poggio', zoom: 16.8 },
         { geo: [44.3872, 10.6893], nome: 'La Chiesa', zoom: 17.0 },
+        { geo: [44.38831, 10.69083], nome: 'Oratorio della Rondine', zoom: 17.0 },
+        { geo: [44.38570, 10.70296], nome: 'C\u00e0 Marastoni', zoom: 16.8 },
         { geo: [44.3790, 10.6894], nome: 'Monte San Martino', zoom: 15.2 },
       ];
       LUOGHI.forEach((l) => {
@@ -100,9 +102,10 @@ export default function Gemello() {
       });
       // perimetro indicativo della frazione di San Martino
       const PERIMETRO: [number, number][] = [
-        [10.6795, 44.3925], [10.6980, 44.3925], [10.7000, 44.3880],
-        [10.6980, 44.3820], [10.6940, 44.3760], [10.6860, 44.3755],
-        [10.6800, 44.3800], [10.6780, 44.3870], [10.6795, 44.3925],
+        [10.6795, 44.3925], [10.6980, 44.3925], [10.7060, 44.3890],
+        [10.7060, 44.3830], [10.6980, 44.3800], [10.6940, 44.3760],
+        [10.6860, 44.3755], [10.6800, 44.3800], [10.6780, 44.3870],
+        [10.6795, 44.3925],
       ];
       map.addSource('perimetro', {
         type: 'geojson',

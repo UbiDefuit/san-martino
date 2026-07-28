@@ -245,9 +245,12 @@ function ChiSiamo() {
       <h1 className="text-3xl font-bold text-white">Chi siamo</h1>
       <Card>
         <p className="text-neutral-200 text-[15px] leading-relaxed">
-          <span className="text-white font-semibold">San Martino 2.0 — The Valley</span> è
-          un'associazione di promozione sociale nata per la tutela e la rinascita del territorio
-          montano di San Martino Vallata, nel comune di Polinago (MO), Appennino modenese.
+          <span className="text-white font-semibold">Associazione di Promozione Sociale San Martino 2.0 APS</span> \u2014
+          per tutti \u201cThe Valley\u201d \u2014 \u00e8 nata per la tutela e la rinascita del territorio
+          montano di San Martino Vallata. Sede: via Carloni 5, loc. San Martino, 41040 Polinago (MO).
+          Da statuto operiamo, senza scopo di lucro, per la salvaguardia dell'ambiente, la tutela e la
+          valorizzazione del patrimonio culturale e del paesaggio, le attivit\u00e0 culturali, educative e
+          ricreative di interesse sociale e l'inclusione delle persone fragili (D.lgs 117/17, Codice del Terzo settore).
           Siamo volontari: gente del borgo, figli e nipoti di chi c'è nato, persone che
           hanno scelto questa valle. Puliamo sentieri, organizziamo eventi, raccogliamo memorie
           e costruiamo — anche digitalmente — il futuro di un posto che non vogliamo veder sparire.

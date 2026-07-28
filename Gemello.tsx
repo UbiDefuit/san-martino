@@ -12,6 +12,7 @@ export const LUOGHI: { geo: [number, number]; nome: string; big?: boolean; zoom:
   { geo: [44.3872, 10.6893], nome: 'La Chiesa', zoom: 17.0 },
   { geo: [44.38831, 10.69083], nome: 'Oratorio della Rondine', zoom: 17.0 },
   { geo: [44.38870, 10.68366], nome: 'Oratorio di Sant\u2019Antonio Abate', zoom: 17.0 },
+  { geo: [44.38852, 10.68394], nome: 'Oratorio di San Geminiano', zoom: 17.0 },
   { geo: [44.38740, 10.69393], nome: 'C\u00e0 Barbino', zoom: 16.8 },
   { geo: [44.38599, 10.69274], nome: 'C\u00e0 Carloni', zoom: 16.8 },
   { geo: [44.38437, 10.69189], nome: 'Il Poggio', zoom: 16.8 },
@@ -28,6 +29,7 @@ export default function Gemello() {
   const [sel, setSel] = useState<Progetto | null>(null);
   const [panorama, setPanorama] = useState<{ foto: string; titolo: string } | null>(null);
   const [zoomed, setZoomed] = useState(false);
+  const [luogoSel, setLuogoSel] = useState<{ geo: [number, number]; nome: string } | null>(null);
   const [racconto, setRacconto] = useState(false);
   const [showSentiero, setShowSentiero] = useState(true);
   const [showPerimetro, setShowPerimetro] = useState(true);
@@ -178,8 +180,9 @@ export default function Gemello() {
     } catch { /* layer non pronti */ }
   }, [showSentiero, showPerimetro, ready]);
 
-  const diveTo = (l: { geo: [number, number]; zoom: number }) => {
+  const diveTo = (l: { geo: [number, number]; zoom: number; nome?: string }) => {
     setZoomed(true);
+    setLuogoSel(l.nome ? (l as { geo: [number, number]; nome: string }) : null);
     mapRef.current?.flyTo({ center: [l.geo[1], l.geo[0]], zoom: l.zoom, pitch: 55, bearing: 168, duration: 2800 });
   };
 
@@ -355,11 +358,19 @@ export default function Gemello() {
         {zoomed && (
           <button onClick={() => {
             setZoomed(false);
+            setLuogoSel(null);
             mapRef.current?.easeTo({ center: [10.6905, 44.3838], zoom: 12.8, pitch: 60, bearing: 168, duration: 2500 });
           }}
             className="absolute top-3 left-3 z-10 bg-black/80 border border-neutral-600 text-white px-4 py-2.5 text-[11px] uppercase tracking-[0.2em] backdrop-blur hover:border-white transition">
             ← Torna alla valle
           </button>
+        )}
+        {zoomed && luogoSel && (
+          <a href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${luogoSel.geo[0]},${luogoSel.geo[1]}`}
+            target="_blank" rel="noreferrer"
+            className="absolute top-14 left-3 z-10 bg-black/80 border border-neutral-600 text-white px-4 py-2.5 text-[11px] uppercase tracking-[0.2em] backdrop-blur hover:border-white transition">
+            ◎ Street View
+          </a>
         )}
         {!racconto && (
           <div className="absolute top-3 right-3 z-10 w-48 bg-black/85 border border-neutral-700 backdrop-blur text-left">

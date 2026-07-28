@@ -71,6 +71,30 @@ export const PROGETTI: Progetto[] = [
 export interface Storia { id: string; titolo: string; testo: string; data: string; }
 export const STORIE: Storia[] = [
   {
+    id: 'paese-che-si-sposto', titolo: 'Il paese che si spost\u00f2', data: '1746\u20131756',
+    testo: 'Nel dicembre 1746 una grande frana si stacc\u00f2 dal versante nord del Monte San Martino; un anno dopo il movimento si riattiv\u00f2 e travolse la chiesa e parte dell\u2019abitato, allora chiamato Vallata. La comunit\u00e0 non si arrese: ricostru\u00ec la chiesa su un colle pi\u00f9 sicuro e la riapr\u00ec al culto il 19 maggio 1756. Non \u00e8 la storia di un edificio: \u00e8 la storia di un paese che ha imparato a convivere con una montagna che si muove \u2014 lo rifar\u00e0 nel 1960, nel 1966, nel 2013. [Fonti: Archivio frane storiche Regione E-R; CEI; Comune di Polinago]',
+  },
+  {
+    id: 'da-cappella-a-parrocchia', titolo: 'Da cappella a parrocchia', data: '1569\u20131627',
+    testo: 'Prima ancora di essere parrocchia, \u201cVallata\u201d compare nell\u2019indice di una visita pastorale del 1569 conservata nell\u2019Archivio Diocesano di Modena. Nel 1627 la comunit\u00e0 ottenne l\u2019autonomia da Cassano: una piccola frazione di montagna che conquista la propria chiesa. La tradizione popolare racconta di una donna ricca che avrebbe finanziato l\u2019edificio per non dover pi\u00f9 scendere a Cassano \u2014 leggenda, forse, ma con dentro un nucleo di verit\u00e0 che stiamo cercando negli archivi. [Fonti: ACMo O.I.33; CEI]',
+  },
+  {
+    id: 'rondine-1644', titolo: 'La Madonna della Rondine: documento e leggenda', data: '1644',
+    testo: 'L\u2019Oratorio della Beata Vergine della Rondine \u00e8 documentato dal 1644, opera di maestranze locali. La memoria del paese lo lega allo scampato pericolo della peste e tramanda racconti miracolosi attorno all\u2019immagine della Madonna. Qui ogni anno si celebra ancora la sua funzione: quattro secoli di devozione ininterrotta, in un edificio che oggi chiede di essere riaperto e curato. [Fonti: Catalogo ICCD 0800264192; tradizione locale]',
+  },
+  {
+    id: 'monte-1944', titolo: 'Monte San Martino, 1944', data: 'Primavera\u2013autunno 1944',
+    testo: 'Nella primavera del 1944 Mario Nardi raggiunse San Martino con una ventina di giovani: nacque la formazione partigiana Arturo Anderlini, con base sul monte. In settembre l\u2019area fu investita da un rastrellamento tedesco: il partigiano Emilio Mazzi, vent\u2019anni, ferito e catturato, fu ucciso il 19 settembre. Un cippo a San Martino lo ricorda ancora. Questi sentieri, prima di essere un percorso di camminata, sono stati una via di libert\u00e0. [Fonti: Atlante Formazioni Partigiane; Atlante delle stragi; Resistenza mAPPe]',
+  },
+  {
+    id: 'palazzo-ciatti', titolo: 'Il palazzo dei Ciatti e l\u2019ombra di Matilde', data: 'Tradizione',
+    testo: 'La memoria di San Martino racconta di tre torri di avvistamento e di un legame con Matilde di Canossa, la grande contessa che domin\u00f2 questi Appennini. Al centro del racconto c\u2019\u00e8 il palazzo della famiglia Ciatti, che la tradizione associa a quel sistema difensivo. Nessun documento lo prova \u2014 ancora. Ma i Da Gomola, feudatari di questa valle, furono davvero legati a Matilde: la leggenda cammina su un sentiero di storia vera, e la ricerca \u00e8 aperta. [Fonte: tradizione locale raccolta da E. Zuccarini, 1998]',
+  },
+  {
+    id: 'battesimo-2023', titolo: 'Il secondo battesimo del millennio', data: '5 febbraio 2023',
+    testo: 'Domenica 5 febbraio 2023, campane a festa: nella chiesa di San Martino viene battezzato il piccolo Gabriele, secondo battesimo in parrocchia in venticinque anni \u2014 il primo era stato suo fratello. La mamma, battezzata qui da bambina, ha scelto di restare a vivere nel borgo con l\u2019azienda agricola di famiglia. \u00c8 la notizia che ha fatto scrivere ai giornali quello che noi sappiamo da sempre: questa valle non si arrende. [Fonte: Il Resto del Carlino, 28/1/2023]',
+  },
+  {
     id: 'sentieri-ritrovati', titolo: 'I sentieri ritrovati', data: 'Estate 2026',
     testo: 'Per anni i sentieri di San Martino sono stati inghiottiti dai rovi. Questa primavera i volontari dell\'associazione li hanno riaperti a colpi di decespugliatore e pazienza: 6,2 chilometri di storia che tornano a respirare. Il 1° agosto li percorreremo tutti insieme, per la prima volta.',
   },

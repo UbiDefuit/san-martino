@@ -12,7 +12,8 @@ export const LUOGHI: { geo: [number, number]; nome: string; big?: boolean; zoom:
   { geo: [44.3872, 10.6893], nome: 'La Chiesa', zoom: 17.0 },
   { geo: [44.38831, 10.69083], nome: 'Oratorio della Rondine', zoom: 17.0 },
   { geo: [44.38870, 10.68366], nome: 'Oratorio di Sant\u2019Antonio Abate', zoom: 17.0 },
-  { geo: [44.38852, 10.68394], nome: 'Oratorio di San Geminiano', zoom: 17.0 },
+  { geo: [44.38852, 10.68394], nome: 'Cappella di San Giovanni (1686)', zoom: 17.0 },
+  { geo: [44.38590, 10.69285], nome: 'Oratorio dei SS. Geminiano e Pellegrino', zoom: 17.0 },
   { geo: [44.38740, 10.69393], nome: 'C\u00e0 Barbino', zoom: 16.8 },
   { geo: [44.38599, 10.69274], nome: 'C\u00e0 Carloni', zoom: 16.8 },
   { geo: [44.38437, 10.69189], nome: 'Il Poggio', zoom: 16.8 },
@@ -212,11 +213,12 @@ export default function Gemello() {
     raccontoRef.current = true;
     const tappe: { c: [number, number]; z: number; p: number; b: number; t: string; hold: number }[] = [
       { c: [10.68466, 44.38851], z: 16.6, p: 55, b: 160, t: 'San Martino. Il nucleo che d\u00e0 il nome alla frazione, sulla via che cuce la vallata.', hold: 2400 },
-      { c: [10.6893, 44.3872], z: 17.0, p: 55, b: 168, t: 'La chiesa parrocchiale: il ritrovo, il cuore, il punto di partenza di tutto.', hold: 2600 },
+      { c: [10.6893, 44.3872], z: 17.0, p: 55, b: 168, t: 'La chiesa: parrocchia dal 1627. Travolta dalle frane del 1746\u201347, riaperta al culto nel 1756 su un colle pi\u00f9 sicuro.', hold: 2800 },
+      { c: [10.69083, 44.38831], z: 17.0, p: 55, b: 165, t: 'L\u2019Oratorio della Madonna della Rondine, 1644: quattro secoli di devozione.', hold: 2400 },
       { c: [10.69393, 44.38740], z: 16.6, p: 55, b: 170, t: 'C\u00e0 Barbino — pietre che resistono da secoli.', hold: 2200 },
       { c: [10.69274, 44.38599], z: 16.6, p: 55, b: 172, t: 'C\u00e0 Carloni, affacciata sui campi.', hold: 2200 },
       { c: [10.69189, 44.38437], z: 16.6, p: 55, b: 175, t: 'Il Poggio — i tetti che vogliamo rivedere abitati.', hold: 2400 },
-      { c: [10.6894, 44.3790], z: 14.6, p: 62, b: 168, t: 'E sopra tutto il Monte San Martino: 6,2 km di sentieri riaperti a mano dai volontari.', hold: 2800 },
+      { c: [10.6894, 44.3790], z: 14.6, p: 62, b: 168, t: 'E sopra tutto il Monte San Martino: base partigiana nel 1944, oggi 6,2 km di sentieri riaperti a mano dai volontari.', hold: 3000 },
     ];
     try {
       for (const tp of tappe) {

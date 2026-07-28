@@ -44,9 +44,9 @@ export const PROGETTI: Progetto[] = [
   },
   {
     id: 'eventi', geo: [44.38660, 10.69010], titolo: 'Il calendario che non si ferma',
-    sintesi: 'Da un evento all\'anno a una stagione: camminata, castagnata, ciaspolata, primavera.',
+    sintesi: 'Da un evento all\'anno a una stagione: camminata, castagnata, inverno, primavera.',
     descrizione: 'Into the Wild è il primo di una serie: vogliamo un calendario di 3-4 appuntamenti l\'anno che tenga vivo il borgo in ogni stagione, sulla piattaforma digitale che abbiamo già costruito.',
-    azioni: ['Camminata estiva (1 agosto — iscrizioni aperte!)', 'Castagnata d\'autunno', 'Ciaspolata o camminata invernale', 'Festa di primavera'],
+    azioni: ['Camminata estiva (1 agosto — iscrizioni aperte!)', 'Castagnata d\'autunno', 'Camminata invernale', 'Festa di primavera'],
     budgetMin: 2000, budgetMax: 5000, raccolti: 0, stato: 'in corso',
     fonti: 'Offerte agli eventi, sponsor, quote soci',
   },

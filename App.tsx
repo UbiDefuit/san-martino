@@ -216,13 +216,13 @@ function Sostienici() {
       <Card>
         <Label>Con la firma: 5×1000</Label>
         <p className="text-neutral-200 text-[15px] leading-relaxed">
-          Presto potrai destinare il tuo 5×1000 all'associazione: non ti costa nulla,
+          Nella dichiarazione dei redditi, firma nel riquadro degli enti del Terzo settore e indica il nostro codice fiscale: non ti costa nulla,
           per San Martino vale moltissimo. Il codice fiscale da indicare arriverà qui
           appena completata la registrazione.
         </p>
         <div className="mt-4 border border-neutral-700 p-4 text-center">
           <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-400">Codice fiscale APS</p>
-          <p className="text-white font-mono text-sm mt-2">[in arrivo]</p>
+          <p className="text-white font-mono text-sm mt-2">94195950368</p>
         </div>
       </Card>
       <Card>
@@ -266,6 +266,8 @@ function ChiSiamo() {
       <Card>
         <Label>Contatti</Label>
         <p className="text-neutral-200 text-sm">Email: {EMAIL}</p>
+        <p className="text-neutral-200 text-sm">PEC: sanmartino2.0@pec.it</p>
+        <p className="text-neutral-200 text-sm">C.F. 94195950368 — iscritta al RUNTS</p>
         <p className="text-neutral-200 text-sm mt-1">WhatsApp: <a className="underline underline-offset-4" href={WHATSAPP_URL} target="_blank" rel="noreferrer">gruppo della comunità</a></p>
       </Card>
     </div>

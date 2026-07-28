@@ -1,7 +1,7 @@
 // Dati della piattaforma — modificare qui testi, obiettivi e raccolte.
 export const EVENTO_URL = 'https://ubidefuit.github.io/camminata-san-martino/';
 export const WHATSAPP_URL = 'https://chat.whatsapp.com/Irv0U5KNHroKef4iLJtWua';
-export const EMAIL = 'sanmartino20.thevalley@gmail.com'; // SEGNAPOSTO: sostituire con l'email reale dell'APS
+export const EMAIL = 'sanmartinovallata@gmail.com';
 
 export interface Progetto {
   id: string;

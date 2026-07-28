@@ -206,11 +206,11 @@ function Sostienici() {
       <Card>
         <Label>Con una donazione</Label>
         <p className="text-neutral-200 text-[15px] leading-relaxed">
-          Bonifico intestato all'associazione — ogni euro va sui progetti che vedi in queste pagine, e ogni anno pubblichiamo il rendiconto.
+          Bonifico intestato ad Associazione di Promozione Sociale San Martino 2.0 APS — ogni euro va sui progetti che vedi in queste pagine, e ogni anno pubblichiamo il rendiconto.
         </p>
         <div className="mt-4 border border-neutral-700 p-4 text-center">
           <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-400">IBAN</p>
-          <p className="text-white font-mono text-sm mt-2 break-all">[IBAN in pubblicazione — conto intestato all'APS]</p>
+          <p className="text-white font-mono text-sm mt-2 break-all">IT13 G030 3266 8200 1000 0695 281</p>
         </div>
       </Card>
       <Card>

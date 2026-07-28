@@ -11,6 +11,7 @@ export const LUOGHI: { geo: [number, number]; nome: string; big?: boolean; zoom:
   { geo: [44.38851, 10.68466], nome: 'San Martino', big: true, zoom: 16.8 },
   { geo: [44.3872, 10.6893], nome: 'La Chiesa', zoom: 17.0 },
   { geo: [44.38831, 10.69083], nome: 'Oratorio della Rondine', zoom: 17.0 },
+  { geo: [44.38870, 10.68366], nome: 'Oratorio di Sant\u2019Antonio Abate', zoom: 17.0 },
   { geo: [44.38740, 10.69393], nome: 'C\u00e0 Barbino', zoom: 16.8 },
   { geo: [44.38599, 10.69274], nome: 'C\u00e0 Carloni', zoom: 16.8 },
   { geo: [44.38437, 10.69189], nome: 'Il Poggio', zoom: 16.8 },

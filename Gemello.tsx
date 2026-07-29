@@ -216,7 +216,16 @@ export default function Gemello() {
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !ready) return;
-    // la carta del 1853 si legge solo in piano: entra/esce dalla vista dall'alto
+    // la carta del 1853 si legge solo in piano e da sola: via il satellite, fondo carta, tratti scuri
+    try {
+      map.setLayoutProperty('sat', 'visibility', showStorica ? 'none' : 'visible');
+      map.setLayoutProperty('ortofoto', 'visibility', showStorica ? 'none' : 'visible');
+      map.setPaintProperty('bg', 'background-color', showStorica ? '#eee7d3' : '#181a17');
+      map.setPaintProperty('route', 'line-color', showStorica ? '#7c2d12' : '#ffffff');
+      map.setPaintProperty('route-glow', 'line-color', showStorica ? '#7c2d12' : '#ffffff');
+      map.setPaintProperty('perimetro', 'line-color', showStorica ? '#374151' : '#ffffff');
+    } catch { /* ok */ }
+    document.getElementById('gemello')?.classList.toggle('storica-mode', showStorica);
     if (showStorica) {
       map.easeTo({ pitch: 0, bearing: 0, zoom: Math.max(map.getZoom(), 13.6), center: [10.6905, 44.3865], duration: 1600 });
     } else if (prevStorica.current && !zoomed) {

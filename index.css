@@ -35,3 +35,10 @@ html { scroll-behavior: smooth; }
 }
 @keyframes kenburnsSlow { 0% { transform: scale(1.02); } 100% { transform: scale(1.14); } }
 .kenburns-slow { animation: kenburnsSlow 16s ease-out forwards; }
+
+/* modalità carta storica 1853: etichette e camera scure su fondo chiaro */
+.storica-mode .gemello-label {
+  color: #1c1917;
+  text-shadow: 0 1px 4px rgba(255,255,255,0.95), 0 0 12px rgba(255,255,255,0.8);
+}
+.storica-mode .gemello-cam { filter: drop-shadow(0 1px 3px rgba(255,255,255,0.9)); }

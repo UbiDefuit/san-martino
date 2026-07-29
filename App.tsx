@@ -63,6 +63,16 @@ function Home() {
             <BtnLink href={EVENTO_URL} external primary>Iscriviti</BtnLink>
           </div>
         </Card>
+        <Card className="border-amber-400/40">
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+            <div className="flex-1 text-center sm:text-left">
+              <Label>Prossimo evento</Label>
+              <h2 className="text-2xl font-bold text-white">🍝 Tortellonata</h2>
+              <p className="text-neutral-300 text-sm mt-1">Sabato 8 agosto, ore 19:00 · Chiesa di San Martino · offerta libera · 100 posti — iscrizioni entro mercoledì 5 agosto</p>
+            </div>
+            <BtnLink href={EVENTO_URL + '#tortellonata'} external primary>Iscriviti</BtnLink>
+          </div>
+        </Card>
       </section>
 
       <section className="grid grid-cols-3 gap-3 text-center">

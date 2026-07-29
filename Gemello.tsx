@@ -227,7 +227,8 @@ export default function Gemello() {
     } catch { /* ok */ }
     document.getElementById('gemello')?.classList.toggle('storica-mode', showStorica);
     if (showStorica) {
-      map.easeTo({ pitch: 0, bearing: 0, zoom: Math.max(map.getZoom(), 13.6), center: [10.6905, 44.3865], duration: 1600 });
+      if (!showBorghi) setShowBorghi(true);
+      map.easeTo({ pitch: 0, bearing: 0, zoom: Math.max(map.getZoom(), 14.3), center: [10.688, 44.3872], duration: 1600 });
     } else if (prevStorica.current && !zoomed) {
       map.easeTo({ pitch: 60, bearing: 168, zoom: 12.8, center: [10.6905, 44.3838], duration: 1600 });
     }
@@ -409,6 +410,12 @@ export default function Gemello() {
       </p>
       <div className="relative">
         <div id="gemello" className="h-[62vh] border border-neutral-800" />
+        {showStorica && (
+          <div className="absolute bottom-8 left-3 z-10 max-w-[280px] bg-black/80 border border-neutral-700 backdrop-blur px-3 py-2.5">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-amber-400 mb-1">La valle nel 1853</p>
+            <p className="text-[12px] text-neutral-200 leading-snug">Carta topografica dello Stato estense, 1:50.000. I tratteggi sono i versanti: pi\u00f9 fitti, pi\u00f9 ripidi. Cerca <span className="italic">S. Martino Vallata</span> in corsivo \u2014 i nomi in nero sono i luoghi di oggi.</p>
+          </div>
+        )}
         {zoomed && (
           <button onClick={() => {
             setZoomed(false);

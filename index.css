@@ -42,3 +42,6 @@ html { scroll-behavior: smooth; }
   text-shadow: 0 1px 4px rgba(255,255,255,0.95), 0 0 12px rgba(255,255,255,0.8);
 }
 .storica-mode .gemello-cam { filter: drop-shadow(0 1px 3px rgba(255,255,255,0.9)); }
+
+/* scena cinematografica: nessuna etichetta o pin durante volo e racconto */
+.scena-pulita .gemello-label, .scena-pulita .gemello-cam, .scena-pulita .gemello-pin { display: none !important; }

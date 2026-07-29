@@ -97,6 +97,9 @@ export default function Gemello() {
       LUOGHI.forEach((l) => {
         const el = document.createElement('button');
         el.className = 'gemello-label' + (l.big ? ' gemello-label-big' : '');
+        // livelli: 0 = sempre, 1 = borgate (da z14), 2 = oratori/cappelle (da z15.2)
+        const tier = l.big || l.nome === 'Monte San Martino' ? 0 : /^(Oratorio|Cappella)/.test(l.nome) ? 2 : 1;
+        el.dataset.tier = String(tier);
         el.textContent = l.nome;
         el.title = 'Vai a ' + l.nome;
         el.addEventListener('click', (e) => {
@@ -173,6 +176,7 @@ export default function Gemello() {
         filter: ['<', ['get', 'idx'], -1],
         paint: { 'circle-color': '#fff3d6', 'circle-radius': 4, 'circle-opacity': 1 },
       });
+      map.on('zoom', applyLabels);
       setReady(true);
       // deep link: #/gemello?luogo=slug
       try {
@@ -194,8 +198,21 @@ export default function Gemello() {
   }, []);
 
   useEffect(() => {
-    luoghiMk.current.forEach((m) => { m.getElement().style.display = showBorghi ? '' : 'none'; });
+    applyLabels();
   }, [showBorghi]);
+  const showBorghiRef = useRef(false);
+  showBorghiRef.current = showBorghi;
+  const applyLabels = () => {
+    const map = mapRef.current;
+    if (!map) return;
+    const z = map.getZoom();
+    luoghiMk.current.forEach((m) => {
+      const el = m.getElement() as HTMLElement;
+      const tier = Number(el.dataset.tier || 0);
+      const minZ = tier === 2 ? 15.2 : tier === 1 ? 14 : 0;
+      el.style.display = showBorghiRef.current && z >= minZ ? '' : 'none';
+    });
+  };
   useEffect(() => {
     progettiMk.current.forEach((m) => { m.getElement().style.display = showProgetti ? '' : 'none'; });
   }, [showProgetti]);
@@ -245,6 +262,7 @@ export default function Gemello() {
     if (flyTimer.current) clearInterval(flyTimer.current);
     flyTimer.current = null;
     setFlying(false);
+    document.getElementById('gemello')?.classList.remove('scena-pulita');
   };
 
   // "Il racconto della valle": tour cinematico con sottotitoli e finale notturno
@@ -252,6 +270,7 @@ export default function Gemello() {
   const stopRacconto = () => {
     raccontoRef.current = false;
     setRacconto(false); setSottotitolo('');
+    document.getElementById('gemello')?.classList.remove('scena-pulita');
     const map = mapRef.current;
     if (map) {
       map.setPaintProperty('notte', 'background-opacity', 0);
@@ -264,6 +283,7 @@ export default function Gemello() {
     const map = mapRef.current;
     if (!map || racconto) return;
     setRacconto(true);
+    document.getElementById('gemello')?.classList.add('scena-pulita');
     raccontoRef.current = true;
     const tappe: { c: [number, number]; z: number; p: number; b: number; t: string; hold: number }[] = [
       { c: [10.68466, 44.38851], z: 16.6, p: 55, b: 160, t: 'San Martino. Il nucleo che d\u00e0 il nome alla frazione, sulla via che cuce la vallata.', hold: 2400 },
@@ -313,6 +333,7 @@ export default function Gemello() {
     if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     rafRef.current = null;
     setFlying(false);
+    document.getElementById('gemello')?.classList.remove('scena-pulita');
     const map = mapRef.current;
     if (map) {
       try { map.setLayoutProperty('ortofoto', 'visibility', 'visible'); } catch { /* ok */ }
@@ -325,6 +346,7 @@ export default function Gemello() {
     if (!map) return;
     if (flying) { stopVolo(); return; }
     setFlying(true);
+    document.getElementById('gemello')?.classList.add('scena-pulita');
     voloAnnullato.current = false;
     // niente ortofoto WMS durante il volo veloce: il satellite su CDN tiene il passo
     try { map.setLayoutProperty('ortofoto', 'visibility', 'none'); } catch { /* ok */ }

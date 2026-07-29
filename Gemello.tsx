@@ -89,8 +89,25 @@ export default function Gemello() {
     map.on('style.load', () => {
       map.setTerrain({ source: 'dem', exaggeration: 1.4 } as any);
       map.addSource('route', { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: TRACK.map((p) => [p[1], p[0]]) } } });
-      map.addLayer({ id: 'route-glow', type: 'line', source: 'route', paint: { 'line-color': '#ffffff', 'line-width': 9, 'line-opacity': 0.25, 'line-blur': 4 } });
-      map.addLayer({ id: 'route', type: 'line', source: 'route', paint: { 'line-color': '#ffffff', 'line-width': 3 } });
+      map.addLayer({ id: 'route-glow', type: 'line', source: 'route', layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#ffffff', 'line-width': 5.5, 'line-opacity': 0.95 } });
+      map.addLayer({ id: 'route', type: 'line', source: 'route', layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#d92626', 'line-width': 2.5 } });
+      map.addLayer({ id: 'route-flow', type: 'line', source: 'route', layout: { 'line-cap': 'round' }, paint: { 'line-color': '#ffffff', 'line-width': 2.5, 'line-opacity': 0.9, 'line-dasharray': [0.6, 5] } });
+      // flusso lento dei trattini lungo il sentiero (sequenza di pattern, ciclo continuo)
+      const dashSeq = [
+        [0, 5, 0.6], [0.1, 5, 0.5], [0.2, 5, 0.4], [0.3, 5, 0.3],
+        [0.4, 5, 0.2], [0.5, 5, 0.1], [0.6, 5, 0.001],
+      ];
+      let dashStep = 0;
+      const flow = (ts: number) => {
+        if (!map.getLayer('route-flow')) return;
+        const step = Math.floor((ts / 120) % dashSeq.length);
+        if (step !== dashStep) {
+          dashStep = step;
+          try { map.setPaintProperty('route-flow', 'line-dasharray', dashSeq[step] as any); } catch { /* ok */ }
+        }
+        requestAnimationFrame(flow);
+      };
+      requestAnimationFrame(flow);
       // area indicativa della grande frana 1746-47 (fonte: Archivio frane storiche RER, ID 221348 — localizzazione approssimativa)
       const FRANA: [number, number][] = [
         [10.6868, 44.3798], [10.6925, 44.3782], [10.6965, 44.3838], [10.6975, 44.39],
@@ -254,6 +271,7 @@ export default function Gemello() {
     try {
       map.setLayoutProperty('route', 'visibility', v(showSentiero));
       map.setLayoutProperty('route-glow', 'visibility', v(showSentiero));
+      map.setLayoutProperty('route-flow', 'visibility', v(showSentiero));
       map.setLayoutProperty('perimetro', 'visibility', v(showPerimetro));
       map.setLayoutProperty('storica', 'visibility', v(showStorica));
       map.setLayoutProperty('sat', 'visibility', v(!showStorica));
@@ -269,8 +287,9 @@ export default function Gemello() {
     // la carta del 1853 si legge solo in piano e da sola: via il satellite, fondo carta, tratti scuri
     try {
       map.setPaintProperty('bg', 'background-color', showStorica ? '#eee7d3' : '#181a17');
-      map.setPaintProperty('route', 'line-color', showStorica ? '#7c2d12' : '#ffffff');
-      map.setPaintProperty('route-glow', 'line-color', showStorica ? '#7c2d12' : '#ffffff');
+      map.setPaintProperty('route', 'line-color', '#d92626');
+      map.setPaintProperty('route-glow', 'line-color', '#ffffff');
+      map.setPaintProperty('route-flow', 'line-opacity', showStorica ? 0 : 0.9);
       map.setPaintProperty('perimetro', 'line-color', showStorica ? '#374151' : '#ffffff');
     } catch { /* ok */ }
     document.getElementById('gemello')?.classList.toggle('storica-mode', showStorica);

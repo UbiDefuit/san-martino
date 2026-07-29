@@ -5,7 +5,7 @@ import Gemello from './Gemello';
 type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'sostienici' | 'chisiamo';
 
 const routeFromHash = (): Route => {
-  const h = location.hash.replace('#/', '');
+  const h = location.hash.replace('#/', '').split('?')[0];
   return (['progetti', 'gemello', 'storie', 'sostienici', 'chisiamo'].includes(h) ? h : 'home') as Route;
 };
 

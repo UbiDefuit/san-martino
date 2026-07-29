@@ -22,6 +22,9 @@ export const LUOGHI: { geo: [number, number]; nome: string; big?: boolean; zoom:
   { geo: [44.3790, 10.6894], nome: 'Monte San Martino', zoom: 15.2 },
 ];
 
+export const slugLuogo = (nome: string) =>
+  nome.toLowerCase().replace(/[’']/g, '').replace(/[()]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
 export default function Gemello() {
   const mapRef = useRef<maplibregl.Map | null>(null);
   const flyTimer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -35,6 +38,8 @@ export default function Gemello() {
   const [showPerimetro, setShowPerimetro] = useState(true);
   const [showBorghi, setShowBorghi] = useState(false);
   const [showProgetti, setShowProgetti] = useState(true);
+  const [showStorica, setShowStorica] = useState(false);
+  const [showFrana, setShowFrana] = useState(false);
   const [legenda, setLegenda] = useState(true);
   const luoghiMk = useRef<maplibregl.Marker[]>([]);
   const progettiMk = useRef<maplibregl.Marker[]>([]);
@@ -56,11 +61,18 @@ export default function Gemello() {
             tileSize: 256,
             attribution: 'Ortofoto AGEA 2023 — Regione Emilia-Romagna',
           },
+          storica: {
+            type: 'raster',
+            tiles: ['https://servizigis.regione.emilia-romagna.it/wms/carta_storica_regionale_1853?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=carta_storica_regionale_1853&STYLES=&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/png'],
+            tileSize: 256,
+            attribution: 'Carta storica regionale 1853 — Regione Emilia-Romagna',
+          },
         },
         layers: [
           { id: 'bg', type: 'background', paint: { 'background-color': '#181a17' } },
           { id: 'sat', type: 'raster', source: 'sat' },
           { id: 'ortofoto', type: 'raster', source: 'ortofoto', minzoom: 13, paint: { 'raster-fade-duration': 300 } },
+          { id: 'storica', type: 'raster', source: 'storica', layout: { visibility: 'none' }, paint: { 'raster-fade-duration': 300, 'raster-opacity': 0.92 } },
         ],
       } as any,
       center: [10.6905, 44.3838],
@@ -72,6 +84,15 @@ export default function Gemello() {
       map.addSource('route', { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: TRACK.map((p) => [p[1], p[0]]) } } });
       map.addLayer({ id: 'route-glow', type: 'line', source: 'route', paint: { 'line-color': '#ffffff', 'line-width': 9, 'line-opacity': 0.25, 'line-blur': 4 } });
       map.addLayer({ id: 'route', type: 'line', source: 'route', paint: { 'line-color': '#ffffff', 'line-width': 3 } });
+      // area indicativa della grande frana 1746-47 (fonte: Archivio frane storiche RER, ID 221348 — localizzazione approssimativa)
+      const FRANA: [number, number][] = [
+        [10.6868, 44.3798], [10.6925, 44.3782], [10.6965, 44.3838], [10.6975, 44.39],
+        [10.696, 44.3965], [10.6935, 44.404], [10.6885, 44.4045], [10.689, 44.396],
+        [10.688, 44.389], [10.6852, 44.384], [10.6868, 44.3798],
+      ];
+      map.addSource('frana', { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: { type: 'Polygon', coordinates: [FRANA] } } });
+      map.addLayer({ id: 'frana-fill', type: 'fill', source: 'frana', layout: { visibility: 'none' }, paint: { 'fill-color': '#d97706', 'fill-opacity': 0.14 } });
+      map.addLayer({ id: 'frana-line', type: 'line', source: 'frana', layout: { visibility: 'none' }, paint: { 'line-color': '#f59e0b', 'line-width': 2, 'line-dasharray': [2, 2], 'line-opacity': 0.85 } });
       // toponimi — nascosti di default: si accendono dalla legenda
       LUOGHI.forEach((l) => {
         const el = document.createElement('button');
@@ -153,6 +174,15 @@ export default function Gemello() {
         paint: { 'circle-color': '#fff3d6', 'circle-radius': 4, 'circle-opacity': 1 },
       });
       setReady(true);
+      // deep link: #/gemello?luogo=slug
+      try {
+        const q = location.hash.split('?')[1];
+        const slug = q ? new URLSearchParams(q).get('luogo') : null;
+        if (slug) {
+          const l = LUOGHI.find((x) => slugLuogo(x.nome) === slug);
+          if (l) setTimeout(() => diveTo(l), 1200);
+        }
+      } catch { /* ok */ }
     });
     mapRef.current = map;
     return () => {
@@ -177,8 +207,11 @@ export default function Gemello() {
       map.setLayoutProperty('route', 'visibility', v(showSentiero));
       map.setLayoutProperty('route-glow', 'visibility', v(showSentiero));
       map.setLayoutProperty('perimetro', 'visibility', v(showPerimetro));
+      map.setLayoutProperty('storica', 'visibility', v(showStorica));
+      map.setLayoutProperty('frana-fill', 'visibility', v(showFrana));
+      map.setLayoutProperty('frana-line', 'visibility', v(showFrana));
     } catch { /* layer non pronti */ }
-  }, [showSentiero, showPerimetro, ready]);
+  }, [showSentiero, showPerimetro, showStorica, showFrana, ready]);
 
   const diveTo = (l: { geo: [number, number]; zoom: number; nome?: string }) => {
     setZoomed(true);
@@ -385,6 +418,8 @@ export default function Gemello() {
                   ['Perimetro frazione', showPerimetro, setShowPerimetro],
                   ['Nomi dei borghi', showBorghi, setShowBorghi],
                   ['Progetti e panorami', showProgetti, setShowProgetti],
+                  ['Carta storica 1853', showStorica, setShowStorica],
+                  ['Frana 1746\u201347 (indicativa)', showFrana, setShowFrana],
                 ] as [string, boolean, (v: boolean) => void][]).map(([label, val, set]) => (
                   <label key={label} className="flex items-center gap-2 text-xs text-neutral-200 cursor-pointer">
                     <input type="checkbox" checked={val} onChange={() => set(!val)} className="accent-white" />

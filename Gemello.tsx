@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { TRACK, ELES } from './track';
+import { elencoLuci, accendiLuce, Luce, supa } from './supa';
 import { PROGETTI, Progetto } from './data';
 
 const eur = (n: number) => n.toLocaleString('it-IT') + ' €';
@@ -46,6 +47,12 @@ export default function Gemello() {
   const [sottotitolo, setSottotitolo] = useState('');
   const raccontoRef = useRef(false);
   const [ready, setReady] = useState(false);
+  const [luci, setLuci] = useState<Luce[]>([]);
+  const luciRef = useRef<Luce[]>([]);
+  const [nomeLuce, setNomeLuce] = useState('');
+  const [borgataLuce, setBorgataLuce] = useState('San Martino');
+  const [luceAccesa, setLuceAccesa] = useState<string | null>(null);
+  const [accendendo, setAccendendo] = useState(false);
 
   useEffect(() => {
     const map = new maplibregl.Map({
@@ -176,7 +183,32 @@ export default function Gemello() {
         filter: ['<', ['get', 'idx'], -1],
         paint: { 'circle-color': '#fff3d6', 'circle-radius': 4, 'circle-opacity': 1 },
       });
+      // le luci della comunità ("Riaccendi la valle")
+      map.addSource('luci-com', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
+      map.addLayer({
+        id: 'luci-com-glow', type: 'circle', source: 'luci-com',
+        paint: { 'circle-color': '#ffd9a0', 'circle-radius': 10, 'circle-blur': 1, 'circle-opacity': 0.75 },
+      });
+      map.addLayer({
+        id: 'luci-com-core', type: 'circle', source: 'luci-com',
+        paint: { 'circle-color': '#fff3d6', 'circle-radius': 2.5, 'circle-opacity': 1 },
+      });
       map.on('zoom', applyLabels);
+      // luci della comunità: carica e resta in ascolto
+      const aggiornaLuciSrc = () => {
+        const src = map.getSource('luci-com') as maplibregl.GeoJSONSource | undefined;
+        if (src) src.setData({ type: 'FeatureCollection', features: luciRef.current.map((l) => ({ type: 'Feature', properties: { nome: l.nome }, geometry: { type: 'Point', coordinates: [l.lng, l.lat] } })) } as any);
+      };
+      elencoLuci().then((ls) => { luciRef.current = ls; setLuci(ls); aggiornaLuciSrc(); });
+      supa.channel('luci')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'sm2030_luci' }, (payload: any) => {
+          const l = payload.new as Luce;
+          if (luciRef.current.some((x) => x.id === l.id)) return;
+          luciRef.current = [...luciRef.current, l];
+          setLuci(luciRef.current);
+          aggiornaLuciSrc();
+        })
+        .subscribe();
       setReady(true);
       // deep link: #/gemello?luogo=slug
       try {
@@ -252,6 +284,36 @@ export default function Gemello() {
     prevStorica.current = showStorica;
   }, [showStorica, ready]);
 
+  const BORGATE_LUCE: { nome: string; geo: [number, number] }[] = [
+    { nome: 'San Martino', geo: [44.38851, 10.68466] },
+    { nome: 'C\u00e0 Carloni', geo: [44.38599, 10.69274] },
+    { nome: 'Il Poggio', geo: [44.38437, 10.69189] },
+    { nome: 'C\u00e0 Marastoni', geo: [44.38570, 10.70296] },
+    { nome: 'C\u00e0 dei Rossi', geo: [44.38946, 10.68199] },
+    { nome: 'C\u00e0 Lunga', geo: [44.39180, 10.68252] },
+  ];
+  const accendi = async () => {
+    const nome = nomeLuce.trim();
+    if (!nome || accendendo) return;
+    setAccendendo(true);
+    const b = BORGATE_LUCE.find((x) => x.nome === borgataLuce) || BORGATE_LUCE[0];
+    const jit = () => (Math.random() - 0.5) * 0.0016;
+    const l = await accendiLuce(nome, b.geo[0] + jit(), b.geo[1] + jit());
+    setAccendendo(false);
+    if (!l) return;
+    if (!luciRef.current.some((x) => x.id === l.id)) {
+      luciRef.current = [...luciRef.current, l];
+      setLuci(luciRef.current);
+      const map = mapRef.current;
+      const src = map?.getSource('luci-com') as maplibregl.GeoJSONSource | undefined;
+      if (src) src.setData({ type: 'FeatureCollection', features: luciRef.current.map((x) => ({ type: 'Feature', properties: { nome: x.nome }, geometry: { type: 'Point', coordinates: [x.lng, x.lat] } })) } as any);
+    }
+    setLuceAccesa(nome);
+    setNomeLuce('');
+    mapRef.current?.flyTo({ center: [l.lng, l.lat], zoom: 15.6, pitch: 55, bearing: 168, duration: 2600 });
+    setZoomed(true);
+  };
+
   const diveTo = (l: { geo: [number, number]; zoom: number; nome?: string }) => {
     setZoomed(true);
     setLuogoSel(l.nome ? (l as { geo: [number, number]; nome: string }) : null);
@@ -317,6 +379,11 @@ export default function Gemello() {
       }
       await attesa(1200);
       if (!raccontoRef.current) return;
+      if (luciRef.current.length > 0) {
+        setSottotitolo(`E non siamo soli: ${luciRef.current.length} ${luciRef.current.length === 1 ? 'luce accesa' : 'luci accese'} da chi crede in questa valle.`);
+        await attesa(3200);
+        if (!raccontoRef.current) return;
+      }
       setSottotitolo('SAN MARTINO 2030 — LA VALLE CHE NON SI ARRENDE');
       await attesa(4000);
     } finally {
@@ -539,7 +606,32 @@ export default function Gemello() {
             className="absolute top-4 right-4 bg-black/70 border border-neutral-600 text-white w-10 h-10 text-lg">✕</button>
         </div>
       )}
-      <button onClick={racconto ? stopRacconto : avviaRacconto} disabled={!ready}
+      <div className="border border-amber-400/40 bg-amber-400/5 p-4 space-y-3">
+        <div className="flex items-baseline justify-between gap-2">
+          <p className="text-[11px] uppercase tracking-[0.25em] text-amber-300">Riaccendi la valle</p>
+          <p className="text-[11px] text-neutral-300">{luci.length} {luci.length === 1 ? 'luce accesa' : 'luci accese'}</p>
+        </div>
+        {luceAccesa ? (
+          <p className="text-neutral-100 text-sm">La tua luce brilla nella valle, <span className="font-semibold">{luceAccesa}</span>. Grazie. <button className="underline text-neutral-400 ml-1" onClick={() => setLuceAccesa(null)}>Accendine un’altra</button></p>
+        ) : (
+          <>
+            <p className="text-neutral-300 text-sm">Lascia il tuo nome e accendi una luce sulla mappa: ogni luce dice “io ci credo”.</p>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input value={nomeLuce} onChange={(e) => setNomeLuce(e.target.value)} maxLength={30} placeholder="Il tuo nome"
+                className="flex-1 bg-black/40 border border-neutral-700 focus:border-amber-400 outline-none text-white px-3 py-2.5 text-sm" />
+              <select value={borgataLuce} onChange={(e) => setBorgataLuce(e.target.value)}
+                className="bg-black/40 border border-neutral-700 text-white px-3 py-2.5 text-sm">
+                {BORGATE_LUCE.map((b) => <option key={b.nome} value={b.nome}>{b.nome}</option>)}
+              </select>
+              <button onClick={accendi} disabled={!nomeLuce.trim() || accendendo || !ready}
+                className="bg-amber-400 text-black px-4 py-2.5 font-semibold uppercase tracking-[0.15em] text-xs disabled:opacity-40 hover:bg-amber-300 transition">
+                {accendendo ? '…' : 'Accendi ✦'}
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+            <button onClick={racconto ? stopRacconto : avviaRacconto} disabled={!ready}
         className="w-full bg-white text-black px-3 py-3.5 font-semibold uppercase tracking-[0.15em] text-xs transition disabled:opacity-40 hover:bg-neutral-200">
         {racconto ? 'Ferma il racconto' : '▶ Il racconto della valle (60s)'}
       </button>

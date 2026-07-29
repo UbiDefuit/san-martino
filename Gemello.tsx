@@ -72,7 +72,7 @@ export default function Gemello() {
           { id: 'bg', type: 'background', paint: { 'background-color': '#181a17' } },
           { id: 'sat', type: 'raster', source: 'sat' },
           { id: 'ortofoto', type: 'raster', source: 'ortofoto', minzoom: 13, paint: { 'raster-fade-duration': 300 } },
-          { id: 'storica', type: 'raster', source: 'storica', layout: { visibility: 'none' }, paint: { 'raster-fade-duration': 300, 'raster-opacity': 0.92 } },
+          { id: 'storica', type: 'raster', source: 'storica', minzoom: 11, layout: { visibility: 'none' }, paint: { 'raster-fade-duration': 300, 'raster-opacity': 1 } },
         ],
       } as any,
       center: [10.6905, 44.3838],
@@ -212,6 +212,18 @@ export default function Gemello() {
       map.setLayoutProperty('frana-line', 'visibility', v(showFrana));
     } catch { /* layer non pronti */ }
   }, [showSentiero, showPerimetro, showStorica, showFrana, ready]);
+  const prevStorica = useRef(false);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !ready) return;
+    // la carta del 1853 si legge solo in piano: entra/esce dalla vista dall'alto
+    if (showStorica) {
+      map.easeTo({ pitch: 0, bearing: 0, zoom: Math.max(map.getZoom(), 13.6), center: [10.6905, 44.3865], duration: 1600 });
+    } else if (prevStorica.current && !zoomed) {
+      map.easeTo({ pitch: 60, bearing: 168, zoom: 12.8, center: [10.6905, 44.3838], duration: 1600 });
+    }
+    prevStorica.current = showStorica;
+  }, [showStorica, ready]);
 
   const diveTo = (l: { geo: [number, number]; zoom: number; nome?: string }) => {
     setZoomed(true);

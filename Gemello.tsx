@@ -18,7 +18,7 @@ export const LUOGHI: { geo: [number, number]; nome: string; big?: boolean; zoom:
   { geo: [44.38599, 10.69274], nome: 'C\u00e0 Carloni', zoom: 16.8 },
   { geo: [44.38437, 10.69189], nome: 'Il Poggio', zoom: 16.8 },
   { geo: [44.38570, 10.70296], nome: 'C\u00e0 Marastoni', zoom: 16.8 },
-  { geo: [44.38946, 10.68199], nome: 'C\u00e0 dei Rossi', zoom: 16.8 },
+  { geo: [44.38885, 10.68345], nome: 'C\u00e0 dei Rossi', zoom: 16.8 },
   { geo: [44.39180, 10.68252], nome: 'C\u00e0 Lunga', zoom: 16.8 },
   { geo: [44.3790, 10.6894], nome: 'Monte San Martino', zoom: 15.2 },
 ];
@@ -111,8 +111,7 @@ export default function Gemello() {
         el.title = 'Vai a ' + l.nome;
         el.addEventListener('click', (e) => {
           e.stopPropagation();
-          setZoomed(true);
-          map.flyTo({ center: [l.geo[1], l.geo[0]], zoom: l.zoom, pitch: 55, bearing: 168, duration: 2800 });
+          diveTo(l);
         });
         el.style.display = 'none';
         const mk = new maplibregl.Marker({ element: el, anchor: 'center' })
@@ -289,7 +288,7 @@ export default function Gemello() {
     { nome: 'C\u00e0 Carloni', geo: [44.38599, 10.69274] },
     { nome: 'Il Poggio', geo: [44.38437, 10.69189] },
     { nome: 'C\u00e0 Marastoni', geo: [44.38570, 10.70296] },
-    { nome: 'C\u00e0 dei Rossi', geo: [44.38946, 10.68199] },
+    { nome: 'C\u00e0 dei Rossi', geo: [44.38885, 10.68345] },
     { nome: 'C\u00e0 Lunga', geo: [44.39180, 10.68252] },
   ];
   const accendi = async () => {

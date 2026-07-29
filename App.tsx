@@ -311,8 +311,17 @@ export default function App() {
   return (
     <div className="min-h-screen bg-black text-white font-sans">
       <button onClick={() => setLight(!light)} title={light ? 'Tema scuro' : 'Tema chiaro'}
-        className="fixed top-3 right-3 z-50 w-9 h-9 border border-neutral-700 bg-black/80 backdrop-blur text-sm hover:border-white transition">
-        {light ? '🌙' : '☀️'}
+        className="fixed top-3 right-3 z-50 w-9 h-9 flex items-center justify-center border border-neutral-700 bg-black/80 backdrop-blur text-white hover:border-white transition">
+        {light ? (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px] mx-auto">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px] mx-auto">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+          </svg>
+        )}
       </button>
       <header className="sticky top-0 z-40 bg-black/95 backdrop-blur border-b border-neutral-800">
         <div className="max-w-3xl mx-auto px-5 h-14 flex items-center justify-between">

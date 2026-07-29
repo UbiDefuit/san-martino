@@ -45,3 +45,29 @@ html { scroll-behavior: smooth; }
 
 /* scena cinematografica: nessuna etichetta o pin durante volo e racconto */
 .scena-pulita .gemello-label, .scena-pulita .gemello-cam, .scena-pulita .gemello-pin { display: none !important; }
+
+/* ---------- Tema chiaro (toggle ☀️) ---------- */
+html.light body { background: #f4f4f2; }
+html.light .bg-black { background-color: #f4f4f2 !important; }
+html.light .bg-neutral-950 { background-color: #ffffff !important; }
+html.light .bg-neutral-900 { background-color: #e9e9e6 !important; }
+html.light .bg-black\/80, html.light .bg-black\/85 { background-color: rgba(255,255,255,0.92) !important; }
+html.light .bg-black\/40 { background-color: rgba(255,255,255,0.7) !important; }
+html.light .text-white { color: #141414 !important; }
+html.light .text-neutral-100 { color: #1f1f1f !important; }
+html.light .text-neutral-200 { color: #2b2b2b !important; }
+html.light .text-neutral-300 { color: #3c3c3c !important; }
+html.light .text-neutral-400 { color: #585858 !important; }
+html.light .text-neutral-500 { color: #6b6b6b !important; }
+html.light .border-neutral-700 { border-color: #9a9a97 !important; }
+html.light .border-neutral-800 { border-color: #d2d2cf !important; }
+html.light .bg-white { background-color: #141414 !important; }
+html.light .text-black { color: #ffffff !important; }
+html.light .hover\:bg-neutral-200:hover { background-color: #333333 !important; }
+html.light .border-white\/30 { border-color: rgba(20,20,20,0.35) !important; }
+html.light .hover\:border-white:hover, html.light .hover\:border-amber-300:hover { border-color: #141414 !important; }
+html.light .text-amber-300 { color: #92600a !important; }
+html.light .text-amber-400 { color: #92600a !important; }
+/* eccezioni: QR, stemma e mappa non si toccano */
+html.light img.bg-white, html.light img[alt="QR tagliandino"] { background-color: #ffffff !important; }
+html.light #gemello .text-white { color: inherit !important; }

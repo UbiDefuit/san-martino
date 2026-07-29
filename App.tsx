@@ -287,6 +287,11 @@ function ChiSiamo() {
 
 // ---------- App ----------
 export default function App() {
+  const [light, setLight] = useState(localStorage.getItem('sm2030_theme') === 'light');
+  useEffect(() => {
+    document.documentElement.classList.toggle('light', light);
+    localStorage.setItem('sm2030_theme', light ? 'light' : 'dark');
+  }, [light]);
   const [route, setRoute] = useState<Route>(routeFromHash());
   useEffect(() => {
     const on = () => { setRoute(routeFromHash()); window.scrollTo(0, 0); };
@@ -305,6 +310,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-black text-white font-sans">
+      <button onClick={() => setLight(!light)} title={light ? 'Tema scuro' : 'Tema chiaro'}
+        className="fixed top-3 right-3 z-50 w-9 h-9 border border-neutral-700 bg-black/80 backdrop-blur text-sm hover:border-white transition">
+        {light ? '🌙' : '☀️'}
+      </button>
       <header className="sticky top-0 z-40 bg-black/95 backdrop-blur border-b border-neutral-800">
         <div className="max-w-3xl mx-auto px-5 h-14 flex items-center justify-between">
           <a href="#/" className="font-bold tracking-tight">SM<span className="text-neutral-400">2030</span></a>

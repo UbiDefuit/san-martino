@@ -40,6 +40,7 @@ export default function Gemello() {
   const [showProgetti, setShowProgetti] = useState(true);
   const [showStorica, setShowStorica] = useState(false);
   const [showFrana, setShowFrana] = useState(false);
+  const [showGai, setShowGai] = useState(false);
   const [legenda, setLegenda] = useState(true);
   const luoghiMk = useRef<maplibregl.Marker[]>([]);
   const progettiMk = useRef<maplibregl.Marker[]>([]);
@@ -67,12 +68,19 @@ export default function Gemello() {
             tileSize: 256,
             attribution: 'Carta storica regionale 1853 — Regione Emilia-Romagna',
           },
+          gai: {
+            type: 'raster',
+            tiles: ['https://servizigis.regione.emilia-romagna.it/wms/vologai1954?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=VoloGAI1954&STYLES=&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/jpeg'],
+            tileSize: 256,
+            attribution: 'Volo aereo IGMI-GAI 1954 — Regione Emilia-Romagna',
+          },
         },
         layers: [
           { id: 'bg', type: 'background', paint: { 'background-color': '#181a17' } },
           { id: 'sat', type: 'raster', source: 'sat' },
           { id: 'ortofoto', type: 'raster', source: 'ortofoto', minzoom: 13, paint: { 'raster-fade-duration': 300 } },
           { id: 'storica', type: 'raster', source: 'storica', minzoom: 11, layout: { visibility: 'none' }, paint: { 'raster-fade-duration': 300, 'raster-opacity': 1 } },
+          { id: 'gai', type: 'raster', source: 'gai', minzoom: 11, layout: { visibility: 'none' }, paint: { 'raster-fade-duration': 300, 'raster-opacity': 1 } },
         ],
       } as any,
       center: [10.6905, 44.3838],
@@ -208,10 +216,11 @@ export default function Gemello() {
       map.setLayoutProperty('route-glow', 'visibility', v(showSentiero));
       map.setLayoutProperty('perimetro', 'visibility', v(showPerimetro));
       map.setLayoutProperty('storica', 'visibility', v(showStorica));
+      map.setLayoutProperty('gai', 'visibility', v(showGai));
       map.setLayoutProperty('frana-fill', 'visibility', v(showFrana));
       map.setLayoutProperty('frana-line', 'visibility', v(showFrana));
     } catch { /* layer non pronti */ }
-  }, [showSentiero, showPerimetro, showStorica, showFrana, ready]);
+  }, [showSentiero, showPerimetro, showStorica, showFrana, showGai, ready]);
   const prevStorica = useRef(false);
   useEffect(() => {
     const map = mapRef.current;
@@ -227,13 +236,31 @@ export default function Gemello() {
     } catch { /* ok */ }
     document.getElementById('gemello')?.classList.toggle('storica-mode', showStorica);
     if (showStorica) {
+      if (showGai) setShowGai(false);
       if (!showBorghi) setShowBorghi(true);
       map.easeTo({ pitch: 0, bearing: 0, zoom: Math.max(map.getZoom(), 14.3), center: [10.688, 44.3872], duration: 1600 });
-    } else if (prevStorica.current && !zoomed) {
+    } else if (prevStorica.current && !zoomed && !showGai) {
       map.easeTo({ pitch: 60, bearing: 168, zoom: 12.8, center: [10.6905, 44.3838], duration: 1600 });
     }
     prevStorica.current = showStorica;
   }, [showStorica, ready]);
+  const prevGai = useRef(false);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !ready) return;
+    try {
+      map.setLayoutProperty('sat', 'visibility', showGai || showStorica ? 'none' : 'visible');
+      map.setLayoutProperty('ortofoto', 'visibility', showGai || showStorica ? 'none' : 'visible');
+    } catch { /* ok */ }
+    if (showGai) {
+      if (showStorica) setShowStorica(false);
+      if (!showBorghi) setShowBorghi(true);
+      map.easeTo({ pitch: 0, bearing: 0, zoom: Math.max(map.getZoom(), 14.3), center: [10.688, 44.3872], duration: 1600 });
+    } else if (prevGai.current && !zoomed && !showStorica) {
+      map.easeTo({ pitch: 60, bearing: 168, zoom: 12.8, center: [10.6905, 44.3838], duration: 1600 });
+    }
+    prevGai.current = showGai;
+  }, [showGai, ready]);
 
   const diveTo = (l: { geo: [number, number]; zoom: number; nome?: string }) => {
     setZoomed(true);
@@ -410,7 +437,13 @@ export default function Gemello() {
       </p>
       <div className="relative">
         <div id="gemello" className="h-[62vh] border border-neutral-800" />
-        {showStorica && (
+        {showGai && (
+          <div className="absolute bottom-8 left-3 z-10 max-w-[280px] bg-black/80 border border-neutral-700 backdrop-blur px-3 py-2.5">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-amber-400 mb-1">La valle nel 1954</p>
+            <p className="text-[12px] text-neutral-200 leading-snug">Fotografia aerea del volo IGMI-GAI: le borgate ancora abitate e i campi coltivati, prima dell\u2019esodo verso il distretto ceramico.</p>
+          </div>
+        )}
+                {showStorica && (
           <div className="absolute bottom-8 left-3 z-10 max-w-[280px] bg-black/80 border border-neutral-700 backdrop-blur px-3 py-2.5">
             <p className="text-[10px] uppercase tracking-[0.2em] text-amber-400 mb-1">La valle nel 1853</p>
             <p className="text-[12px] text-neutral-200 leading-snug">Carta topografica dello Stato estense, 1:50.000. I tratteggi sono i versanti: pi\u00f9 fitti, pi\u00f9 ripidi. Cerca <span className="italic">S. Martino Vallata</span> in corsivo \u2014 i nomi in nero sono i luoghi di oggi.</p>
@@ -446,6 +479,7 @@ export default function Gemello() {
                   ['Perimetro frazione', showPerimetro, setShowPerimetro],
                   ['Nomi dei borghi', showBorghi, setShowBorghi],
                   ['Progetti e panorami', showProgetti, setShowProgetti],
+                  ['Volo aereo 1954', showGai, setShowGai],
                   ['Carta storica 1853', showStorica, setShowStorica],
                   ['Frana 1746\u201347 (indicativa)', showFrana, setShowFrana],
                 ] as [string, boolean, (v: boolean) => void][]).map(([label, val, set]) => (

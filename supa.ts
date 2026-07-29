@@ -22,3 +22,30 @@ export async function accendiLuce(nome: string, lat: number, lng: number): Promi
   if (error) return null;
   return data as Luce;
 }
+
+// ---------------- Tortellonata (8 agosto 2026) ----------------
+export interface TtParticipant { id: string; name: string; adults: number; children: number; checked_in: boolean; }
+export interface TtStats { taken: number; cap: number; deadline: string; }
+
+export async function ttStats(): Promise<TtStats | null> {
+  const { data, error } = await supa.rpc('tt_public_stats');
+  if (error) return null;
+  return data as TtStats;
+}
+export async function ttRegister(p: { name: string; contact: string; adults: number; children: number; notes: string; consent: boolean }): Promise<TtParticipant> {
+  const id = crypto.randomUUID();
+  const { error } = await supa.from('tt_participants')
+    .insert({ id, name: p.name, contact: p.contact, adults: p.adults, children: p.children, notes: p.notes, consent: p.consent });
+  if (error) throw error;
+  return { id, name: p.name, adults: p.adults, children: p.children, checked_in: false };
+}
+export async function ttGetTicket(id: string): Promise<TtParticipant | null> {
+  const { data, error } = await supa.rpc('tt_get_ticket', { p_id: id });
+  if (error || !data || !(data as any[]).length) return null;
+  return (data as any[])[0] as TtParticipant;
+}
+export async function ttFindTicket(contact: string): Promise<{ id: string; name: string } | null> {
+  const { data, error } = await supa.rpc('tt_find_ticket', { p_contact: contact });
+  if (error || !data || !(data as any[]).length) return null;
+  return (data as any[])[0];
+}

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { PROGETTI, STORIE, EVENTO_URL, WHATSAPP_URL, EMAIL, Progetto } from './data';
 import Gemello from './Gemello';
+import Tortellonata from './Tortellonata';
 
-type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'sostienici' | 'chisiamo';
+type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'sostienici' | 'chisiamo' | 'tortellonata';
 
 const routeFromHash = (): Route => {
   const h = location.hash.replace('#/', '').split('?')[0];
-  return (['progetti', 'gemello', 'storie', 'sostienici', 'chisiamo'].includes(h) ? h : 'home') as Route;
+  return (['progetti', 'gemello', 'storie', 'sostienici', 'chisiamo', 'tortellonata'].includes(h) ? h : 'home') as Route;
 };
 
 const eur = (n: number) => n.toLocaleString('it-IT') + ' €';
@@ -70,7 +71,7 @@ function Home() {
               <h2 className="text-2xl font-bold text-white">🍝 Tortellonata</h2>
               <p className="text-neutral-300 text-sm mt-1">Sabato 8 agosto, ore 19:00 · Chiesa di San Martino · offerta libera · 100 posti — iscrizioni entro mercoledì 5 agosto</p>
             </div>
-            <BtnLink href={EVENTO_URL + '#tortellonata'} external primary>Iscriviti</BtnLink>
+            <BtnLink href="#/tortellonata" primary>Iscriviti</BtnLink>
           </div>
         </Card>
       </section>
@@ -325,6 +326,7 @@ export default function App() {
         {route === 'storie' && <Storie />}
         {route === 'sostienici' && <Sostienici />}
         {route === 'chisiamo' && <ChiSiamo />}
+        {route === 'tortellonata' && <Tortellonata />}
       </main>
       <footer className="border-t border-neutral-800 py-10 text-center space-y-3">
         <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-400">San Martino 2.0 — The Valley</p>

@@ -217,6 +217,8 @@ export default function Gemello() {
       map.setLayoutProperty('perimetro', 'visibility', v(showPerimetro));
       map.setLayoutProperty('storica', 'visibility', v(showStorica));
       map.setLayoutProperty('gai', 'visibility', v(showGai));
+      map.setLayoutProperty('sat', 'visibility', v(!(showStorica || showGai)));
+      map.setLayoutProperty('ortofoto', 'visibility', v(!(showStorica || showGai)));
       map.setLayoutProperty('frana-fill', 'visibility', v(showFrana));
       map.setLayoutProperty('frana-line', 'visibility', v(showFrana));
     } catch { /* layer non pronti */ }
@@ -227,8 +229,6 @@ export default function Gemello() {
     if (!map || !ready) return;
     // la carta del 1853 si legge solo in piano e da sola: via il satellite, fondo carta, tratti scuri
     try {
-      map.setLayoutProperty('sat', 'visibility', showStorica ? 'none' : 'visible');
-      map.setLayoutProperty('ortofoto', 'visibility', showStorica ? 'none' : 'visible');
       map.setPaintProperty('bg', 'background-color', showStorica ? '#eee7d3' : '#181a17');
       map.setPaintProperty('route', 'line-color', showStorica ? '#7c2d12' : '#ffffff');
       map.setPaintProperty('route-glow', 'line-color', showStorica ? '#7c2d12' : '#ffffff');
@@ -248,16 +248,16 @@ export default function Gemello() {
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !ready) return;
-    try {
-      map.setLayoutProperty('sat', 'visibility', showGai || showStorica ? 'none' : 'visible');
-      map.setLayoutProperty('ortofoto', 'visibility', showGai || showStorica ? 'none' : 'visible');
-    } catch { /* ok */ }
     if (showGai) {
       if (showStorica) setShowStorica(false);
       if (!showBorghi) setShowBorghi(true);
-      map.easeTo({ pitch: 0, bearing: 0, zoom: Math.max(map.getZoom(), 14.3), center: [10.688, 44.3872], duration: 1600 });
-    } else if (prevGai.current && !zoomed && !showStorica) {
-      map.easeTo({ pitch: 60, bearing: 168, zoom: 12.8, center: [10.6905, 44.3838], duration: 1600 });
+      map.easeTo({ pitch: 0, bearing: 0, zoom: Math.max(map.getZoom(), 14.6), center: [10.688, 44.3872], duration: 1600 });
+      setTimeout(() => { try { map.setMinZoom(13.8); } catch { /* ok */ } }, 1700);
+    } else {
+      try { map.setMinZoom(0); } catch { /* ok */ }
+      if (prevGai.current && !zoomed && !showStorica) {
+        map.easeTo({ pitch: 60, bearing: 168, zoom: 12.8, center: [10.6905, 44.3838], duration: 1600 });
+      }
     }
     prevGai.current = showGai;
   }, [showGai, ready]);
@@ -440,13 +440,13 @@ export default function Gemello() {
         {showGai && (
           <div className="absolute bottom-8 left-3 z-10 max-w-[280px] bg-black/80 border border-neutral-700 backdrop-blur px-3 py-2.5">
             <p className="text-[10px] uppercase tracking-[0.2em] text-amber-400 mb-1">La valle nel 1954</p>
-            <p className="text-[12px] text-neutral-200 leading-snug">Fotografia aerea del volo IGMI-GAI: le borgate ancora abitate e i campi coltivati, prima dell\u2019esodo verso il distretto ceramico.</p>
+            <p className="text-[12px] text-neutral-200 leading-snug">Fotografia aerea del volo IGMI-GAI: le borgate ancora abitate e i campi coltivati, prima dell’esodo verso il distretto ceramico.</p>
           </div>
         )}
                 {showStorica && (
           <div className="absolute bottom-8 left-3 z-10 max-w-[280px] bg-black/80 border border-neutral-700 backdrop-blur px-3 py-2.5">
             <p className="text-[10px] uppercase tracking-[0.2em] text-amber-400 mb-1">La valle nel 1853</p>
-            <p className="text-[12px] text-neutral-200 leading-snug">Carta topografica dello Stato estense, 1:50.000. I tratteggi sono i versanti: pi\u00f9 fitti, pi\u00f9 ripidi. Cerca <span className="italic">S. Martino Vallata</span> in corsivo \u2014 i nomi in nero sono i luoghi di oggi.</p>
+            <p className="text-[12px] text-neutral-200 leading-snug">Carta topografica dello Stato estense, 1:50.000. I tratteggi sono i versanti: più fitti, più ripidi. Cerca <span className="italic">S. Martino Vallata</span> in corsivo — i nomi in nero sono i luoghi di oggi.</p>
           </div>
         )}
         {zoomed && (

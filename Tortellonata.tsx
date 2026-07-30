@@ -58,7 +58,7 @@ export default function Tortellonata() {
         <h1 className="text-3xl font-bold text-white">Ci sei, {mio.name.split(' ')[0]}!</h1>
         <p className="text-neutral-300 text-sm">{mio.adults} adulti · {mio.children} bambini — mostra questo QR all'arrivo.</p>
         {qr && <img src={qr} alt="QR tagliandino" className="mx-auto bg-white p-3" style={{ width: 240 }} />}
-        <p className="text-neutral-400 text-xs">Sabato 8 agosto, ore 19:00 · Chiesa di San Martino. Contributo 20 € a testa, si paga alla serata.</p>
+        <p className="text-neutral-400 text-xs">Sabato 8 agosto, ore 19:00 · Chiesa di San Martino. Contributo: 20 € adulti · 10 € bambini — si paga alla serata.</p>
         {mio.checked_in && <p className="text-emerald-400 text-sm font-semibold">✓ Check-in effettuato — buon appetito!</p>}
       </div>
     );
@@ -69,7 +69,7 @@ export default function Tortellonata() {
       <div className="text-center space-y-2">
         <p className="text-[11px] uppercase tracking-[0.3em] text-neutral-400">Sabato 8 agosto · ore 19:00 · Chiesa di San Martino</p>
         <h1 className="text-4xl font-extrabold tracking-tight text-white">🍝 TORTELLONATA</h1>
-        <p className="text-neutral-300 text-sm">Tortelloni per tutti sotto le stelle della valle. Contributo: 20 € a testa, a sostegno dei progetti di San Martino 2030 — si paga alla serata.</p>
+        <p className="text-neutral-300 text-sm">Tortelloni per tutti sotto le stelle della valle. Contributo: 20 € adulti · 10 € bambini, a sostegno dei progetti di San Martino 2030 — si paga alla serata.</p>
         {stats && (
           <p className="text-amber-300 text-sm font-semibold">
             {stats.taken} iscritti · {rimasti} posti disponibili · iscrizioni entro le 20:00 di mercoledì 5 agosto

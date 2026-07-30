@@ -44,9 +44,9 @@ export const PROGETTI: Progetto[] = [
   },
   {
     id: 'eventi', geo: [44.38660, 10.69010], titolo: 'Il calendario che non si ferma',
-    sintesi: 'Da un evento all\'anno a una stagione: camminata, castagnata, inverno, primavera.',
-    descrizione: 'Into the Wild è il primo di una serie: vogliamo un calendario di 3-4 appuntamenti l\'anno che tenga vivo il borgo in ogni stagione, sulla piattaforma digitale che abbiamo già costruito.',
-    azioni: ['Camminata estiva (1 agosto — iscrizioni aperte!)', 'Castagnata d\'autunno', 'Camminata invernale', 'Festa di primavera'],
+    sintesi: 'La Festa di San Martino — polenta, vino novello e castagne — è il perno da sempre. Attorno, le nuove tappe.',
+    descrizione: 'La nostra scansione del tempo è la Festa di San Martino di novembre, che l\'associazione fa da anni: polentata, vino novello e castagne. Attorno a quella tappa fissa costruiamo la stagione: la camminata d\'estate, la Tortellonata, la primavera. Ogni appuntamento vive sulla piattaforma digitale — e alla Festa di San Martino si annunciano i risultati dell\'anno: le idee dell\'anfora votate, i progetti avviati, il rendiconto.',
+    azioni: ['Camminata Into the Wild (1 agosto)', 'Tortellonata (8 agosto)', 'FESTA DI SAN MARTINO — polenta, novello e castagne (novembre, la tradizione di sempre): qui si annunciano le idee vincitrici dell\'anfora', 'Festa di primavera'],
     budgetMin: 2000, budgetMax: 5000, raccolti: 0, stato: 'in corso',
     fonti: 'Offerte agli eventi, sponsor, quote soci',
   },

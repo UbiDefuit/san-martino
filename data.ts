@@ -13,7 +13,7 @@ export interface Progetto {
   budgetMin: number;
   budgetMax: number;
   raccolti: number;          // aggiornare a mano (per ora)
-  stato: 'in corso' | 'in avvio' | 'in progettazione';
+  stato: 'in corso' | 'in avvio' | 'in progettazione' | 'in valutazione';
   fonti: string;
 }
 
@@ -57,6 +57,14 @@ export const PROGETTI: Progetto[] = [
     azioni: ['Accordi con le reti dei cammini regionali', 'Punto acqua, ristoro e spazio tenda', 'Pacchetto "weekend a San Martino" con guide locali'],
     budgetMin: 10000, budgetMax: 25000, raccolti: 0, stato: 'in progettazione',
     fonti: 'GAL, Regione, APT',
+  },
+  {
+    id: 'casa-borgate', geo: [44.38810, 10.68520], titolo: 'La Casa delle Borgate',
+    sintesi: 'Ospitalit\u00e0 culturale dell\u2019APS: dormire nella valle e viverla, non solo visitarla. Idea in valutazione.',
+    descrizione: 'Una \u201ccasa per ferie\u201d gestita dall\u2019associazione (la forma che la legge regionale prevede per gli enti non profit): posti letto per escursionisti, famiglie, scolaresche e gruppi, sempre legati a un\u2019esperienza \u2014 i weekend delle borgate, la raccolta delle storie, i laboratori. Non un B&B: ospitalit\u00e0 con uno scopo. Il progetto \u00e8 in valutazione: il primo passo \u00e8 trovare l\u2019immobile giusto (comodato o accordo), poi la verifica fiscale e la SCIA. Nel frattempo si parte con i weekend-esperienza appoggiati alle strutture vicine convenzionate.',
+    azioni: ['Individuare l\u2019immobile (comodato/accordo)', 'Verifica fiscale con il commercialista (attivit\u00e0 secondarie ETS)', 'Weekend delle borgate pilota con pernotto convenzionato', 'SCIA casa per ferie quando c\u2019\u00e8 l\u2019edificio'],
+    budgetMin: 60000, budgetMax: 150000, raccolti: 0, stato: 'in valutazione',
+    fonti: 'Bandi 2027, comodato immobile, crowdfunding, sponsor',
   },
   {
     id: 'gemello', geo: [44.38860, 10.69050], titolo: 'Il gemello digitale di San Martino',

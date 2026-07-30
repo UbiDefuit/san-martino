@@ -71,3 +71,6 @@ html.light .text-amber-400 { color: #92600a !important; }
 /* eccezioni: QR, stemma e mappa non si toccano */
 html.light img.bg-white, html.light img[alt="QR tagliandino"] { background-color: #ffffff !important; }
 html.light #gemello .text-white { color: inherit !important; }
+
+/* logo monocromatico: in tema chiaro si inverte (nero su carta) */
+html.light img.logo-brand { filter: invert(1); border-color: #d2d2cf !important; }

@@ -37,7 +37,7 @@ function Home() {
   return (
     <div className="space-y-14 animate-fade-in-up">
       <section className="text-center pt-14">
-        <img src="./icona-app.svg" alt="San Martino 2.0" className="w-28 mx-auto mb-8 border border-neutral-800" />
+        <img src="./icona-app.svg" alt="San Martino 2.0" className="logo-brand w-28 mx-auto mb-8 border border-neutral-800" />
         <p className="text-xs uppercase tracking-[0.35em] text-neutral-400 mb-4">San Martino Vallata · Appennino modenese</p>
         <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">La valle che<br />non si arrende</h1>
         <p className="text-neutral-200 mt-6 max-w-xl mx-auto text-[15px] leading-relaxed">

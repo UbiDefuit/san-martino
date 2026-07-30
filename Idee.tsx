@@ -29,7 +29,7 @@ export default function Idee() {
       <div className="space-y-5 animate-fade-in-up pt-12 max-w-md mx-auto text-center">
         <p className="text-5xl">🏺</p>
         <h1 className="text-3xl font-bold text-white">Idea nell'anfora!</h1>
-        <p className="text-neutral-300 text-sm">Grazie. È anonima, come quelle su carta. Entro settembre pubblicheremo tutte le idee raccolte e le tre più fattibili andranno ai voti.</p>
+        <p className="text-neutral-300 text-sm">Grazie. È anonima, come quelle su carta. Il 23 settembre — l'ottavo compleanno dell'associazione — pubblicheremo tutte le idee raccolte, e le tre più fattibili andranno ai voti. Le vincitrici saranno annunciate alla Festa di San Martino.</p>
         {tot !== null && <p className="text-amber-300 font-semibold">{tot} idee raccolte finora</p>}
         <button onClick={() => { setFatto(false); setIdea(''); setLuogo(''); setAiuto(''); setContatto(''); }}
           className="border border-neutral-700 text-white px-4 py-2.5 text-sm hover:border-white transition">Ne ho un'altra</button>

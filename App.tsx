@@ -273,6 +273,8 @@ function ChiSiamo() {
           Da statuto operiamo, senza scopo di lucro, per la salvaguardia dell'ambiente, la tutela e la
           valorizzazione del patrimonio culturale e del paesaggio, le attività culturali, educative e
           ricreative di interesse sociale e l'inclusione delle persone fragili (D.lgs 117/17, Codice del Terzo settore).
+          Siamo nati il 23 settembre 2018, con nove firme in via Carloni: da allora ogni anno la valle
+          ha la sua Festa di San Martino — e da quest'anno molto di più.
           Siamo volontari: gente del borgo, figli e nipoti di chi c'è nato, persone che
           hanno scelto questa valle. Puliamo sentieri, organizziamo eventi, raccogliamo memorie
           e costruiamo — anche digitalmente — il futuro di un posto che non vogliamo veder sparire.

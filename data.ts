@@ -79,6 +79,10 @@ export const PROGETTI: Progetto[] = [
 export interface Storia { id: string; titolo: string; testo: string; data: string; }
 export const STORIE: Storia[] = [
   {
+    id: 'nove-firme', titolo: 'Nove firme in via Carloni', data: '23 settembre 2018',
+    testo: 'Il 23 settembre 2018, in via Carloni 5, nove persone firmano l\u2019atto costitutivo dell\u2019Associazione di Promozione Sociale San Martino 2.0. Quota sociale: dieci euro. Gli scopi, neri su bianco: promuovere arte, tradizioni e cultura della frazione, educare a muoversi nella natura, accrescere il senso d\u2019appartenenza, stimolare un turismo etico e sostenibile. Otto anni dopo, quelle nove firme sono sentieri riaperti, feste che riempiono il sagrato e una valle che si racconta al mondo. Il 23 settembre \u00e8 il nostro compleanno \u2014 e ogni anno, da adesso, sar\u00e0 il giorno in cui pubblichiamo le idee della comunit\u00e0.',
+  },
+  {
     id: 'paese-che-si-sposto', titolo: 'Il paese che si spost\u00f2', data: '1746\u20131756',
     testo: 'Nel dicembre 1746 una grande frana si stacc\u00f2 dal versante nord del Monte San Martino; un anno dopo il movimento si riattiv\u00f2 e travolse la chiesa e parte dell\u2019abitato, allora chiamato Vallata. La comunit\u00e0 non si arrese: ricostru\u00ec la chiesa su un colle pi\u00f9 sicuro e la riapr\u00ec al culto il 19 maggio 1756. Non \u00e8 la storia di un edificio: \u00e8 la storia di un paese che ha imparato a convivere con una montagna che si muove \u2014 lo rifar\u00e0 nel 1960, nel 1966, nel 2013. [Fonti: Archivio frane storiche Regione E-R; CEI; Comune di Polinago]',
   },

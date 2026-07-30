@@ -88,7 +88,7 @@ function Home() {
       </section>
 
       <section className="grid grid-cols-3 gap-3 text-center">
-        {[['6,2 km', 'di sentieri riaperti dai volontari'], ['6', 'progetti per il borgo'], ['1', 'valle da salvare']].map(([n, l]) => (
+        {[['6,2 km', 'di sentieri riaperti dai volontari'], ['7', 'progetti per il borgo'], ['dal 2018', 'al servizio della valle']].map(([n, l]) => (
           <Card key={l}>
             <div className="text-3xl font-light text-white">{n}</div>
             <div className="text-[11px] uppercase tracking-[0.15em] text-neutral-400 mt-2">{l}</div>
@@ -273,8 +273,11 @@ function ChiSiamo() {
           Da statuto operiamo, senza scopo di lucro, per la salvaguardia dell'ambiente, la tutela e la
           valorizzazione del patrimonio culturale e del paesaggio, le attività culturali, educative e
           ricreative di interesse sociale e l'inclusione delle persone fragili (D.lgs 117/17, Codice del Terzo settore).
-          Siamo nati il 23 settembre 2018, con nove firme in via Carloni: da allora ogni anno la valle
-          ha la sua Festa di San Martino — e da quest'anno molto di più.
+          Siamo nati il 23 settembre 2018, con nove firme in via Carloni, e la nostra sede è nella
+          canonica della parrocchia, di cui curiamo la manutenzione. In otto anni: la Festa di San Martino
+          ogni novembre, il centro estivo per i ragazzi, il defibrillatore finanziato per Il Poggio,
+          e una dotazione tutta nostra — tensostruttura, tavoli, cucina attrezzata, luci esterne —
+          che fa vivere gli eventi della valle.
           Siamo volontari: gente del borgo, figli e nipoti di chi c'è nato, persone che
           hanno scelto questa valle. Puliamo sentieri, organizziamo eventi, raccogliamo memorie
           e costruiamo — anche digitalmente — il futuro di un posto che non vogliamo veder sparire.

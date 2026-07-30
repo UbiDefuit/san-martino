@@ -49,3 +49,18 @@ export async function ttFindTicket(contact: string): Promise<{ id: string; name:
   if (error || !data || !(data as any[]).length) return null;
   return (data as any[])[0];
 }
+
+// ---------------- Anfora delle idee ----------------
+export async function ideaInvia(idea: string, luogo: string, aiuto: string, contatto: string): Promise<boolean> {
+  const { error } = await supa.from('sm2030_idee').insert({
+    idea: idea.trim().slice(0, 400),
+    luogo: luogo || null,
+    aiuto: aiuto.trim() ? aiuto.trim().slice(0, 200) : null,
+    contatto: contatto.trim() ? contatto.trim().slice(0, 120) : null,
+  });
+  return !error;
+}
+export async function ideeTotale(): Promise<number> {
+  const { data, error } = await supa.rpc('sm2030_idee_count');
+  return error ? 0 : (data as number) || 0;
+}

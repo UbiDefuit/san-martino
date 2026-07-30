@@ -76,6 +76,24 @@ export default function Tortellonata() {
           </p>
         )}
       </div>
+      <div className="border border-neutral-800 bg-neutral-950 p-5 space-y-4">
+        <p className="text-[11px] uppercase tracking-[0.3em] text-amber-300 text-center">Il menù</p>
+        <div className="space-y-3 text-sm">
+          <div>
+            <p className="text-white font-semibold">Per rompere il ghiaccio</p>
+            <p className="text-neutral-300">Gin Lemon e Spritz, con stuzzichini</p>
+          </div>
+          <div>
+            <p className="text-white font-semibold">I tortelloni — tre assaggi</p>
+            <p className="text-neutral-300">Burro e salvia · Ragù · e un terzo a sorpresa (funghi o pancetta: si decide all'ultimo, come si fa in valle)</p>
+          </div>
+          <div>
+            <p className="text-white font-semibold">Per finire</p>
+            <p className="text-neutral-300">Dolci della comunità e la famosissima <span className="text-white font-semibold">crescentina fritta di San Martino</span></p>
+          </div>
+        </div>
+        <p className="text-neutral-500 text-xs text-center">Intolleranze o allergie? Scrivilo nelle note dell'iscrizione: la cucina ne tiene conto.</p>
+      </div>
       {chiuse ? (
         <p className="text-center text-red-400 font-semibold">Iscrizioni chiuse{stats && stats.taken >= stats.cap ? ': posti esauriti' : ''}. Chiedi nel gruppo WhatsApp per eventuali rinunce.</p>
       ) : (

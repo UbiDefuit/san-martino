@@ -1,3 +1,4 @@
+import Mark from './Mark';
 import React, { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
 import { ttStats, ttRegister, ttGetTicket, ttFindTicket, TtParticipant, TtStats } from './supa';
@@ -77,7 +78,7 @@ export default function Gramignata() {
              className="w-full h-[210px] object-cover object-bottom" />
         <div className="absolute inset-0 hero-fade" />
         <div className="absolute left-1/2 -translate-x-1/2 -bottom-9 w-[92px] h-[92px] badge-disc flex items-center justify-center">
-          <img src="./gramignata-mark.svg" alt="" className="w-[86px] h-[86px]" />
+          <Mark className="w-[86px] h-[86px] mark-fg" />
         </div>
       </div>
       <div className="text-center space-y-3">

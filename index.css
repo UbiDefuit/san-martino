@@ -87,3 +87,6 @@ html.light img.logo-brand { filter: invert(1); border-color: #d2d2cf !important;
 html.light .hero-fade { background: linear-gradient(to bottom, rgba(244,244,242,.35) 0%, rgba(244,244,242,0) 40%, rgba(244,244,242,.5) 72%, #f4f4f2 100%); }
 html.light .badge-disc { background: #f4f4f2; }
 html.light .gold { color: #8a6a11 !important; }
+
+.mark-fg { color: #F3EFE6; }
+html.light .mark-fg { color: #141414; }

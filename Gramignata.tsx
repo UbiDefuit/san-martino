@@ -14,6 +14,9 @@ export default function Gramignata() {
   const [mio, setMio] = useState<TtParticipant | null>(null);
   const [qr, setQr] = useState('');
   const [recupero, setRecupero] = useState('');
+  const [tids, setTids] = useState<string[]>([]);
+  const [altri, setAltri] = useState<TtParticipant[]>([]);
+  const [nuovo, setNuovo] = useState(false);
 
   const EVENTO = new Date('2026-08-08T19:30:00+02:00').getTime();
   const [now, setNow] = useState(Date.now());
@@ -23,13 +26,29 @@ export default function Gramignata() {
     mm = Math.floor(diff / 60000) % 60, ss = Math.floor(diff / 1000) % 60;
   useEffect(() => { ttStats().then(setStats); }, []);
   useEffect(() => {
-    const tid = localStorage.getItem('tt_tid');
-    if (tid) ttGetTicket(tid).then((p) => { if (p) setMio(p); });
+    const raw = localStorage.getItem('tt_tids');
+    const vecchio = localStorage.getItem('tt_tid');
+    const lista: string[] = raw ? JSON.parse(raw) : (vecchio ? [vecchio] : []);
+    if (!lista.length) return;
+    setTids(lista);
+    Promise.all(lista.map((t) => ttGetTicket(t)))
+      .then((ps) => {
+        const ok = ps.filter(Boolean) as TtParticipant[];
+        setAltri(ok);
+        if (ok.length) setMio(ok[ok.length - 1]);
+      });
   }, []);
   useEffect(() => { if (mio) QRCode.toDataURL('tt:' + mio.id, { width: 280, margin: 1 }).then(setQr); }, [mio]);
 
   const chiuse = stats ? (new Date() > new Date(stats.deadline) || stats.taken >= stats.cap) : false;
   const rimasti = stats ? Math.max(0, stats.cap - stats.taken) : null;
+
+  const salvaTid = (id: string) => {
+    const lista = Array.from(new Set([...tids, id]));
+    setTids(lista);
+    localStorage.setItem('tt_tids', JSON.stringify(lista));
+    localStorage.removeItem('tt_tid');
+  };
 
   const invia = async () => {
     setErr('');
@@ -39,12 +58,14 @@ export default function Gramignata() {
     setBusy(true);
     try {
       const p = await ttRegister({ name: nome.trim(), contact: contatto.trim(), adults: adulti, children: bimbi, notes: note.trim(), consent: consenso });
-      localStorage.setItem('tt_tid', p.id);
+      salvaTid(p.id);
+      setAltri((a) => [...a.filter((x) => x.id !== p.id), p]);
       setMio(p);
+      setNuovo(false);
       ttStats().then(setStats);
     } catch (e: any) {
       const m = String(e.message || e);
-      setErr(m.includes('duplicate') ? 'Questo contatto risulta già iscritto: usa "Recupera tagliandino" qui sotto.' : m.includes('esauriti') ? 'Posti esauriti.' : m.includes('chiuse') ? 'Le iscrizioni sono chiuse.' : 'Errore: ' + m);
+      setErr(m.includes('duplicate') ? 'Questo contatto risulta già iscritto. Se stai iscrivendo un\'altra persona usa un contatto diverso (il suo numero); se invece è la tua iscrizione, usa "Recupera tagliandino" qui sotto.' : m.includes('esauriti') ? 'Posti esauriti.' : m.includes('chiuse') ? 'Le iscrizioni sono chiuse.' : 'Errore: ' + m);
     }
     setBusy(false);
   };
@@ -53,12 +74,12 @@ export default function Gramignata() {
     setErr('');
     const f = await ttFindTicket(recupero.trim());
     if (!f) { setErr('Nessuna iscrizione trovata con questo contatto.'); return; }
-    localStorage.setItem('tt_tid', f.id);
+    salvaTid(f.id);
     const p = await ttGetTicket(f.id);
-    if (p) setMio(p);
+    if (p) { setAltri((a) => [...a.filter((x) => x.id !== p.id), p]); setMio(p); setNuovo(false); }
   };
 
-  if (mio) {
+  if (mio && !nuovo) {
     return (
       <div className="space-y-5 animate-fade-in-up pt-10 max-w-sm mx-auto text-center">
         <p className="text-[11px] uppercase tracking-[0.3em] text-neutral-400">La Gramignata · 8 agosto</p>
@@ -67,10 +88,34 @@ export default function Gramignata() {
         {qr && <img src={qr} alt="QR tagliandino" className="mx-auto bg-white p-3" style={{ width: 240 }} />}
         <p className="text-neutral-400 text-xs">Sabato 8 agosto, ore 19:30 · Chiesa di San Martino. Contributo: 20 € adulti · 10 € bambini — si paga alla serata.</p>
         {mio.checked_in && <p className="text-emerald-400 text-sm font-semibold">✓ Check-in effettuato — buon appetito!</p>}
+
+        {altri.length > 1 && (
+          <div className="pt-4 border-t border-neutral-800 space-y-2">
+            <p className="text-[10px] tracked gold">I tagliandini su questo telefono</p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {altri.map((a) => (
+                <button key={a.id} onClick={() => setMio(a)}
+                  className={'px-3 py-1.5 text-xs border transition ' +
+                    (a.id === mio.id ? 'border-white text-white' : 'border-neutral-700 text-neutral-400 hover:border-neutral-500')}>
+                  {a.name.split(' ')[0]}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!chiuse && (
+          <div className="pt-5 border-t border-neutral-800 space-y-2">
+            <p className="text-neutral-400 text-xs">Devi iscrivere qualcun altro? Un vicino, un parente che non se la cava col telefono?</p>
+            <button onClick={() => { setNuovo(true); setNome(''); setContatto(''); setAdulti(2); setBimbi(0); setNote(''); setConsenso(false); setErr(''); }}
+              className="w-full border border-neutral-700 text-white px-4 py-3 text-[11px] uppercase tracking-[0.15em] hover:border-white transition">
+              Iscrivi un'altra persona
+            </button>
+          </div>
+        )}
       </div>
     );
   }
-
   return (
     <div className="space-y-6 animate-fade-in-up pt-10 max-w-md mx-auto">
       <div className="-mx-5 relative mb-14">
@@ -81,6 +126,16 @@ export default function Gramignata() {
           <Mark className="w-[86px] h-[86px] mark-fg" />
         </div>
       </div>
+      {nuovo && (
+        <div className="hairline bg-neutral-950 p-4 text-center space-y-2">
+          <p className="text-[10px] tracked gold">Nuova iscrizione</p>
+          <p className="text-neutral-300 text-sm">Stai iscrivendo un'altra persona. Metti il <span className="text-white">suo</span> nome e un contatto diverso dal tuo (il suo numero, oppure il tuo con una nota tipo "per Maria").</p>
+          <button onClick={() => { setNuovo(false); setErr(''); }}
+            className="text-[11px] tracked text-neutral-200 underline underline-offset-4 hover:text-white transition">
+            Torna ai miei tagliandini
+          </button>
+        </div>
+      )}
       <div className="text-center space-y-3">
         <h1 className="font-display text-5xl text-white leading-none">La Gramignata</h1>
         <div className="w-12 h-[2px] mx-auto" style={{ background: '#A8322A' }} />

@@ -15,7 +15,7 @@ export default function Gramignata() {
   const [qr, setQr] = useState('');
   const [recupero, setRecupero] = useState('');
 
-  const EVENTO = new Date('2026-08-08T19:00:00+02:00').getTime();
+  const EVENTO = new Date('2026-08-08T19:30:00+02:00').getTime();
   const [now, setNow] = useState(Date.now());
   useEffect(() => { const t = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(t); }, []);
   const diff = Math.max(0, EVENTO - now);
@@ -65,7 +65,7 @@ export default function Gramignata() {
         <h1 className="text-3xl font-bold text-white">Ci sei, {mio.name.split(' ')[0]}!</h1>
         <p className="text-neutral-300 text-sm">{mio.adults} adulti · {mio.children} bambini — mostra questo QR all'arrivo.</p>
         {qr && <img src={qr} alt="QR tagliandino" className="mx-auto bg-white p-3" style={{ width: 240 }} />}
-        <p className="text-neutral-400 text-xs">Sabato 8 agosto, ore 19:00 · Chiesa di San Martino. Contributo: 20 € adulti · 10 € bambini — si paga alla serata.</p>
+        <p className="text-neutral-400 text-xs">Sabato 8 agosto, ore 19:30 · Chiesa di San Martino. Contributo: 20 € adulti · 10 € bambini — si paga alla serata.</p>
         {mio.checked_in && <p className="text-emerald-400 text-sm font-semibold">✓ Check-in effettuato — buon appetito!</p>}
       </div>
     );
@@ -84,8 +84,12 @@ export default function Gramignata() {
       <div className="text-center space-y-3">
         <h1 className="font-display text-5xl text-white leading-none">La Gramignata</h1>
         <div className="w-12 h-[2px] mx-auto" style={{ background: '#A8322A' }} />
-        <p className="text-[11px] tracked text-white font-bold">Sabato 8 agosto 2026 · ore 19</p>
+        <p className="text-[11px] tracked text-white font-bold">Sabato 8 agosto 2026 · ore 19:30</p>
         <p className="text-[12px] text-neutral-400">Chiesa di San Martino — San Martino Vallata, Polinago</p>
+        <a href="https://maps.app.goo.gl/rUAuxyJMV4Pdbpb69" target="_blank" rel="noreferrer"
+           className="inline-block text-[11px] tracked text-neutral-200 underline underline-offset-4 hover:text-white transition">
+          Apri il punto di ritrovo in Google Maps
+        </a>
         <p className="text-neutral-300 text-sm pt-1">La cena di San Martino sotto le stelle della valle. Contributo: 20 € adulti · 10 € bambini, a sostegno dei progetti della valle — si paga alla serata.</p>
         <div className="grid grid-cols-4 gap-2 text-center border border-neutral-800 py-3">
           {[[gg, 'giorni'], [hh, 'ore'], [mm, 'min'], [ss, 'sec']].map(([v, l]) => (
@@ -120,6 +124,27 @@ export default function Gramignata() {
           <p className="text-neutral-400 text-[11px] mt-1">acqua e vino inclusi nel coperto</p>
         </div>
         <p className="text-neutral-500 text-xs text-center">Intolleranze o allergie? Scrivilo nelle note dell'iscrizione: la cucina ne tiene conto.</p>
+      </div>
+      <div className="hairline bg-neutral-950 p-6 space-y-5">
+        <p className="text-[10px] tracked gold text-center">La serata</p>
+        <div className="rule-gold w-10 mx-auto" />
+        <div className="text-center">
+          <p className="text-[10px] tracked gold">Musica dal vivo</p>
+          <p className="font-display text-lg text-white mt-1">Si suona fino a tardi</p>
+          <p className="text-neutral-400 text-[12px] mt-1">Un gruppo accompagna la cena e la serata sul sagrato.</p>
+        </div>
+        <div className="text-center pt-4 border-t border-neutral-800/80">
+          <p className="text-[10px] tracked gold">L'anfora delle idee</p>
+          <p className="font-display text-lg text-white mt-1">Cosa vorresti per San Martino?</p>
+          <p className="text-neutral-400 text-[12px] mt-1">
+            Durante la serata trovi un'anfora e dei biglietti: scrivi la tua idea per il paese, in forma anonima.
+            Le raccogliamo tutte e diventano il piano <span className="text-neutral-200">San Martino 2030</span>.
+          </p>
+          <a href="#/idee"
+             className="inline-block mt-3 text-[11px] tracked text-neutral-200 underline underline-offset-4 hover:text-white transition">
+            Scrivi la tua idea ora
+          </a>
+        </div>
       </div>
       {chiuse ? (
         <p className="text-center text-red-400 font-semibold">Iscrizioni chiuse{stats && stats.taken >= stats.cap ? ': posti esauriti' : ''}. Chiedi nel gruppo WhatsApp per eventuali rinunce.</p>

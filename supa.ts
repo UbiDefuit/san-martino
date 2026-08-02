@@ -64,3 +64,17 @@ export async function ideeTotale(): Promise<number> {
   const { data, error } = await supa.rpc('sm2030_idee_count');
   return error ? 0 : (data as number) || 0;
 }
+
+export async function ttCheckIn(id: string, pin: string): Promise<void> {
+  const { error } = await supa.rpc('tt_check_in', { p_id: id, pin });
+  if (error) throw error;
+}
+export async function ttStaffList(pin: string): Promise<any[]> {
+  const { data, error } = await supa.rpc('tt_staff_list', { pin });
+  if (error) throw error;
+  return (data as any[]) || [];
+}
+export async function ttResetCheckin(id: string, pin: string): Promise<void> {
+  const { error } = await supa.rpc('tt_reset_checkin', { p_id: id, pin });
+  if (error) throw error;
+}

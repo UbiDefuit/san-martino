@@ -4,7 +4,7 @@ import { ttStats, ttRegister, ttGetTicket, ttFindTicket, TtParticipant, TtStats 
 
 const input = 'w-full bg-black border border-neutral-800 px-4 py-3 text-white focus:outline-none focus:border-white transition';
 
-export default function Tortellonata() {
+export default function Gramignata() {
   const [stats, setStats] = useState<TtStats | null>(null);
   const [nome, setNome] = useState(''); const [contatto, setContatto] = useState('');
   const [adulti, setAdulti] = useState(2); const [bimbi, setBimbi] = useState(0);
@@ -14,6 +14,12 @@ export default function Tortellonata() {
   const [qr, setQr] = useState('');
   const [recupero, setRecupero] = useState('');
 
+  const EVENTO = new Date('2026-08-08T19:00:00+02:00').getTime();
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => { const t = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(t); }, []);
+  const diff = Math.max(0, EVENTO - now);
+  const gg = Math.floor(diff / 86400000), hh = Math.floor(diff / 3600000) % 24,
+    mm = Math.floor(diff / 60000) % 60, ss = Math.floor(diff / 1000) % 60;
   useEffect(() => { ttStats().then(setStats); }, []);
   useEffect(() => {
     const tid = localStorage.getItem('tt_tid');
@@ -54,7 +60,7 @@ export default function Tortellonata() {
   if (mio) {
     return (
       <div className="space-y-5 animate-fade-in-up pt-10 max-w-sm mx-auto text-center">
-        <p className="text-[11px] uppercase tracking-[0.3em] text-neutral-400">Tortellonata · 8 agosto</p>
+        <p className="text-[11px] uppercase tracking-[0.3em] text-neutral-400">La Gramignata · 8 agosto</p>
         <h1 className="text-3xl font-bold text-white">Ci sei, {mio.name.split(' ')[0]}!</h1>
         <p className="text-neutral-300 text-sm">{mio.adults} adulti · {mio.children} bambini — mostra questo QR all'arrivo.</p>
         {qr && <img src={qr} alt="QR tagliandino" className="mx-auto bg-white p-3" style={{ width: 240 }} />}
@@ -68,8 +74,16 @@ export default function Tortellonata() {
     <div className="space-y-6 animate-fade-in-up pt-10 max-w-md mx-auto">
       <div className="text-center space-y-2">
         <p className="text-[11px] uppercase tracking-[0.3em] text-neutral-400">Sabato 8 agosto · ore 19:00 · Chiesa di San Martino</p>
-        <h1 className="text-4xl font-extrabold tracking-tight text-white">🍝 TORTELLONATA</h1>
-        <p className="text-neutral-300 text-sm">Tortelloni per tutti sotto le stelle della valle. Contributo: 20 € adulti · 10 € bambini, a sostegno dei progetti di San Martino 2030 — si paga alla serata.</p>
+        <h1 className="text-4xl font-extrabold tracking-tight text-white">LA GRAMIGNATA</h1>
+        <p className="text-neutral-300 text-sm">La cena di San Martino sotto le stelle della valle. Contributo: 20 € adulti · 10 € bambini, a sostegno dei progetti della valle — si paga alla serata.</p>
+        <div className="grid grid-cols-4 gap-2 text-center border border-neutral-800 py-3">
+          {[[gg, 'giorni'], [hh, 'ore'], [mm, 'min'], [ss, 'sec']].map(([v, l]) => (
+            <div key={l as string}>
+              <div className="text-2xl font-light text-white tabular-nums">{String(v).padStart(2, '0')}</div>
+              <div className="text-[10px] text-neutral-400 uppercase tracking-[0.2em] mt-0.5">{l}</div>
+            </div>
+          ))}
+        </div>
         {stats && (
           <p className="text-amber-300 text-sm font-semibold">
             {stats.taken} iscritti · {rimasti} posti disponibili · iscrizioni entro le 20:00 di mercoledì 5 agosto
@@ -84,12 +98,16 @@ export default function Tortellonata() {
             <p className="text-neutral-300">Gin Lemon e Spritz, con stuzzichini</p>
           </div>
           <div>
-            <p className="text-white font-semibold">I tortelloni — tre assaggi</p>
-            <p className="text-neutral-300">Burro e salvia · Ragù · e un terzo a sorpresa (funghi o pancetta: si decide all'ultimo, come si fa in valle)</p>
+            <p className="text-white font-semibold">Il piatto della serata</p>
+            <p className="text-neutral-300">Gramigna alla salsiccia</p>
+          </div>
+          <div>
+            <p className="text-white font-semibold">Dalla brace e dalla piastra</p>
+            <p className="text-neutral-300">Tigelle e gnocco fritto</p>
           </div>
           <div>
             <p className="text-white font-semibold">Per finire</p>
-            <p className="text-neutral-300">Dolci della comunità e la famosissima <span className="text-white font-semibold">crescentina fritta di San Martino</span></p>
+            <p className="text-neutral-300">La famosissima <span className="text-white font-semibold">crescentina fritta di San Martino</span> e i dolci della comunità</p>
           </div>
         </div>
         <p className="text-neutral-500 text-xs text-center">Intolleranze o allergie? Scrivilo nelle note dell'iscrizione: la cucina ne tiene conto.</p>
@@ -116,7 +134,7 @@ export default function Tortellonata() {
           {err && <p className="text-red-400 text-sm">{err}</p>}
           <button onClick={invia} disabled={busy}
             className="w-full bg-white text-black px-3 py-3.5 font-semibold uppercase tracking-[0.15em] text-xs disabled:opacity-40 hover:bg-neutral-200 transition">
-            {busy ? 'Invio…' : 'Iscrivimi alla Tortellonata'}
+            {busy ? 'Invio…' : 'Iscrivimi alla Gramignata'}
           </button>
         </div>
       )}

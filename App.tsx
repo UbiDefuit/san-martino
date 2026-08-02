@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { PROGETTI, STORIE, EVENTO_URL, WHATSAPP_URL, EMAIL, Progetto } from './data';
 import Gemello from './Gemello';
-import Tortellonata from './Tortellonata';
+import Gramignata from './Gramignata';
+import StaffEvento from './StaffEvento';
 import Idee from './Idee';
 
-type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'sostienici' | 'chisiamo' | 'tortellonata' | 'idee';
+type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'sostienici' | 'chisiamo' | 'gramignata' | 'idee' | 'staff';
 
 const routeFromHash = (): Route => {
   const h = location.hash.replace('#/', '').split('?')[0];
-  return (['progetti', 'gemello', 'storie', 'sostienici', 'chisiamo', 'tortellonata', 'idee'].includes(h) ? h : 'home') as Route;
+  return (['progetti', 'gemello', 'storie', 'sostienici', 'chisiamo', 'gramignata', 'idee', 'staff'].includes(h) ? h : 'home') as Route;
 };
 
 const eur = (n: number) => n.toLocaleString('it-IT') + ' €';
@@ -69,10 +70,10 @@ function Home() {
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="flex-1 text-center sm:text-left">
               <Label>Prossimo evento</Label>
-              <h2 className="text-2xl font-bold text-white">🍝 Tortellonata</h2>
-              <p className="text-neutral-300 text-sm mt-1">Sabato 8 agosto, ore 19:00 · Chiesa di San Martino · 20 € adulti, 10 € bambini · 100 posti — iscrizioni entro mercoledì 5 agosto</p>
+              <h2 className="text-2xl font-bold text-white">La Gramignata</h2>
+              <p className="text-neutral-300 text-sm mt-1">Sabato 8 agosto, ore 19:00 · Chiesa di San Martino · gramigna alla salsiccia, tigelle e crescentine · 20 € adulti, 10 € bambini</p>
             </div>
-            <BtnLink href="#/tortellonata" primary>Iscriviti</BtnLink>
+            <BtnLink href="#/gramignata" primary>Iscriviti</BtnLink>
           </div>
         </Card>
         <Card>
@@ -360,7 +361,8 @@ export default function App() {
         {route === 'storie' && <Storie />}
         {route === 'sostienici' && <Sostienici />}
         {route === 'chisiamo' && <ChiSiamo />}
-        {route === 'tortellonata' && <Tortellonata />}
+        {route === 'gramignata' && <Gramignata />}
+        {route === 'staff' && <StaffEvento />}
         {route === 'idee' && <Idee />}
       </main>
       <footer className="border-t border-neutral-800 py-10 text-center space-y-3">

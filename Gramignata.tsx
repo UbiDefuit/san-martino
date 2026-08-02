@@ -72,10 +72,20 @@ export default function Gramignata() {
 
   return (
     <div className="space-y-6 animate-fade-in-up pt-10 max-w-md mx-auto">
-      <div className="text-center space-y-2">
-        <p className="text-[11px] uppercase tracking-[0.3em] text-neutral-400">Sabato 8 agosto · ore 19:00 · Chiesa di San Martino</p>
-        <h1 className="text-4xl font-extrabold tracking-tight text-white">LA GRAMIGNATA</h1>
-        <p className="text-neutral-300 text-sm">La cena di San Martino sotto le stelle della valle. Contributo: 20 € adulti · 10 € bambini, a sostegno dei progetti della valle — si paga alla serata.</p>
+      <div className="-mx-5 relative mb-14">
+        <img src="./hero-gramignata.jpg" alt="Il tramonto sulla valle di San Martino"
+             className="w-full h-[210px] object-cover object-bottom" />
+        <div className="absolute inset-0 hero-fade" />
+        <div className="absolute left-1/2 -translate-x-1/2 -bottom-9 w-[92px] h-[92px] badge-disc flex items-center justify-center">
+          <img src="./gramignata-mark.svg" alt="" className="w-[86px] h-[86px]" />
+        </div>
+      </div>
+      <div className="text-center space-y-3">
+        <h1 className="font-display text-5xl text-white leading-none">La Gramignata</h1>
+        <div className="w-12 h-[2px] mx-auto" style={{ background: '#A8322A' }} />
+        <p className="text-[11px] tracked text-white font-bold">Sabato 8 agosto 2026 · ore 19</p>
+        <p className="text-[12px] text-neutral-400">Chiesa di San Martino — San Martino Vallata, Polinago</p>
+        <p className="text-neutral-300 text-sm pt-1">La cena di San Martino sotto le stelle della valle. Contributo: 20 € adulti · 10 € bambini, a sostegno dei progetti della valle — si paga alla serata.</p>
         <div className="grid grid-cols-4 gap-2 text-center border border-neutral-800 py-3">
           {[[gg, 'giorni'], [hh, 'ore'], [mm, 'min'], [ss, 'sec']].map(([v, l]) => (
             <div key={l as string}>
@@ -90,25 +100,23 @@ export default function Gramignata() {
           </p>
         )}
       </div>
-      <div className="border border-neutral-800 bg-neutral-950 p-5 space-y-4">
-        <p className="text-[11px] uppercase tracking-[0.3em] text-amber-300 text-center">Il menù</p>
-        <div className="space-y-3 text-sm">
-          <div>
-            <p className="text-white font-semibold">Per rompere il ghiaccio</p>
-            <p className="text-neutral-300">Gin Lemon e Spritz, con stuzzichini</p>
-          </div>
-          <div>
-            <p className="text-white font-semibold">Il piatto della serata</p>
-            <p className="text-neutral-300">Gramigna alla salsiccia</p>
-          </div>
-          <div>
-            <p className="text-white font-semibold">Dalla brace e dalla piastra</p>
-            <p className="text-neutral-300">Tigelle e gnocco fritto</p>
-          </div>
-          <div>
-            <p className="text-white font-semibold">Per finire</p>
-            <p className="text-neutral-300">La famosissima <span className="text-white font-semibold">crescentina fritta di San Martino</span> e i dolci della comunità</p>
-          </div>
+      <div className="hairline bg-neutral-950 p-6 space-y-5">
+        <p className="text-[10px] tracked gold text-center">Il menù della serata</p>
+        <div className="rule-gold w-10 mx-auto" />
+        <div className="space-y-4 text-center">
+          {[['Per iniziare', 'Spritz e Gin Lemon, con stuzzichini'],
+            ['Il piatto', 'Gramigna alla salsiccia'],
+            ['Dalla piastra', 'Tigelle e gnocco fritto'],
+            ['Per finire', 'La crescentina fritta di San Martino']].map(([t, v], i) => (
+            <div key={t} className={i > 0 ? 'pt-4 border-t border-neutral-800/80' : ''}>
+              <p className="text-[10px] tracked gold">{t}</p>
+              <p className="font-display text-lg text-white mt-1">{v}</p>
+            </div>
+          ))}
+        </div>
+        <div className="hairline py-3 text-center">
+          <p className="font-display text-xl text-white">20 € adulti · 10 € bambini</p>
+          <p className="text-neutral-400 text-[11px] mt-1">acqua e vino inclusi nel coperto</p>
         </div>
         <p className="text-neutral-500 text-xs text-center">Intolleranze o allergie? Scrivilo nelle note dell'iscrizione: la cucina ne tiene conto.</p>
       </div>

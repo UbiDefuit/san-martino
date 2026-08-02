@@ -101,7 +101,7 @@ export default function Gramignata() {
         </div>
         {stats && (
           <p className="text-amber-300 text-sm font-semibold">
-            {stats.taken} iscritti · {rimasti} posti disponibili · iscrizioni entro le 20:00 di mercoledì 5 agosto
+            {stats.taken} iscritti · {rimasti} posti disponibili · iscrizioni entro la mezzanotte di giovedì 6 agosto
           </p>
         )}
       </div>

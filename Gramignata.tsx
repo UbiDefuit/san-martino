@@ -130,8 +130,8 @@ export default function Gramignata() {
         <div className="rule-gold w-10 mx-auto" />
         <div className="text-center">
           <p className="text-[10px] tracked gold">Musica dal vivo</p>
-          <p className="font-display text-lg text-white mt-1">Si suona fino a tardi</p>
-          <p className="text-neutral-400 text-[12px] mt-1">Un gruppo accompagna la cena e la serata sul sagrato.</p>
+          <p className="font-display text-lg text-white mt-1">Incontri nello Chalet</p>
+          <p className="text-neutral-400 text-[12px] mt-1">Tributo italiano in acustico, dal vivo per tutta la serata.</p>
         </div>
         <div className="text-center pt-4 border-t border-neutral-800/80">
           <p className="text-[10px] tracked gold">L'anfora delle idee</p>

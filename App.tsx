@@ -71,7 +71,7 @@ function Home() {
             <div className="flex-1 text-center sm:text-left">
               <Label>Prossimo evento</Label>
               <h2 className="text-2xl font-bold text-white">La Gramignata</h2>
-              <p className="text-neutral-300 text-sm mt-1">Sabato 8 agosto, ore 19:30 · Chiesa di San Martino · gramigna alla salsiccia, tigelle e crescentine · musica dal vivo · 20 € adulti, 10 € bambini</p>
+              <p className="text-neutral-300 text-sm mt-1">Sabato 8 agosto, ore 19:30 · Chiesa di San Martino · gramigna alla salsiccia, tigelle e crescentine · musica dal vivo con Incontri nello Chalet · 20 € adulti, 10 € bambini</p>
             </div>
             <BtnLink href="#/gramignata" primary>Iscriviti</BtnLink>
           </div>

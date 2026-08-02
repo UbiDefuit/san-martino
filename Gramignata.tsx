@@ -111,7 +111,7 @@ export default function Gramignata() {
         <div className="space-y-4 text-center">
           {[['Per iniziare', 'Spritz e Gin Lemon, con stuzzichini'],
             ['Il piatto', 'Gramigna alla salsiccia'],
-            ['Dalla piastra', 'Tigelle e gnocco fritto'],
+            ['Dalla piastra', 'Crescentine e gnocco fritto'],
             ['Per finire', 'La crescentina fritta di San Martino']].map(([t, v], i) => (
             <div key={t} className={i > 0 ? 'pt-4 border-t border-neutral-800/80' : ''}>
               <p className="text-[10px] tracked gold">{t}</p>
@@ -131,7 +131,7 @@ export default function Gramignata() {
         <div className="text-center">
           <p className="text-[10px] tracked gold">Musica dal vivo</p>
           <p className="font-display text-lg text-white mt-1">Incontri nello Chalet</p>
-          <p className="text-neutral-400 text-[12px] mt-1">Tributo italiano in acustico, dal vivo per tutta la serata.</p>
+          <p className="text-neutral-400 text-[12px] mt-1">Tributo italiano in acustico, dal vivo durante la serata.</p>
         </div>
         <div className="text-center pt-4 border-t border-neutral-800/80">
           <p className="text-[10px] tracked gold">L'anfora delle idee</p>

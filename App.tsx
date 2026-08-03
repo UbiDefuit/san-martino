@@ -4,12 +4,13 @@ import Gemello from './Gemello';
 import Gramignata from './Gramignata';
 import StaffEvento from './StaffEvento';
 import Idee from './Idee';
+import PianoServizio from './PianoServizio';
 
-type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'sostienici' | 'chisiamo' | 'gramignata' | 'idee' | 'staff';
+type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'sostienici' | 'chisiamo' | 'gramignata' | 'idee' | 'staff' | 'piano';
 
 const routeFromHash = (): Route => {
   const h = location.hash.replace('#/', '').split('?')[0];
-  return (['progetti', 'gemello', 'storie', 'sostienici', 'chisiamo', 'gramignata', 'idee', 'staff'].includes(h) ? h : 'home') as Route;
+  return (['progetti', 'gemello', 'storie', 'sostienici', 'chisiamo', 'gramignata', 'idee', 'staff', 'piano'].includes(h) ? h : 'home') as Route;
 };
 
 const eur = (n: number) => n.toLocaleString('it-IT') + ' €';
@@ -363,6 +364,7 @@ export default function App() {
         {route === 'chisiamo' && <ChiSiamo />}
         {route === 'gramignata' && <Gramignata />}
         {route === 'staff' && <StaffEvento />}
+        {route === 'piano' && <PianoServizio />}
         {route === 'idee' && <Idee />}
       </main>
       <footer className="border-t border-neutral-800 py-10 text-center space-y-3">

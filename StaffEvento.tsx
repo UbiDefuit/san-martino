@@ -257,7 +257,10 @@ export default function StaffEvento() {
 
   return (
     <div className="space-y-4 animate-fade-in-up pt-8">
-      <h1 className="text-2xl font-bold text-white">Staff · La Gramignata</h1>
+      <div className="flex items-center justify-between gap-2">
+        <h1 className="text-2xl font-bold text-white">Staff · La Gramignata</h1>
+        <a href="#/piano" className="shrink-0 border border-neutral-700 text-white px-3 py-2 text-[10px] uppercase tracking-[0.12em] hover:border-white">Piano serata</a>
+      </div>
 
       <div className="grid grid-cols-4 gap-2 text-center">
         {[[String(tot), 'attesi'], [String(arrivati), 'arrivati'], [String(mancanti), 'mancano'], [incasso + ' €', 'incassato']].map(([v, l]) => (

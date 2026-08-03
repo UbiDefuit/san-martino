@@ -118,6 +118,96 @@ export default function StaffEvento() {
   };
   const stopScan = async () => { await scannerRef.current?.stop().catch(() => {}); setScanning(false); };
 
+  const stampaPdf = () => {
+    const logo = new URL('./logo.svg', location.href).href;
+    const oggi = new Date().toLocaleString('it-IT', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const esc = (x: any) => String(x ?? '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c] as string));
+    const righe = list.map((p) => {
+      const a = arrA(p), b = arrB(p);
+      const attesi = p.adults + p.children;
+      const stato = !p.checked_in ? 'atteso' : (a + b < attesi ? 'parziale' : 'arrivato');
+      return `<tr class="${stato}">
+        <td>${esc(p.name)}</td>
+        <td class="c">${p.adults}</td><td class="c">${p.children}</td>
+        <td class="c">${p.checked_in ? a : '—'}</td><td class="c">${p.checked_in ? b : '—'}</td>
+        <td class="c">${p.checked_in ? (a * ADULTO + b * BIMBO) + ' €' : '—'}</td>
+        <td class="note">${esc(p.notes || '')}</td>
+      </tr>`;
+    }).join('');
+
+    const html = `<!doctype html><html lang="it"><head><meta charset="utf-8">
+<title>La Gramignata — elenco</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Lato:wght@300;400;700&display=swap">
+<style>
+  @page { size: A4; margin: 14mm 12mm; }
+  * { box-sizing: border-box; }
+  body { font-family: Lato, Arial, sans-serif; color: #111; margin: 0; }
+  header { display: flex; align-items: center; gap: 14px; border-bottom: 2px solid #C9A227; padding-bottom: 10px; }
+  header img { width: 54px; height: 54px; }
+  h1 { font-family: Lora, Georgia, serif; font-size: 22px; margin: 0; font-weight: 600; }
+  .sub { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #8a8a8a; margin-top: 3px; }
+  .stampato { margin-left: auto; text-align: right; font-size: 10px; color: #8a8a8a; }
+  .stats { display: flex; gap: 8px; margin: 14px 0 10px; }
+  .stat { flex: 1; border: 1px solid #d8d4c8; padding: 8px; text-align: center; }
+  .stat b { display: block; font-size: 20px; font-family: Lora, serif; }
+  .stat span { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #8a8a8a; }
+  table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  th { text-align: left; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #8a8a8a;
+       border-bottom: 1px solid #C9A227; padding: 6px 4px; }
+  td { padding: 5px 4px; border-bottom: 1px solid #ececec; }
+  td.c { text-align: center; }
+  td.note { color: #7a7a7a; font-size: 10px; }
+  tr.arrivato td:first-child::before { content: "\\2713 "; color: #1a7f37; }
+  tr.parziale td:first-child::before { content: "\\25CF "; color: #b8860b; }
+  tr.parziale { background: #fdf8ec; }
+  tfoot td { font-weight: 700; border-top: 2px solid #C9A227; padding-top: 8px; }
+  footer { margin-top: 14px; font-size: 9px; color: #9a9a9a; text-align: center; }
+  @media print { .noprint { display: none; } }
+  .noprint { margin: 16px 0; text-align: center; }
+  .noprint button { font: inherit; padding: 10px 18px; background: #111; color: #fff; border: 0; cursor: pointer; }
+</style></head><body>
+<header>
+  <img src="${logo}" alt="">
+  <div>
+    <h1>La Gramignata</h1>
+    <div class="sub">Sabato 8 agosto 2026 · San Martino Vallata</div>
+  </div>
+  <div class="stampato">Elenco per la cucina<br>stampato il ${oggi}</div>
+</header>
+
+<div class="stats">
+  <div class="stat"><b>${tot}</b><span>attesi</span></div>
+  <div class="stat"><b>${arrivati}</b><span>arrivati</span></div>
+  <div class="stat"><b>${mancanti}</b><span>mancano</span></div>
+  <div class="stat"><b>${incasso} €</b><span>incassato</span></div>
+</div>
+
+<table>
+  <thead><tr>
+    <th>Nome</th><th class="c">Ad. pren.</th><th class="c">Bim. pren.</th>
+    <th class="c">Ad. arriv.</th><th class="c">Bim. arriv.</th><th class="c">Incassato</th><th>Note</th>
+  </tr></thead>
+  <tbody>${righe}</tbody>
+  <tfoot><tr>
+    <td>Totale (${list.length} prenotazioni)</td>
+    <td class="c">${list.reduce((n, p) => n + p.adults, 0)}</td>
+    <td class="c">${list.reduce((n, p) => n + p.children, 0)}</td>
+    <td class="c">${list.reduce((n, p) => n + arrA(p), 0)}</td>
+    <td class="c">${list.reduce((n, p) => n + arrB(p), 0)}</td>
+    <td class="c">${incasso} €</td><td></td>
+  </tr></tfoot>
+</table>
+
+<footer>APS San Martino 2.0 — documento interno, contiene dati personali: non diffondere.</footer>
+<div class="noprint"><button onclick="window.print()">Stampa / salva come PDF</button></div>
+<script>window.onload = function () { setTimeout(function () { window.print(); }, 600); };<\/script>
+</body></html>`;
+
+    const w = window.open('', '_blank');
+    if (!w) { setMsg('Il browser ha bloccato la finestra: consenti i popup e riprova.'); return; }
+    w.document.open(); w.document.write(html); w.document.close();
+  };
+
   const arrA = (p: P) => (p.checked_in ? (p.arrived_adults ?? p.adults) : 0);
   const arrB = (p: P) => (p.checked_in ? (p.arrived_children ?? p.children) : 0);
 
@@ -259,22 +349,9 @@ export default function StaffEvento() {
         {list.length > 0 && filtered.length === 0 && <p className="text-neutral-500 text-xs">Nessun risultato.</p>}
       </div>
 
-      <button disabled={list.length === 0}
-        onClick={() => {
-          const rows = [['Nome', 'Contatto', 'Adulti prenotati', 'Bambini prenotati', 'Adulti arrivati', 'Bambini arrivati', 'Incassato €', 'Note', 'Arrivato']]
-            .concat(list.map((p) => [
-              p.name, p.contact || '', String(p.adults), String(p.children),
-              String(arrA(p)), String(arrB(p)),
-              String(arrA(p) * ADULTO + arrB(p) * BIMBO),
-              p.notes || '', p.checked_in ? 'SI' : 'NO',
-            ]));
-          const csv = '﻿' + rows.map((r) => r.map((x) => '"' + String(x).replace(/"/g, '""') + '"').join(';')).join('\n');
-          const a = document.createElement('a');
-          a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
-          a.download = 'gramignata.csv'; a.click();
-        }}
-        className="border border-neutral-700 text-white px-4 py-2 text-xs hover:border-white disabled:opacity-40">
-        Esporta CSV per la cucina
+      <button disabled={list.length === 0} onClick={stampaPdf}
+        className="w-full border border-neutral-700 text-white px-4 py-3 text-xs uppercase tracking-[0.15em] hover:border-white disabled:opacity-40">
+        Stampa / salva PDF per la cucina
       </button>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ttStaffList } from './supa';
+import Checklist from './Checklist';
 
 /* ------------------------------------------------------------------ dati */
 
@@ -130,7 +131,7 @@ function Timeline({ tappe, ora }: { tappe: Tappa[]; ora: number }) {
 
 /* ------------------------------------------------------------------ pagina */
 
-const TABS = ['Serata', 'Squadre', 'Cucina', 'Se va storto'] as const;
+const TABS = ['Da fare', 'Serata', 'Squadre', 'Cucina', 'Guai'] as const;
 type Tab = typeof TABS[number];
 
 export default function PianoServizio() {
@@ -138,7 +139,7 @@ export default function PianoServizio() {
   const [authed, setAuthed] = useState(!!sessionStorage.getItem('sm2_staff_pin'));
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
-  const [tab, setTab] = useState<Tab>('Serata');
+  const [tab, setTab] = useState<Tab>('Da fare');
   const [now, setNow] = useState(new Date());
 
   useEffect(() => { const t = setInterval(() => setNow(new Date()), 30000); return () => clearInterval(t); }, []);
@@ -176,15 +177,17 @@ export default function PianoServizio() {
         <p className="text-neutral-500 text-xs mt-1">Chi fa cosa, e quando. Tienila aperta.</p>
       </div>
 
-      <div className="grid grid-cols-4 gap-1">
+      <div className="grid grid-cols-5 gap-1">
         {TABS.map((t) => (
           <button key={t} onClick={() => setTab(t)}
-            className={'py-2.5 text-[10px] uppercase tracking-[0.12em] border transition ' +
+            className={'py-2.5 text-[9px] uppercase tracking-[0.08em] border transition ' +
               (tab === t ? 'border-white text-white' : 'border-neutral-800 text-neutral-500')}>
             {t}
           </button>
         ))}
       </div>
+
+      {tab === 'Da fare' && <Checklist pin={pin} />}
 
       {tab === 'Serata' && (
         <div className="space-y-5">
@@ -252,7 +255,7 @@ export default function PianoServizio() {
         </div>
       )}
 
-      {tab === 'Se va storto' && (
+      {tab === 'Guai' && (
         <div className="space-y-3">
           {GUAI.map(([q, r]) => (
             <div key={q} className="border-b border-neutral-800 pb-3">

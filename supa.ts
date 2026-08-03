@@ -88,3 +88,15 @@ export async function ttStaffAdd(pin: string, name: string, adults: number, chil
   const { error } = await supa.rpc('tt_staff_add', { pin, p_name: name, p_adults: adults, p_children: children, p_notes: notes });
   if (error) throw error;
 }
+
+// ---------------- Checklist della serata ----------------
+export interface CheckRow { id: string; done: boolean; chi: string | null; updated_at: string }
+export async function gramCheckList(pin: string): Promise<CheckRow[]> {
+  const { data, error } = await supa.rpc('gram_check_list', { pin });
+  if (error) throw error;
+  return (data || []) as CheckRow[];
+}
+export async function gramCheckSet(pin: string, id: string, done: boolean, chi: string): Promise<void> {
+  const { error } = await supa.rpc('gram_check_set', { pin, p_id: id, p_done: done, p_chi: chi });
+  if (error) throw error;
+}

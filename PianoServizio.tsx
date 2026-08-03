@@ -8,7 +8,7 @@ const SQUADRE: [string, string, string][] = [
   ['Allestimento', '4 persone', 'Tensostruttura, tavoli, sedie, luci, cartelli, anfora delle idee'],
   ['Accoglienza', '2 persone', 'App per il check-in, incasso, indicare i tavoli, backup cartaceo'],
   ['Cucina — primo', '3 persone', 'Ragù di salsiccia, pentoloni, cottura e mantecatura della gramigna'],
-  ['Piastra', '3 persone', 'Crescentine sulle tigelliere, rifornimento continuo dei cesti'],
+  ['Piastra', '3 persone', 'Cottura delle crescentine sulle tigelliere e rifornimento continuo dei cesti'],
   ['Frittura', '2 persone', 'Gnocco fritto salato e crescentine fritte dolci — due oli separati'],
   ['Bar', '2 persone', 'Spritz, gin lemon, analcolici per i bambini, vino e acqua ai tavoli'],
   ['Sala e lavaggio', '4 persone', 'Servizio ai tavoli, sbarazzo, differenziata, lavaggio'],
@@ -19,7 +19,7 @@ type Tappa = { h: string; t: string; chi: string; big?: boolean };
 const POMERIGGIO: Tappa[] = [
   { h: '15:00', t: 'Ritrovo. Montaggio tensostruttura, tavoli e sedie. Prova luci.', chi: 'Allestimento' },
   { h: '16:00', t: 'Soffritto e ragù di salsiccia: cuoce piano fino alle 19.', chi: 'Cucina primo' },
-  { h: '16:30', t: 'Ritiro impasto da Lavacchielli (Pavullo) e sistemazione in fresco.', chi: 'Piastra' },
+  { h: '16:30', t: 'Ritiro crescentine da Lavacchielli (Pavullo) e sistemazione in fresco.', chi: 'Piastra' },
   { h: '16:30', t: 'Banco bar: ghiaccio, bottiglie in fresco, arance e limoni tagliati.', chi: 'Bar' },
   { h: '17:00', t: 'Tavoli apparecchiati, tovaglie, tovaglioli, menù sui tavoli.', chi: 'Sala' },
   { h: '17:30', t: "Anfora delle idee al suo posto, con biglietti, penne e cartello col QR.", chi: 'Allestimento' },
@@ -52,13 +52,15 @@ const CUCINA: [string, string[]][] = [
     'Non cuocere tutto insieme: due turni, così l’ultimo piatto non è scotto.',
     'Parmigiano a scaglie in tavola, non già mescolato.',
   ]],
-  ['Crescentine, gnocco e dolce — impasto Lavacchielli', [
-    'L’impasto arriva già pronto da Lavacchielli, Pavullo: lo stesso serve per tutte e tre le cose.',
-    'Tenerlo in fresco fino all’uso, tirarlo fuori mezz’ora prima così si lavora meglio.',
-    'Crescentine: tigelliere ben calde e leggermente unte, cottura continua, si servono calde nei cesti col tovagliolo.',
-    'Gnocco fritto: strisce a rombo, olio a 170–175 °C, si gonfia in pochi secondi.',
-    'Crescentina fritta dolce: stesso impasto, olio pulito e separato, zucchero a velo o semolato appena esce.',
+  ['Crescentine, gnocco e dolce — tutto dalle crescentine Lavacchielli', [
+    'Arrivano già formate da Lavacchielli (Pavullo): non si impasta e non si tira niente, solo cuocere.',
+    'Le stesse crescentine servono per tutte e tre le portate: in piastra restano crescentine, fritte diventano gnocco fritto, fritte e zuccherate diventano il dolce.',
+    'Tenerle in fresco fino all’uso, tirarle fuori una mezz’ora prima: fredde di frigo cuociono male.',
+    'In piastra: tigelliere ben calde e appena unte. Si servono calde nei cesti col tovagliolo, mai in anticipo.',
+    'Fritte salate: olio a 170–175 °C, si gonfiano in pochi secondi, si girano una volta sola.',
+    'Fritte dolci: olio pulito e separato, zucchero appena escono, finché sono bollenti.',
     'Due friggitrici distinte: il dolce non deve sapere di salato. È la regola che salva il finale.',
+    'Contare circa 7 pezzi a testa in tutto — 3 in piastra, 2-3 fritti salati, 1-2 dolci.',
   ]],
   ['Bar', [
     'Spritz: 3 prosecco · 2 Aperol · 1 soda, ghiaccio abbondante, fetta d’arancia.',
@@ -229,7 +231,7 @@ export default function PianoServizio() {
           ))}
           <div className="hairline p-4">
             <p className="text-[10px] tracked gold mb-2">Da ordinare / ritirare</p>
-            <p className="text-neutral-300 text-[13px] mb-1">· <span className="text-white">Impasto per crescentine</span> — Lavacchielli, Pavullo. Ordinare entro martedì, ritirare sabato pomeriggio. Serve per crescentine, gnocco fritto e crescentina fritta dolce: circa 250 g a persona.</p>
+            <p className="text-neutral-300 text-[13px] mb-1">· <span className="text-white">Crescentine già formate</span> — Lavacchielli, Pavullo. Sono pronte, vanno solo cotte. Le stesse servono per la piastra, per lo gnocco fritto e per la crescentina fritta dolce: circa <span className="text-white">7 pezzi a persona</span>, per 100 coperti sono 660. Ordinare entro martedì, ritiro sabato pomeriggio.</p>
             <p className="text-neutral-300 text-[13px] mb-1">· <span className="text-white">Salsiccia senza budello</span> dal macellaio — confermare la quantità venerdì, a iscrizioni chiuse.</p>
             <p className="text-neutral-300 text-[13px]">· <span className="text-white">Ghiaccio</span> — finisce sempre. Comprarne il doppio di quanto sembra ragionevole.</p>
           </div>

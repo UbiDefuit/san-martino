@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
-import { ttStaffList, ttCheckIn, ttCheckInN, ttResetCheckin, ttGetTicket } from './supa';
+import { ttStaffList, ttCheckIn, ttCheckInN, ttResetCheckin, ttGetTicket, ttStaffAdd } from './supa';
 
 interface P {
   id: string; name: string; contact?: string; adults: number; children: number;
@@ -39,6 +39,13 @@ export default function StaffEvento() {
   const [soloDaFare, setSoloDaFare] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const lastSeen = useRef<Record<string, number>>({});
+
+  // aggiunta all'ingresso
+  const [addOpen, setAddOpen] = useState(false);
+  const [aNome, setANome] = useState('');
+  const [aAd, setAAd] = useState(2);
+  const [aBi, setABi] = useState(0);
+  const [aNote, setANote] = useState('');
 
   // pannello "chi è arrivato?"
   const [conf, setConf] = useState<P | null>(null);
@@ -208,6 +215,16 @@ export default function StaffEvento() {
     w.document.open(); w.document.write(html); w.document.close();
   };
 
+  const aggiungi = async () => {
+    if (aNome.trim().length < 2) { setMsg('Serve almeno il nome'); return; }
+    try {
+      await ttStaffAdd(pin, aNome.trim(), aAd, aBi, aNote.trim());
+      setMsg('✓ Aggiunto ' + aNome.trim() + ' — ' + (aAd * ADULTO + aBi * BIMBO) + ' € da incassare');
+      setANome(''); setAAd(2); setABi(0); setANote(''); setAddOpen(false);
+      refresh();
+    } catch (e: any) { setMsg('Errore: ' + (e.message || e)); }
+  };
+
   const arrA = (p: P) => (p.checked_in ? (p.arrived_adults ?? p.adults) : 0);
   const arrB = (p: P) => (p.checked_in ? (p.arrived_children ?? p.children) : 0);
 
@@ -302,6 +319,32 @@ export default function StaffEvento() {
             Se gli altri arrivano dopo, ritocca il nome nella lista e aggiorna il numero.
           </p>
         </div>
+      )}
+
+      {/* ---- aggiunta all'ingresso ---- */}
+      {addOpen ? (
+        <div className="hairline bg-neutral-950 p-4 space-y-3">
+          <p className="text-[10px] tracked gold text-center">Aggiungi all'ingresso</p>
+          <p className="text-neutral-400 text-xs text-center">Per chi si presenta senza prenotazione. Viene registrato subito come arrivato.</p>
+          <input placeholder="Nome e cognome" value={aNome} onChange={(e) => setANome(e.target.value)}
+            className="w-full bg-black border border-neutral-800 px-4 py-3 text-white text-sm focus:outline-none focus:border-white" />
+          <div className="grid grid-cols-2 gap-3">
+            <Contatore label="Adulti" val={aAd} max={20} set={setAAd} />
+            <Contatore label="Bambini" val={aBi} max={20} set={setABi} />
+          </div>
+          <input placeholder="Note (allergie, tavolo…)" value={aNote} onChange={(e) => setANote(e.target.value)}
+            className="w-full bg-black border border-neutral-800 px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white" />
+          <p className="text-center text-sm text-white">Da incassare: <span className="font-bold">{aAd * ADULTO + aBi * BIMBO} €</span></p>
+          <div className="grid grid-cols-2 gap-2">
+            <button onClick={aggiungi} className="bg-white text-black py-3 font-semibold uppercase tracking-[0.15em] text-xs">Aggiungi</button>
+            <button onClick={() => setAddOpen(false)} className="border border-neutral-600 text-white py-3 uppercase tracking-[0.15em] text-xs hover:border-white">Annulla</button>
+          </div>
+        </div>
+      ) : (
+        <button onClick={() => { setAddOpen(true); setMsg(''); }}
+          className="w-full border border-neutral-700 text-white py-3 text-xs uppercase tracking-[0.15em] hover:border-white">
+          + Aggiungi all'ingresso (senza prenotazione)
+        </button>
       )}
 
       <input placeholder="Cerca per nome o contatto…" value={query} onChange={(e) => setQuery(e.target.value)}

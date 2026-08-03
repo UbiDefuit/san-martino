@@ -78,3 +78,8 @@ export async function ttResetCheckin(id: string, pin: string): Promise<void> {
   const { error } = await supa.rpc('tt_reset_checkin', { p_id: id, pin });
   if (error) throw error;
 }
+
+export async function ttCheckInN(id: string, pin: string, nAdults: number, nChildren: number): Promise<void> {
+  const { error } = await supa.rpc('tt_check_in_n', { p_id: id, pin, n_adults: nAdults, n_children: nChildren });
+  if (error) throw error;
+}

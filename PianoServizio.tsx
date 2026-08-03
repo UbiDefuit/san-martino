@@ -10,7 +10,7 @@ const SQUADRE: [string, string, string][] = [
   ['Accoglienza', '2 persone', 'App per il check-in, incasso, indicare i tavoli, backup cartaceo'],
   ['Cucina — primo', '3 persone', 'Ragù di salsiccia, pentoloni, cottura e mantecatura della gramigna'],
   ['Piastra', '3 persone', 'Cottura delle crescentine sulle tigelliere e rifornimento continuo dei cesti'],
-  ['Frittura', '2 persone', 'Gnocco fritto salato e crescentine fritte dolci — due oli separati'],
+  ['Frittura', '2 persone', 'Gnocco fritto salato e crescentine fritte dolci'],
   ['Bar', '2 persone', 'Spritz, gin lemon, analcolici per i bambini, vino e acqua ai tavoli'],
   ['Sala e lavaggio', '4 persone', 'Servizio ai tavoli, sbarazzo, differenziata, lavaggio'],
 ];
@@ -29,7 +29,7 @@ const POMERIGGIO: Tappa[] = [
   { h: '16:00', t: 'Tavoli e sedie sotto la tensostruttura (già montata). Prova luci esterne.', chi: 'Allestimento' },
   { h: '16:30', t: 'Banco bar: ghiaccio nei contenitori, bottiglie in fresco, arance e limoni tagliati.', chi: 'Bar' },
   { h: '17:00', t: 'Tavoli apparecchiati, tovaglie, tovaglioli, menù sui tavoli.', chi: 'Sala' },
-  { h: '17:00', t: 'Tigelliere e friggitrici in postazione. Olio salato e olio dolce ben separati.', chi: 'Piastra + Frittura' },
+  { h: '17:00', t: 'Tigelliere e friggitrici in postazione.', chi: 'Piastra + Frittura' },
   { h: '17:30', t: 'Anfora delle idee al suo posto, con biglietti, penne e cartello col QR.', chi: 'Allestimento' },
   { h: '18:00', t: 'Arriva il gruppo: scarico, posizionamento, prova audio.', chi: 'Regia' },
   { h: '18:30', t: 'Banco accoglienza: telefono carico, app aperta, PIN provato, cassetta, PDF stampato.', chi: 'Accoglienza' },
@@ -56,7 +56,7 @@ const SERA: Tappa[] = [
 
 const CUCINA: [string, string[]][] = [
   ['Il primo — gramigna alla salsiccia', [
-    'Il ragù si fa la mattina: soffritto, salsiccia sgranata senza budello, sfumare col bianco, passata, due ore di fuoco basso. Poi si tiene al fresco.',
+    'Il ragù si fa la mattina: soffritto, salsiccia sgranata, sfumare col bianco, passata, due ore di fuoco basso. Poi si tiene al fresco.',
     'La sera si riscalda soltanto — alle 19:40, mentre l’acqua va a bollire.',
     'Acqua salata nei pentoloni già bollente alle 19:50.',
     'Gramigna: cottura molto al dente, si finisce in padella col ragù.',
@@ -69,8 +69,7 @@ const CUCINA: [string, string[]][] = [
     'Si ritirano la mattina e vanno subito in frigo. Fuori mezz’ora prima del servizio: fredde di frigo cuociono male.',
     'In piastra: tigelliere ben calde e appena unte. Si servono calde nei cesti col tovagliolo, mai in anticipo.',
     'Fritte salate: olio a 170–175 °C, si gonfiano in pochi secondi, si girano una volta sola.',
-    'Fritte dolci: olio pulito e separato, zucchero appena escono, finché sono bollenti.',
-    'Due friggitrici distinte: il dolce non deve sapere di salato. È la regola che salva il finale.',
+    'Fritte dolci: zucchero appena escono, finché sono bollenti.',
     'Contare circa 7 pezzi a testa in tutto — 3 in piastra, 2-3 fritti salati, 1-2 dolci.',
   ]],
   ['Bar', [
@@ -249,8 +248,8 @@ export default function PianoServizio() {
           <div className="hairline p-4">
             <p className="text-[10px] tracked gold mb-2">Da ordinare / ritirare</p>
             <p className="text-neutral-300 text-[13px] mb-1">· <span className="text-white">Crescentine già formate</span> — Lavacchielli, Pavullo. Sono pronte, vanno solo cotte. Le stesse servono per la piastra, per lo gnocco fritto e per la crescentina fritta dolce: circa <span className="text-white">7 pezzi a persona</span>, per 100 coperti sono 660. Ordinare entro martedì, <span className="text-white">ritiro sabato mattina</span> e subito in frigo.</p>
-            <p className="text-neutral-300 text-[13px] mb-1">· <span className="text-white">Salsiccia senza budello</span> dal macellaio — confermare la quantità venerdì, a iscrizioni chiuse.</p>
-            <p className="text-neutral-300 text-[13px]">· <span className="text-white">Ghiaccio</span> — finisce sempre. Comprarne il doppio di quanto sembra ragionevole.</p>
+            <p className="text-neutral-300 text-[13px] mb-1">· <span className="text-white">Salsiccia</span> dal macellaio — confermare la quantità venerdì, a iscrizioni chiuse.</p>
+            
           </div>
         </div>
       )}

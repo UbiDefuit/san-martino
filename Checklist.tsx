@@ -10,10 +10,8 @@ export const FASI: Fase[] = [
   {
     titolo: 'Prima della chiusura iscrizioni', quando: 'entro giovedì 6',
     voci: [
-      { id: 'wa-locandina', t: 'Locandina mandata sui gruppi WhatsApp e appesa in bacheca a Polinago', chi: 'Regia' },
       { id: 'ord-crescentine', t: 'Crescentine ordinate da Lavacchielli (Pavullo) — dire la quantità e l’ora del ritiro', chi: 'Piastra', critica: true },
-      { id: 'ord-salsiccia', t: 'Salsiccia ordinata dal macellaio, senza budello', chi: 'Cucina', critica: true },
-      { id: 'ord-ghiaccio', t: 'Ghiaccio prenotato (il doppio di quanto sembra ragionevole)', chi: 'Bar' },
+      { id: 'ord-salsiccia', t: 'Salsiccia ordinata dal macellaio', chi: 'Cucina', critica: true },
       { id: 'volontari', t: 'Volontari confermati per ogni squadra: ogni casella ha un nome', chi: 'Regia', critica: true },
       { id: 'gruppo-ok', t: 'Sentito il gruppo: orario di arrivo, cosa serve per l’audio, corrente disponibile', chi: 'Regia' },
     ],
@@ -23,9 +21,9 @@ export const FASI: Fase[] = [
     voci: [
       { id: 'numeri', t: 'Guardato il numero vero degli iscritti nell’app e aggiornata la lista spesa', chi: 'Regia', critica: true },
       { id: 'conferma-ordini', t: 'Confermate le quantità a Lavacchielli e al macellaio', chi: 'Cucina', critica: true },
-      { id: 'spesa-fresco', t: 'Spesa del fresco fatta: parmigiano, arance, limoni, latte', chi: 'Bar + Cucina' },
+      { id: 'spesa-fresco', t: 'Spesa del fresco fatta: parmigiano, arance, limoni', chi: 'Bar + Cucina' },
       { id: 'spesa-bibite', t: 'Bibite, acqua e vino comprati', chi: 'Bar' },
-      { id: 'olio', t: 'Olio di frittura comprato, in due lotti separati: salato e dolce', chi: 'Frittura', critica: true },
+      { id: 'olio', t: 'Olio di frittura comprato', chi: 'Frittura', critica: true },
       { id: 'monouso', t: 'Piatti, bicchieri, posate, tovaglioli e sacchi rifiuti', chi: 'Sala' },
       { id: 'gas', t: 'Bombole del gas controllate: piene, non “quasi piene”', chi: 'Cucina', critica: true },
       { id: 'pdf', t: 'PDF elenco per la cucina stampato (backup se salta la linea)', chi: 'Accoglienza', critica: true },
@@ -49,7 +47,7 @@ export const FASI: Fase[] = [
       { id: 'luci', t: 'Luci esterne provate e funzionanti', chi: 'Allestimento' },
       { id: 'bar-pronto', t: 'Banco bar pronto: ghiaccio, bottiglie, arance e limoni tagliati', chi: 'Bar' },
       { id: 'apparecchiato', t: 'Tavoli apparecchiati, menù sui tavoli', chi: 'Sala' },
-      { id: 'postazioni', t: 'Tigelliere e friggitrici in postazione, i due oli ben separati', chi: 'Piastra + Frittura', critica: true },
+      { id: 'postazioni', t: 'Tigelliere e friggitrici in postazione', chi: 'Piastra + Frittura', critica: true },
       { id: 'anfora', t: 'Anfora al suo posto con biglietti, penne e cartello col QR', chi: 'Allestimento', critica: true },
       { id: 'gruppo-arrivato', t: 'Gruppo arrivato, posizionato, prova audio fatta', chi: 'Regia' },
       { id: 'crescentine-fuori', t: 'Crescentine fuori dal frigo (mezz’ora prima del servizio)', chi: 'Piastra' },

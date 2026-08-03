@@ -5,7 +5,7 @@ import { ttStaffList } from './supa';
 
 const SQUADRE: [string, string, string][] = [
   ['Regia', '1 persona', 'Tiene i tempi, decide se si slitta, unica a parlare col gruppo e col parroco'],
-  ['Allestimento', '4 persone', 'Tensostruttura, tavoli, sedie, luci, cartelli, anfora delle idee'],
+  ['Allestimento', '3 persone', 'Tavoli, sedie, luci, cartelli, anfora delle idee (la tensostruttura è fissa: non si monta)'],
   ['Accoglienza', '2 persone', 'App per il check-in, incasso, indicare i tavoli, backup cartaceo'],
   ['Cucina — primo', '3 persone', 'Ragù di salsiccia, pentoloni, cottura e mantecatura della gramigna'],
   ['Piastra', '3 persone', 'Cottura delle crescentine sulle tigelliere e rifornimento continuo dei cesti'],
@@ -16,21 +16,30 @@ const SQUADRE: [string, string, string][] = [
 
 type Tappa = { h: string; t: string; chi: string; big?: boolean };
 
+const MATTINA: Tappa[] = [
+  { h: '08:30', t: 'Ritiro delle crescentine da Lavacchielli (Pavullo). Subito in frigo.', chi: 'Piastra', big: true },
+  { h: '09:00', t: 'Ragù di salsiccia: soffritto, salsiccia sgranata, sfumare, passata. Cuoce piano un paio d’ore.', chi: 'Cucina primo', big: true },
+  { h: '11:00', t: 'Ragù pronto: si lascia da parte al fresco, la sera si riscalda soltanto.', chi: 'Cucina primo' },
+  { h: '11:00', t: 'Bibite, acqua e vino bianco in fresco. Ghiaccio nel congelatore.', chi: 'Bar' },
+  { h: '11:30', t: 'Giro finale: manca qualcosa? Si compra adesso, non nel pomeriggio.', chi: 'Regia' },
+];
+
 const POMERIGGIO: Tappa[] = [
-  { h: '15:00', t: 'Ritrovo. Montaggio tensostruttura, tavoli e sedie. Prova luci.', chi: 'Allestimento' },
-  { h: '16:00', t: 'Soffritto e ragù di salsiccia: cuoce piano fino alle 19.', chi: 'Cucina primo' },
-  { h: '16:30', t: 'Ritiro crescentine da Lavacchielli (Pavullo) e sistemazione in fresco.', chi: 'Piastra' },
-  { h: '16:30', t: 'Banco bar: ghiaccio, bottiglie in fresco, arance e limoni tagliati.', chi: 'Bar' },
+  { h: '16:00', t: 'Tavoli e sedie sotto la tensostruttura (già montata). Prova luci esterne.', chi: 'Allestimento' },
+  { h: '16:30', t: 'Banco bar: ghiaccio nei contenitori, bottiglie in fresco, arance e limoni tagliati.', chi: 'Bar' },
   { h: '17:00', t: 'Tavoli apparecchiati, tovaglie, tovaglioli, menù sui tavoli.', chi: 'Sala' },
-  { h: '17:30', t: "Anfora delle idee al suo posto, con biglietti, penne e cartello col QR.", chi: 'Allestimento' },
+  { h: '17:00', t: 'Tigelliere e friggitrici in postazione. Olio salato e olio dolce ben separati.', chi: 'Piastra + Frittura' },
+  { h: '17:30', t: 'Anfora delle idee al suo posto, con biglietti, penne e cartello col QR.', chi: 'Allestimento' },
   { h: '18:00', t: 'Arriva il gruppo: scarico, posizionamento, prova audio.', chi: 'Regia' },
   { h: '18:30', t: 'Banco accoglienza: telefono carico, app aperta, PIN provato, cassetta, PDF stampato.', chi: 'Accoglienza' },
+  { h: '18:45', t: 'Crescentine fuori dal frigo: mezz’ora prima, così cuociono meglio.', chi: 'Piastra' },
   { h: '19:00', t: 'Briefing di tutti in cerchio: dieci minuti, si legge questa pagina.', chi: 'Regia', big: true },
 ];
 
 const SERA: Tappa[] = [
   { h: '19:15', t: 'Si apre. Check-in all’ingresso, si incassa, si indica il tavolo.', chi: 'Accoglienza', big: true },
   { h: '19:30', t: 'Aperitivo: spritz, gin lemon, stuzzichini. Musica di sottofondo bassa.', chi: 'Bar' },
+  { h: '19:40', t: 'Si scalda il ragù e si mette l’acqua a bollire.', chi: 'Cucina primo' },
   { h: '20:00', t: 'Si butta la pasta. Ultima chiamata per i ritardatari.', chi: 'Cucina primo' },
   { h: '20:15', t: 'Esce la gramigna alla salsiccia. Servizio ai tavoli, non self-service.', chi: 'Cucina + Sala', big: true },
   { h: '20:45', t: 'Sbarazzo primi. Partono piastra e frittura.', chi: 'Sala' },
@@ -41,13 +50,14 @@ const SERA: Tappa[] = [
   { h: '22:40', t: 'Secondo set. Si balla, si chiacchiera, si scrive nell’anfora.', chi: '—' },
   { h: '23:45', t: 'Chiude la cucina. Il bar resta aperto.', chi: 'Cucina' },
   { h: '00:30', t: 'Saluti. Si spegne la musica.', chi: 'Regia' },
-  { h: '00:40', t: 'Sbarazzo, differenziata, sedie impilate. La tensostruttura si smonta domani.', chi: 'Tutti' },
+  { h: '00:40', t: 'Sbarazzo, differenziata, tavoli e sedie a posto. La tensostruttura resta.', chi: 'Tutti' },
 ];
 
 const CUCINA: [string, string[]][] = [
   ['Il primo — gramigna alla salsiccia', [
-    'Ragù: soffritto, salsiccia sgranata senza budello, sfumare col bianco, passata, cuocere piano dalle 16 alle 19.',
-    'Acqua salata nei pentoloni già bollente alle 19:45.',
+    'Il ragù si fa la mattina: soffritto, salsiccia sgranata senza budello, sfumare col bianco, passata, due ore di fuoco basso. Poi si tiene al fresco.',
+    'La sera si riscalda soltanto — alle 19:40, mentre l’acqua va a bollire.',
+    'Acqua salata nei pentoloni già bollente alle 19:50.',
     'Gramigna: cottura molto al dente, si finisce in padella col ragù.',
     'Non cuocere tutto insieme: due turni, così l’ultimo piatto non è scotto.',
     'Parmigiano a scaglie in tavola, non già mescolato.',
@@ -55,7 +65,7 @@ const CUCINA: [string, string[]][] = [
   ['Crescentine, gnocco e dolce — tutto dalle crescentine Lavacchielli', [
     'Arrivano già formate da Lavacchielli (Pavullo): non si impasta e non si tira niente, solo cuocere.',
     'Le stesse crescentine servono per tutte e tre le portate: in piastra restano crescentine, fritte diventano gnocco fritto, fritte e zuccherate diventano il dolce.',
-    'Tenerle in fresco fino all’uso, tirarle fuori una mezz’ora prima: fredde di frigo cuociono male.',
+    'Si ritirano la mattina e vanno subito in frigo. Fuori mezz’ora prima del servizio: fredde di frigo cuociono male.',
     'In piastra: tigelliere ben calde e appena unte. Si servono calde nei cesti col tovagliolo, mai in anticipo.',
     'Fritte salate: olio a 170–175 °C, si gonfiano in pochi secondi, si girano una volta sola.',
     'Fritte dolci: olio pulito e separato, zucchero appena escono, finché sono bollenti.',
@@ -179,7 +189,11 @@ export default function PianoServizio() {
       {tab === 'Serata' && (
         <div className="space-y-5">
           <div>
-            <p className="text-[10px] tracked gold mb-1">Pomeriggio — si prepara</p>
+            <p className="text-[10px] tracked gold mb-1">Mattina — si cucina</p>
+            <Timeline tappe={MATTINA} ora={ora} />
+          </div>
+          <div>
+            <p className="text-[10px] tracked gold mb-1">Pomeriggio — si allestisce</p>
             <Timeline tappe={POMERIGGIO} ora={ora} />
           </div>
           <div>
@@ -231,7 +245,7 @@ export default function PianoServizio() {
           ))}
           <div className="hairline p-4">
             <p className="text-[10px] tracked gold mb-2">Da ordinare / ritirare</p>
-            <p className="text-neutral-300 text-[13px] mb-1">· <span className="text-white">Crescentine già formate</span> — Lavacchielli, Pavullo. Sono pronte, vanno solo cotte. Le stesse servono per la piastra, per lo gnocco fritto e per la crescentina fritta dolce: circa <span className="text-white">7 pezzi a persona</span>, per 100 coperti sono 660. Ordinare entro martedì, ritiro sabato pomeriggio.</p>
+            <p className="text-neutral-300 text-[13px] mb-1">· <span className="text-white">Crescentine già formate</span> — Lavacchielli, Pavullo. Sono pronte, vanno solo cotte. Le stesse servono per la piastra, per lo gnocco fritto e per la crescentina fritta dolce: circa <span className="text-white">7 pezzi a persona</span>, per 100 coperti sono 660. Ordinare entro martedì, <span className="text-white">ritiro sabato mattina</span> e subito in frigo.</p>
             <p className="text-neutral-300 text-[13px] mb-1">· <span className="text-white">Salsiccia senza budello</span> dal macellaio — confermare la quantità venerdì, a iscrizioni chiuse.</p>
             <p className="text-neutral-300 text-[13px]">· <span className="text-white">Ghiaccio</span> — finisce sempre. Comprarne il doppio di quanto sembra ragionevole.</p>
           </div>

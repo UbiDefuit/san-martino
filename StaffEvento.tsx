@@ -11,7 +11,7 @@ interface P {
 const ADULTO = 20, BIMBO = 10;
 
 
-function Contatore({ label, val, max, set }: { label: string; val: number; max: number; set: (n: number) => void }) {
+function Contatore({ label, val, max, set, nota }: { label: string; val: number; max: number; set: (n: number) => void; nota?: string }) {
   return (
     <div className="border border-neutral-800 p-3 text-center">
       <p className="text-[10px] uppercase tracking-[0.15em] text-neutral-400">{label}</p>
@@ -22,7 +22,7 @@ function Contatore({ label, val, max, set }: { label: string; val: number; max: 
         <button onClick={() => set(Math.min(max, val + 1))}
           className="w-9 h-9 border border-neutral-700 text-white text-lg leading-none hover:border-white">+</button>
       </div>
-      <p className="text-[10px] text-neutral-500 mt-2">su {max} prenotati</p>
+      {nota !== undefined ? (nota ? <p className="text-[10px] text-neutral-500 mt-2">{nota}</p> : null) : <p className="text-[10px] text-neutral-500 mt-2">su {max} prenotati</p>}
     </div>
   );
 }
@@ -329,8 +329,8 @@ export default function StaffEvento() {
           <input placeholder="Nome e cognome" value={aNome} onChange={(e) => setANome(e.target.value)}
             className="w-full bg-black border border-neutral-800 px-4 py-3 text-white text-sm focus:outline-none focus:border-white" />
           <div className="grid grid-cols-2 gap-3">
-            <Contatore label="Adulti" val={aAd} max={20} set={setAAd} />
-            <Contatore label="Bambini" val={aBi} max={20} set={setABi} />
+            <Contatore label="Adulti" val={aAd} max={20} set={setAAd} nota="" />
+            <Contatore label="Bambini" val={aBi} max={20} set={setABi} nota="" />
           </div>
           <input placeholder="Note (allergie, tavolo…)" value={aNote} onChange={(e) => setANote(e.target.value)}
             className="w-full bg-black border border-neutral-800 px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white" />

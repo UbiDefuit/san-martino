@@ -62,6 +62,7 @@ export default function Gemello() {
         sources: {
           sat: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, attribution: 'Esri, Maxar, Earthstar Geographics', maxzoom: 18 },
           dem: { type: 'raster-dem', tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'], encoding: 'terrarium', tileSize: 256, maxzoom: 14 },
+          demhs: { type: 'raster-dem', tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'], encoding: 'terrarium', tileSize: 256, maxzoom: 14 },
           ortofoto: {
             type: 'raster',
             tiles: ['https://servizigis.regione.emilia-romagna.it/wms/agea2023_rgb?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=Agea2023_RGB&STYLES=&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/jpeg'],
@@ -78,16 +79,45 @@ export default function Gemello() {
         layers: [
           { id: 'bg', type: 'background', paint: { 'background-color': '#181a17' } },
           { id: 'sat', type: 'raster', source: 'sat' },
+          { id: 'rilievo', type: 'hillshade', source: 'demhs', paint: { 'hillshade-exaggeration': 0.45, 'hillshade-shadow-color': '#0b0d10', 'hillshade-highlight-color': '#f5e9cf', 'hillshade-accent-color': '#2c2a24' } },
           { id: 'ortofoto', type: 'raster', source: 'ortofoto', minzoom: 13, paint: { 'raster-fade-duration': 300 } },
           { id: 'storica', type: 'raster', source: 'storica', minzoom: 11, layout: { visibility: 'none' }, paint: { 'raster-fade-duration': 300, 'raster-opacity': 1 } },
         ],
       } as any,
-      center: [10.6905, 44.3838],
-      zoom: 12.8, pitch: 60, bearing: 168, maxPitch: 78,
+      center: [10.703, 44.352],
+      zoom: 10.8, pitch: 38, bearing: 130, maxPitch: 78,
       attributionControl: { compact: true } as any,
     });
+    // partenza cinematografica: lontani e alti, si scende sul paese quando è pronto
+    let introDone = false;
+    const intro = () => {
+      if (introDone) return; introDone = true;
+      setReady(true);
+      map.easeTo({ center: [10.6905, 44.3838], zoom: 13.5, pitch: 63, bearing: 168, duration: 5500, easing: (t) => 1 - Math.pow(1 - t, 3) } as any);
+      // lenta orbita finché nessuno tocca la mappa
+      let orbit = true;
+      const stop = () => { orbit = false; };
+      ['mousedown', 'touchstart', 'wheel', 'dblclick'].forEach((ev) => map.getCanvas().addEventListener(ev, stop, { once: true, passive: true } as any));
+      setTimeout(() => {
+        const spin = () => {
+          if (!orbit || !mapRef.current) return;
+          map.setBearing(map.getBearing() + 0.012);
+          requestAnimationFrame(spin);
+        };
+        requestAnimationFrame(spin);
+      }, 5600);
+    };
+    // rete di sicurezza: qualunque cosa succeda, via l'overlay
+    map.on('load', intro);
+    const failsafe = setTimeout(intro, 9000);
+    map.on('error', () => { /* tile mancante o WMS lento: non bloccare la scena */ });
+
     map.on('style.load', () => {
-      map.setTerrain({ source: 'dem', exaggeration: 1.4 } as any);
+      try {
+      map.setTerrain({ source: 'dem', exaggeration: 1.5 } as any);
+      try {
+        (map as any).setSky({ 'sky-color': '#0e1a2b', 'horizon-color': '#c98a4b', 'fog-color': '#1a1f28', 'sky-horizon-blend': 0.6, 'horizon-fog-blend': 0.55, 'fog-ground-blend': 0.72 });
+      } catch { /* versioni senza sky */ }
       map.addSource('route', { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: TRACK.map((p) => [p[1], p[0]]) } } });
       map.addLayer({ id: 'route-glow', type: 'line', source: 'route', layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#ffffff', 'line-width': 5.5, 'line-opacity': 0.95 } });
       map.addLayer({ id: 'route', type: 'line', source: 'route', layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#d92626', 'line-width': 2.5 } });
@@ -225,7 +255,6 @@ export default function Gemello() {
           aggiornaLuciSrc();
         })
         .subscribe();
-      setReady(true);
       // deep link: #/gemello?luogo=slug
       try {
         const q = location.hash.split('?')[1];
@@ -235,9 +264,12 @@ export default function Gemello() {
           if (l) setTimeout(() => diveTo(l), 1200);
         }
       } catch { /* ok */ }
+      } catch (e) { console.warn('gemello init', e); }
+      intro();
     });
     mapRef.current = map;
     return () => {
+      clearTimeout(failsafe);
       if (flyTimer.current) clearInterval(flyTimer.current);
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       map.remove();
@@ -589,9 +621,13 @@ export default function Gemello() {
             </span>
           </div>
         )}
+        <div className="absolute inset-0 pointer-events-none z-[5] gemello-vignetta" />
         {!ready && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-neutral-300 text-xs uppercase tracking-[0.2em]">
-            Carico la valle…
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 bg-[#0b0d10]">
+            <svg viewBox="0 0 100 100" className="w-14 h-14 gemello-spin" fill="none">
+              <circle cx="50" cy="50" r="44" stroke="#C9A227" strokeWidth="2" strokeDasharray="80 200" strokeLinecap="round" />
+            </svg>
+            <p className="text-neutral-400 text-[11px] uppercase tracking-[0.3em]">Sto costruendo la valle</p>
           </div>
         )}
         {sel && (

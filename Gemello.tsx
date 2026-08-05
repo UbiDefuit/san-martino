@@ -12,14 +12,14 @@ export const LUOGHI: { geo: [number, number]; nome: string; big?: boolean; zoom:
   { geo: [44.38851, 10.68466], nome: 'San Martino', big: true, zoom: 16.8 },
   { geo: [44.3872, 10.6893], nome: 'La Chiesa', zoom: 17.0 },
   { geo: [44.38831, 10.69083], nome: 'Oratorio della Rondine', zoom: 17.0 },
-  { geo: [44.38870, 10.68366], nome: 'Oratorio di Sant\u2019Antonio Abate', zoom: 17.0 },
+  { geo: [44.38870, 10.68366], nome: 'Oratorio di Sant’Antonio Abate', zoom: 17.0 },
   { geo: [44.38852, 10.68394], nome: 'Cappella di San Giovanni (1686)', zoom: 17.0 },
   { geo: [44.38590, 10.69285], nome: 'Oratorio dei SS. Geminiano e Pellegrino', zoom: 17.0 },
-  { geo: [44.38599, 10.69274], nome: 'C\u00e0 Carloni', zoom: 16.8 },
+  { geo: [44.38599, 10.69274], nome: 'Cà Carloni', zoom: 16.8 },
   { geo: [44.38437, 10.69189], nome: 'Il Poggio', zoom: 16.8 },
-  { geo: [44.38570, 10.70296], nome: 'C\u00e0 Marastoni', zoom: 16.8 },
-  { geo: [44.38885, 10.68345], nome: 'C\u00e0 dei Rossi', zoom: 16.8 },
-  { geo: [44.39180, 10.68252], nome: 'C\u00e0 Lunga', zoom: 16.8 },
+  { geo: [44.38570, 10.70296], nome: 'Cà Marastoni', zoom: 16.8 },
+  { geo: [44.38885, 10.68345], nome: 'Cà dei Rossi', zoom: 16.8 },
+  { geo: [44.39180, 10.68252], nome: 'Cà Lunga', zoom: 16.8 },
   { geo: [44.3790, 10.6894], nome: 'Monte San Martino', zoom: 15.2 },
 ];
 
@@ -336,11 +336,11 @@ export default function Gemello() {
 
   const BORGATE_LUCE: { nome: string; geo: [number, number] }[] = [
     { nome: 'San Martino', geo: [44.38851, 10.68466] },
-    { nome: 'C\u00e0 Carloni', geo: [44.38599, 10.69274] },
+    { nome: 'Cà Carloni', geo: [44.38599, 10.69274] },
     { nome: 'Il Poggio', geo: [44.38437, 10.69189] },
-    { nome: 'C\u00e0 Marastoni', geo: [44.38570, 10.70296] },
-    { nome: 'C\u00e0 dei Rossi', geo: [44.38885, 10.68345] },
-    { nome: 'C\u00e0 Lunga', geo: [44.39180, 10.68252] },
+    { nome: 'Cà Marastoni', geo: [44.38570, 10.70296] },
+    { nome: 'Cà dei Rossi', geo: [44.38885, 10.68345] },
+    { nome: 'Cà Lunga', geo: [44.39180, 10.68252] },
   ];
   const accendi = async () => {
     const nome = nomeLuce.trim();
@@ -398,10 +398,10 @@ export default function Gemello() {
     document.getElementById('gemello')?.classList.add('scena-pulita');
     raccontoRef.current = true;
     const tappe: { c: [number, number]; z: number; p: number; b: number; t: string; hold: number }[] = [
-      { c: [10.68466, 44.38851], z: 16.6, p: 55, b: 160, t: 'San Martino. Il nucleo che d\u00e0 il nome alla frazione, sulla via che cuce la vallata.', hold: 2400 },
-      { c: [10.6893, 44.3872], z: 17.0, p: 55, b: 168, t: 'La chiesa: parrocchia dal 1627. Travolta dalle frane del 1746\u201347, riaperta al culto nel 1756 su un colle pi\u00f9 sicuro.', hold: 2800 },
-      { c: [10.69083, 44.38831], z: 17.0, p: 55, b: 165, t: 'L\u2019Oratorio della Madonna della Rondine, 1644: quattro secoli di devozione.', hold: 2400 },
-      { c: [10.69274, 44.38599], z: 16.6, p: 55, b: 172, t: 'C\u00e0 Carloni, affacciata sui campi.', hold: 2200 },
+      { c: [10.68466, 44.38851], z: 16.6, p: 55, b: 160, t: 'San Martino. Il nucleo che dà il nome alla frazione, sulla via che cuce la vallata.', hold: 2400 },
+      { c: [10.6893, 44.3872], z: 17.0, p: 55, b: 168, t: 'La chiesa: parrocchia dal 1627. Travolta dalle frane del 1746–47, riaperta al culto nel 1756 su un colle più sicuro.', hold: 2800 },
+      { c: [10.69083, 44.38831], z: 17.0, p: 55, b: 165, t: 'L’Oratorio della Madonna della Rondine, 1644: quattro secoli di devozione.', hold: 2400 },
+      { c: [10.69274, 44.38599], z: 16.6, p: 55, b: 172, t: 'Cà Carloni, affacciata sui campi.', hold: 2200 },
       { c: [10.69189, 44.38437], z: 16.6, p: 55, b: 175, t: 'Il Poggio — i tetti che vogliamo rivedere abitati.', hold: 2400 },
       { c: [10.6894, 44.3790], z: 14.6, p: 62, b: 168, t: 'E sopra tutto il Monte San Martino: base partigiana nel 1944, oggi 6,2 km di sentieri riaperti a mano dai volontari.', hold: 3000 },
     ];
@@ -447,6 +447,7 @@ export default function Gemello() {
   const stopVolo = () => {
     voloAnnullato.current = true;
     setPreparo(null);
+    setSottotitolo('');
     if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     rafRef.current = null;
     setFlying(false);
@@ -465,73 +466,78 @@ export default function Gemello() {
     setFlying(true);
     document.getElementById('gemello')?.classList.add('scena-pulita');
     voloAnnullato.current = false;
-    // niente ortofoto WMS durante il volo veloce: il satellite su CDN tiene il passo
+    // niente ortofoto WMS durante il volo: il satellite su CDN tiene il passo
     try { map.setLayoutProperty('ortofoto', 'visibility', 'none'); } catch { /* ok */ }
     const len = TRACK.length;
-    const DUR = 24000;
 
-    // PRECARICO: percorro la rotta dietro il sipario, le tile entrano in cache
-    setPreparo(0);
-    const N = 30;
-    const avgP = (idx: number, r: number): [number, number] => {
-      const a = Math.max(0, idx - r), b = Math.min(len - 1, idx + r);
-      let la = 0, lo = 0, n = 0;
-      for (let k = a; k <= b; k++) { la += TRACK[k][0]; lo += TRACK[k][1]; n++; }
-      return [la / n, lo / n];
-    };
-    // simulo la STESSA traiettoria smussata del volo (sottopassi senza render)
-    let pPos: [number, number] | null = null, pLook: [number, number] | null = null, pAlt: number | null = null;
-    const SUB = 18; // sottopassi di smussamento fra un campione e l'altro
-    for (let k = 0; k <= N; k++) {
-      if (voloAnnullato.current) { setPreparo(null); return; }
-      for (let q = 0; q < SUB; q++) {
-        const p = Math.min(1, (k + q / SUB) / N);
-        const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-        const i = Math.min(len - 7, Math.max(0, Math.floor(e * (len - 7))));
-        const camIdx = Math.max(0, i - 22), lookIdx = Math.min(i + 16, len - 1);
-        const pos = avgP(camIdx, 10), look = avgP(lookIdx, 6);
-        const alt = Math.max(...ELES.slice(camIdx, lookIdx + 1)) + 240;
-        pPos = pPos ? [pPos[0] + (pos[0] - pPos[0]) * 0.08, pPos[1] + (pos[1] - pPos[1]) * 0.08] : pos;
-        pLook = pLook ? [pLook[0] + (look[0] - pLook[0]) * 0.12, pLook[1] + (look[1] - pLook[1]) * 0.12] : look;
-        pAlt = pAlt !== null ? pAlt + (alt - pAlt) * 0.06 : alt;
-      }
-      const lookIdxK = Math.min(Math.floor(((k / N) * (len - 7))) + 16, len - 1);
-      try {
-        map.jumpTo(map.calculateCameraOptionsFromTo(
-          new maplibregl.LngLat(pPos![1], pPos![0]), pAlt!,
-          new maplibregl.LngLat(pLook![1], pLook![0]), ELES[lookIdxK]));
-      } catch { /* continua */ }
-      await new Promise<void>((res) => {
-        const to = setTimeout(res, 750);
-        map.once('idle', () => { clearTimeout(to); res(); });
-      });
-      setPreparo(Math.round((k / N) * 100));
-    }
-    if (voloAnnullato.current) { setPreparo(null); return; }
-    setPreparo(null);
     const avg = (idx: number, r: number): [number, number] => {
       const a = Math.max(0, idx - r), b = Math.min(len - 1, idx + r);
       let la = 0, lo = 0, n = 0;
       for (let k = a; k <= b; k++) { la += TRACK[k][0]; lo += TRACK[k][1]; n++; }
       return [la / n, lo / n];
     };
+    const camera = (i: number) => {
+      const camIdx = Math.max(0, i - 22), lookIdx = Math.min(i + 18, len - 1);
+      const pos = avg(camIdx, 10), look = avg(lookIdx, 6);
+      const alt = Math.max(...ELES.slice(camIdx, lookIdx + 1)) + 185;
+      return { pos, look, alt, lookIdx };
+    };
+
+    // decollo: sipario di pochi secondi, semino la cache su quattro punti chiave
+    setPreparo(-1);
+    for (const f of [0.3, 0.6, 0.9, 0]) {
+      if (voloAnnullato.current) { setPreparo(null); return; }
+      const i = Math.min(len - 7, Math.floor(f * (len - 7)));
+      const c = camera(i);
+      try {
+        map.jumpTo(map.calculateCameraOptionsFromTo(
+          new maplibregl.LngLat(c.pos[1], c.pos[0]), c.alt,
+          new maplibregl.LngLat(c.look[1], c.look[0]), ELES[c.lookIdx]));
+      } catch { /* continua */ }
+      await new Promise<void>((res) => {
+        const to = setTimeout(res, 800);
+        map.once('idle', () => { clearTimeout(to); res(); });
+      });
+    }
+    if (voloAnnullato.current) { setPreparo(null); return; }
+    setPreparo(null);
+
+    // il volo: 34 secondi, quota bassa, sguardo lontano, racconto a bordo
+    const DUR = 34000;
+    const TAPPE_VOLO: [number, string][] = [
+      [0.01, "Si parte dalla chiesa — come all'alba del 1° agosto."],
+      [0.2, "L'Oratorio della Madonna della Rondine: la prima tappa, dal 1644."],
+      [0.45, 'Il crinale. Da quassù si vede tutta la valle del Rossenna.'],
+      [0.68, 'Il Monte San Martino, base partigiana nel 1944.'],
+      [0.88, '6,2 chilometri riaperti a mano dai volontari.'],
+    ];
+    let tappaIdx = 0;
     let smPos: [number, number] | null = null, smLook: [number, number] | null = null, smAlt: number | null = null;
     const t0 = performance.now();
     const step = (now: number) => {
+      if (voloAnnullato.current) return;
       const p = (now - t0) / DUR;
-      if (p >= 1) { stopVolo(); return; }
+      if (p >= 1) {
+        // finale: la camera si alza e abbraccia la valle
+        setSottotitolo('SAN MARTINO 2030 — LA VALLE CHE NON SI ARRENDE');
+        map.easeTo({ center: [10.6905, 44.3838], zoom: 12.9, pitch: 62, bearing: 168, duration: 4200 } as any);
+        setTimeout(() => { if (!voloAnnullato.current) stopVolo(); }, 5200);
+        return;
+      }
+      if (tappaIdx < TAPPE_VOLO.length && p >= TAPPE_VOLO[tappaIdx][0]) {
+        setSottotitolo(TAPPE_VOLO[tappaIdx][1]);
+        tappaIdx++;
+      }
       const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
       const i = Math.min(len - 7, Math.max(0, Math.floor(e * (len - 7))));
-      const camIdx = Math.max(0, i - 22), lookIdx = Math.min(i + 16, len - 1);
-      const pos = avg(camIdx, 10), look = avg(lookIdx, 6);
-      const alt = Math.max(...ELES.slice(camIdx, lookIdx + 1)) + 240;
-      smPos = smPos ? [smPos[0] + (pos[0] - smPos[0]) * 0.08, smPos[1] + (pos[1] - smPos[1]) * 0.08] : pos;
-      smLook = smLook ? [smLook[0] + (look[0] - smLook[0]) * 0.12, smLook[1] + (look[1] - smLook[1]) * 0.12] : look;
-      smAlt = smAlt !== null ? smAlt + (alt - smAlt) * 0.06 : alt;
+      const c = camera(i);
+      smPos = smPos ? [smPos[0] + (c.pos[0] - smPos[0]) * 0.07, smPos[1] + (c.pos[1] - smPos[1]) * 0.07] : c.pos;
+      smLook = smLook ? [smLook[0] + (c.look[0] - smLook[0]) * 0.1, smLook[1] + (c.look[1] - smLook[1]) * 0.1] : c.look;
+      smAlt = smAlt !== null ? smAlt + (c.alt - smAlt) * 0.05 : c.alt;
       try {
         map.jumpTo(map.calculateCameraOptionsFromTo(
           new maplibregl.LngLat(smPos[1], smPos[0]), smAlt,
-          new maplibregl.LngLat(smLook[1], smLook[0]), ELES[lookIdx]));
+          new maplibregl.LngLat(smLook[1], smLook[0]), ELES[c.lookIdx]));
       } catch { stopVolo(); return; }
       rafRef.current = requestAnimationFrame(step);
     };
@@ -586,7 +592,7 @@ export default function Gemello() {
                   ['Nomi dei borghi', showBorghi, setShowBorghi],
                   ['Progetti e panorami', showProgetti, setShowProgetti],
                   ['Carta storica 1853', showStorica, setShowStorica],
-                  ['Frana 1746\u201347 (indicativa)', showFrana, setShowFrana],
+                  ['Frana 1746–47 (indicativa)', showFrana, setShowFrana],
                 ] as [string, boolean, (v: boolean) => void][]).map(([label, val, set]) => (
                   <label key={label} className="flex items-center gap-2 text-xs text-neutral-200 cursor-pointer">
                     <input type="checkbox" checked={val} onChange={() => set(!val)} className="accent-white" />
@@ -606,12 +612,11 @@ export default function Gemello() {
           </div>
         )}
         {preparo !== null && (
-          <div className="absolute inset-0 z-20 bg-black flex flex-col items-center justify-center gap-4">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-neutral-300">Preparo il volo</p>
-            <div className="w-52 h-1 bg-neutral-800 overflow-hidden">
-              <div className="h-full bg-white transition-all" style={{ width: preparo + '%' }} />
-            </div>
-            <p className="text-white text-2xl font-light tabular-nums">{preparo}%</p>
+          <div className="absolute inset-0 z-20 bg-[#0b0d10] flex flex-col items-center justify-center gap-4">
+            <svg viewBox="0 0 100 100" className="w-12 h-12 gemello-spin" fill="none">
+              <circle cx="50" cy="50" r="44" stroke="#C9A227" strokeWidth="2" strokeDasharray="80 200" strokeLinecap="round" />
+            </svg>
+            <p className="text-neutral-300 text-[11px] uppercase tracking-[0.3em]">Decollo…</p>
           </div>
         )}
         {sottotitolo && (

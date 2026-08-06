@@ -100,3 +100,15 @@ export async function gramCheckSet(pin: string, id: string, done: boolean, chi: 
   const { error } = await supa.rpc('gram_check_set', { pin, p_id: id, p_done: done, p_chi: chi });
   if (error) throw error;
 }
+
+// ---------------- Lista spesa condivisa ----------------
+export interface SpesaRow { id: string; voce: string; squadra: string | null; qta: string | null; prezzo: number | null; preso: boolean; chi: string | null; updated_at: string }
+export async function gramSpesaList(pin: string): Promise<SpesaRow[]> {
+  const { data, error } = await supa.rpc('gram_spesa_list', { pin });
+  if (error) throw error;
+  return (data || []) as SpesaRow[];
+}
+export async function gramSpesaSet(pin: string, id: string, voce: string, squadra: string, qta: string, prezzo: number | null, preso: boolean, chi: string): Promise<void> {
+  const { error } = await supa.rpc('gram_spesa_set', { pin, p_id: id, p_voce: voce, p_squadra: squadra, p_qta: qta, p_prezzo: prezzo, p_preso: preso, p_chi: chi });
+  if (error) throw error;
+}

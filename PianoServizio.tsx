@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ttStaffList } from './supa';
 import Checklist from './Checklist';
+import Spesa from './Spesa';
 
 /* ------------------------------------------------------------------ dati */
 
@@ -130,7 +131,7 @@ function Timeline({ tappe, ora }: { tappe: Tappa[]; ora: number }) {
 
 /* ------------------------------------------------------------------ pagina */
 
-const TABS = ['Da fare', 'Serata', 'Squadre', 'Cucina', 'Guai'] as const;
+const TABS = ['Da fare', 'Spesa', 'Serata', 'Squadre', 'Cucina', 'Guai'] as const;
 type Tab = typeof TABS[number];
 
 export default function PianoServizio() {
@@ -176,7 +177,7 @@ export default function PianoServizio() {
         <p className="text-neutral-500 text-xs mt-1">Chi fa cosa, e quando. Tienila aperta.</p>
       </div>
 
-      <div className="grid grid-cols-5 gap-1">
+      <div className="grid grid-cols-3 gap-1">
         {TABS.map((t) => (
           <button key={t} onClick={() => setTab(t)}
             className={'py-2.5 text-[9px] uppercase tracking-[0.08em] border transition ' +
@@ -187,6 +188,8 @@ export default function PianoServizio() {
       </div>
 
       {tab === 'Da fare' && <Checklist pin={pin} />}
+
+      {tab === 'Spesa' && <Spesa pin={pin} />}
 
       {tab === 'Serata' && (
         <div className="space-y-5">

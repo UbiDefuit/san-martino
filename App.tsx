@@ -4,7 +4,7 @@ import Gemello from './Gemello';
 import Gramignata from './Gramignata';
 import StaffEvento from './StaffEvento';
 import Idee from './Idee';
-import Mark from './Mark';
+import Mark2030 from './Mark2030';
 
 type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'sostienici' | 'chisiamo' | 'gramignata' | 'idee' | 'staff';
 
@@ -361,7 +361,7 @@ export default function App() {
       <header className="sticky top-0 z-40 bg-black/95 backdrop-blur border-b border-neutral-800">
         <div className="max-w-3xl mx-auto px-5 h-14 flex items-center justify-between">
           <a href="#/" className="flex items-center gap-2">
-            <Mark className="w-7 h-7 mark-fg" />
+            <Mark2030 className="w-7 h-7 mark-fg" />
             <span className="font-display text-lg leading-none">San Martino <span className="gold">2030</span></span>
           </a>
           <nav className="flex gap-4 sm:gap-6 overflow-x-auto">
@@ -387,7 +387,7 @@ export default function App() {
         {route === 'idee' && <Idee />}
       </main>
       <footer className="border-t border-neutral-800 py-10 text-center space-y-3">
-        <Mark className="w-10 h-10 mx-auto mark-fg" />
+        <Mark2030 className="w-10 h-10 mx-auto mark-fg" />
         <p className="text-[11px] tracked gold">San Martino 2030 — la valle che non si arrende</p>
         <p className="text-xs text-neutral-500">APS per la rinascita di San Martino Vallata · Polinago (MO)</p>
         <a href={EVENTO_URL} target="_blank" rel="noreferrer"

@@ -112,3 +112,10 @@ export async function gramSpesaSet(pin: string, id: string, voce: string, squadr
   const { error } = await supa.rpc('gram_spesa_set', { pin, p_id: id, p_voce: voce, p_squadra: squadra, p_qta: qta, p_prezzo: prezzo, p_preso: preso, p_chi: chi });
   if (error) throw error;
 }
+
+export interface IdeaRow { idea: string; luogo: string | null; aiuto: string | null; contatto: string | null; created_at: string }
+export async function ideeStaff(pin: string): Promise<IdeaRow[]> {
+  const { data, error } = await supa.rpc('sm2030_idee_staff', { pin });
+  if (error) throw error;
+  return (data || []) as IdeaRow[];
+}

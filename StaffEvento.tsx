@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Html5Qrcode } from 'html5-qrcode';
-import { ttStaffList, ttCheckIn, ttCheckInN, ttResetCheckin, ttGetTicket, ttStaffAdd } from './supa';
+import { ttStaffList, ttCheckIn, ttCheckInN, ttResetCheckin, ttGetTicket, ttStaffAdd, ideeStaff, IdeaRow } from './supa';
 
 interface P {
   id: string; name: string; contact?: string; adults: number; children: number;
@@ -40,6 +40,11 @@ export default function StaffEvento() {
   const [soloDaFare, setSoloDaFare] = useState(false);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const lastSeen = useRef<Record<string, number>>({});
+
+  // idee raccolte dal form
+  const [idee, setIdee] = useState<IdeaRow[] | null>(null);
+  const [ideeOpen, setIdeeOpen] = useState(false);
+  const caricaIdee = () => ideeStaff(pin).then(setIdee).catch(() => setIdee([]));
 
   // aggiunta all'ingresso
   const [addOpen, setAddOpen] = useState(false);
@@ -396,6 +401,32 @@ export default function StaffEvento() {
         })}
         {list.length === 0 && <p className="text-neutral-500 text-xs">Nessuna iscrizione.</p>}
         {list.length > 0 && filtered.length === 0 && <p className="text-neutral-500 text-xs">Nessun risultato.</p>}
+      </div>
+
+      {/* ---- idee raccolte dal form ---- */}
+      <div className="hairline p-4">
+        <button onClick={() => { setIdeeOpen(!ideeOpen); if (!idee) caricaIdee(); }}
+          className="w-full flex items-center justify-between text-left">
+          <span className="text-[10px] tracked gold">L'anfora digitale — idee dal form</span>
+          <span className="text-neutral-400 text-sm">{ideeOpen ? '−' : (idee ? idee.length : '…')}</span>
+        </button>
+        {ideeOpen && (
+          <div className="mt-3 space-y-3">
+            {idee === null && <p className="text-neutral-500 text-xs">Carico…</p>}
+            {idee !== null && idee.length === 0 && <p className="text-neutral-500 text-xs">Ancora nessuna idea dal form. Quelle di carta sono nell'anfora vera.</p>}
+            {(idee || []).map((r, i) => (
+              <div key={i} className="border-b border-neutral-800/70 pb-2">
+                <p className="text-white text-sm leading-snug">{r.idea}</p>
+                <p className="text-neutral-500 text-[11px] mt-1">
+                  {new Date(r.created_at).toLocaleDateString('it-IT')}
+                  {r.luogo ? ' · ' + r.luogo : ''}
+                  {r.aiuto ? ' · offre: ' + r.aiuto : ''}
+                  {r.contatto ? ' · ' + r.contatto : ' · anonima'}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <button disabled={list.length === 0} onClick={stampaPdf}

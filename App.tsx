@@ -111,7 +111,7 @@ function Home() {
             <img src="./canonica.jpg" alt="" className="w-full h-56 object-cover opacity-50 group-hover:opacity-65 group-hover:scale-[1.03] transition duration-700" />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
               <Label>Il gemello digitale</Label>
-              <h2 className="font-display text-3xl text-white">Sorvola la valle</h2>
+              <h2 className="font-display text-3xl text-white">Esplora la valle</h2>
               <p className="text-neutral-300 text-sm mt-2 max-w-md">Il territorio vero in 3D: la chiesa, gli oratori, i sentieri, la frana del 1746. E il racconto che si guarda come un film.</p>
               <span className="inline-block mt-5 bg-white text-black px-6 py-3 font-semibold uppercase tracking-[0.15em] text-xs">Entra</span>
             </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { TRACK, ELES } from './track';
+import { TRACK } from './track';
 import { elencoLuci, accendiLuce, Luce, supa } from './supa';
 import { PROGETTI, Progetto } from './data';
 
@@ -29,7 +29,6 @@ export const slugLuogo = (nome: string) =>
 export default function Gemello() {
   const mapRef = useRef<maplibregl.Map | null>(null);
   const flyTimer = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [flying, setFlying] = useState(false);
   const [sel, setSel] = useState<Progetto | null>(null);
   const [panorama, setPanorama] = useState<{ foto: string; titolo: string } | null>(null);
   const [zoomed, setZoomed] = useState(false);
@@ -271,7 +270,6 @@ export default function Gemello() {
     return () => {
       clearTimeout(failsafe);
       if (flyTimer.current) clearInterval(flyTimer.current);
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       map.remove();
       mapRef.current = null;
     };
@@ -441,109 +439,6 @@ export default function Gemello() {
     }
   };
 
-  const rafRef = useRef<number | null>(null);
-  const [preparo, setPreparo] = useState<number | null>(null);
-  const voloAnnullato = useRef(false);
-  const stopVolo = () => {
-    voloAnnullato.current = true;
-    setPreparo(null);
-    setSottotitolo('');
-    if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-    rafRef.current = null;
-    setFlying(false);
-    document.getElementById('gemello')?.classList.remove('scena-pulita');
-    const map = mapRef.current;
-    if (map) {
-      try { map.setLayoutProperty('ortofoto', 'visibility', 'visible'); } catch { /* ok */ }
-      map.easeTo({ center: [10.6905, 44.3838], zoom: 12.8, pitch: 60, bearing: 168, duration: 2500 });
-    }
-  };
-
-  const flyover = async () => {
-    const map = mapRef.current;
-    if (!map) return;
-    if (flying) { stopVolo(); return; }
-    setFlying(true);
-    document.getElementById('gemello')?.classList.add('scena-pulita');
-    voloAnnullato.current = false;
-    // niente ortofoto WMS durante il volo: il satellite su CDN tiene il passo
-    try { map.setLayoutProperty('ortofoto', 'visibility', 'none'); } catch { /* ok */ }
-    const len = TRACK.length;
-
-    const avg = (idx: number, r: number): [number, number] => {
-      const a = Math.max(0, idx - r), b = Math.min(len - 1, idx + r);
-      let la = 0, lo = 0, n = 0;
-      for (let k = a; k <= b; k++) { la += TRACK[k][0]; lo += TRACK[k][1]; n++; }
-      return [la / n, lo / n];
-    };
-    const camera = (i: number) => {
-      const camIdx = Math.max(0, i - 22), lookIdx = Math.min(i + 18, len - 1);
-      const pos = avg(camIdx, 10), look = avg(lookIdx, 6);
-      const alt = Math.max(...ELES.slice(camIdx, lookIdx + 1)) + 185;
-      return { pos, look, alt, lookIdx };
-    };
-
-    // decollo: sipario di pochi secondi, semino la cache su quattro punti chiave
-    setPreparo(-1);
-    for (const f of [0.3, 0.6, 0.9, 0]) {
-      if (voloAnnullato.current) { setPreparo(null); return; }
-      const i = Math.min(len - 7, Math.floor(f * (len - 7)));
-      const c = camera(i);
-      try {
-        map.jumpTo(map.calculateCameraOptionsFromTo(
-          new maplibregl.LngLat(c.pos[1], c.pos[0]), c.alt,
-          new maplibregl.LngLat(c.look[1], c.look[0]), ELES[c.lookIdx]));
-      } catch { /* continua */ }
-      await new Promise<void>((res) => {
-        const to = setTimeout(res, 800);
-        map.once('idle', () => { clearTimeout(to); res(); });
-      });
-    }
-    if (voloAnnullato.current) { setPreparo(null); return; }
-    setPreparo(null);
-
-    // il volo: 34 secondi, quota bassa, sguardo lontano, racconto a bordo
-    const DUR = 34000;
-    const TAPPE_VOLO: [number, string][] = [
-      [0.01, "Si parte dalla chiesa — come all'alba del 1° agosto."],
-      [0.2, "L'Oratorio della Madonna della Rondine: la prima tappa, dal 1644."],
-      [0.45, 'Il crinale. Da quassù si vede tutta la valle del Rossenna.'],
-      [0.68, 'Il Monte San Martino, base partigiana nel 1944.'],
-      [0.88, '6,2 chilometri riaperti a mano dai volontari.'],
-    ];
-    let tappaIdx = 0;
-    let smPos: [number, number] | null = null, smLook: [number, number] | null = null, smAlt: number | null = null;
-    const t0 = performance.now();
-    const step = (now: number) => {
-      if (voloAnnullato.current) return;
-      const p = (now - t0) / DUR;
-      if (p >= 1) {
-        // finale: la camera si alza e abbraccia la valle
-        setSottotitolo('SAN MARTINO 2030 — LA VALLE CHE NON SI ARRENDE');
-        map.easeTo({ center: [10.6905, 44.3838], zoom: 12.9, pitch: 62, bearing: 168, duration: 4200 } as any);
-        setTimeout(() => { if (!voloAnnullato.current) stopVolo(); }, 5200);
-        return;
-      }
-      if (tappaIdx < TAPPE_VOLO.length && p >= TAPPE_VOLO[tappaIdx][0]) {
-        setSottotitolo(TAPPE_VOLO[tappaIdx][1]);
-        tappaIdx++;
-      }
-      const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-      const i = Math.min(len - 7, Math.max(0, Math.floor(e * (len - 7))));
-      const c = camera(i);
-      smPos = smPos ? [smPos[0] + (c.pos[0] - smPos[0]) * 0.07, smPos[1] + (c.pos[1] - smPos[1]) * 0.07] : c.pos;
-      smLook = smLook ? [smLook[0] + (c.look[0] - smLook[0]) * 0.1, smLook[1] + (c.look[1] - smLook[1]) * 0.1] : c.look;
-      smAlt = smAlt !== null ? smAlt + (c.alt - smAlt) * 0.05 : c.alt;
-      try {
-        map.jumpTo(map.calculateCameraOptionsFromTo(
-          new maplibregl.LngLat(smPos[1], smPos[0]), smAlt,
-          new maplibregl.LngLat(smLook[1], smLook[0]), ELES[c.lookIdx]));
-      } catch { stopVolo(); return; }
-      rafRef.current = requestAnimationFrame(step);
-    };
-    rafRef.current = requestAnimationFrame(step);
-  };
-
   return (
     <div className="animate-fade-in-up pt-10 space-y-5">
       <h1 className="text-3xl font-bold text-white">Il gemello digitale</h1>
@@ -609,14 +504,6 @@ export default function Gemello() {
                 </div>
               </div>
             )}
-          </div>
-        )}
-        {preparo !== null && (
-          <div className="absolute inset-0 z-20 bg-[#0b0d10] flex flex-col items-center justify-center gap-4">
-            <svg viewBox="0 0 100 100" className="w-12 h-12 gemello-spin" fill="none">
-              <circle cx="50" cy="50" r="44" stroke="#C9A227" strokeWidth="2" strokeDasharray="80 200" strokeLinecap="round" />
-            </svg>
-            <p className="text-neutral-300 text-[11px] uppercase tracking-[0.3em]">Decollo…</p>
           </div>
         )}
         {sottotitolo && (
@@ -694,11 +581,7 @@ export default function Gemello() {
         className="w-full bg-white text-black px-3 py-3.5 font-semibold uppercase tracking-[0.15em] text-xs transition disabled:opacity-40 hover:bg-neutral-200">
         {racconto ? 'Ferma il racconto' : '▶ Il racconto della valle (60s)'}
       </button>
-      <div className="grid grid-cols-2 gap-3">
-        <button onClick={flyover}
-          className="border border-neutral-700 text-white hover:border-white px-3 py-3.5 font-semibold uppercase tracking-[0.15em] text-xs transition">
-          {flying ? 'Ferma il volo' : 'Volo sulla valle'}
-        </button>
+      <div className="grid grid-cols-1 gap-3">
         <a href="https://ubidefuit.github.io/camminata-san-martino/" target="_blank" rel="noreferrer"
           className="border border-neutral-700 text-white hover:border-white px-3 py-3.5 font-semibold uppercase tracking-[0.15em] text-xs transition text-center">
           L'app dell'evento

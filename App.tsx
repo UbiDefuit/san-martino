@@ -4,6 +4,7 @@ import Gemello from './Gemello';
 import Gramignata from './Gramignata';
 import StaffEvento from './StaffEvento';
 import Idee from './Idee';
+import Mark from './Mark';
 
 type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'sostienici' | 'chisiamo' | 'gramignata' | 'idee' | 'staff';
 
@@ -15,7 +16,7 @@ const routeFromHash = (): Route => {
 const eur = (n: number) => n.toLocaleString('it-IT') + ' €';
 
 function Label({ children }: { children: React.ReactNode }) {
-  return <div className="text-[11px] uppercase tracking-[0.25em] text-neutral-400 mb-3">{children}</div>;
+  return <div className="text-[10px] tracked gold mb-3">{children}</div>;
 }
 
 function Card({ children, className = '' }: { children: React.ReactNode; className?: string }) {
@@ -35,95 +36,112 @@ function BtnLink({ href, children, primary = false, external = false }: any) {
 }
 
 // ---------- Home ----------
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('reveal-in'); io.unobserve(e.target); }
+    }), { threshold: 0.12 });
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
 function Home() {
+  useReveal();
   return (
-    <div className="space-y-14 animate-fade-in-up">
-      <section className="text-center pt-14">
-        <img src="./icona-app.svg" alt="San Martino 2.0" className="logo-brand w-28 mx-auto mb-8 border border-neutral-800" />
-        <p className="text-xs uppercase tracking-[0.35em] text-neutral-400 mb-4">San Martino Vallata · Appennino modenese</p>
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">La valle che<br />non si arrende</h1>
-        <p className="text-neutral-200 mt-6 max-w-xl mx-auto text-[15px] leading-relaxed">
-          San Martino è una frazione di montagna che il tempo stava spegnendo.
-          Noi — volontari, famiglie, gente della valle — abbiamo deciso di riaccenderla:
-          sentieri riaperti, eventi che riempiono il borgo, la memoria che diventa archivio,
-          progetti concreti per riportare vita. Questa è la nostra piattaforma.
-        </p>
-        <div className="flex flex-wrap gap-3 justify-center mt-8">
-          <BtnLink href="#/progetti" primary>I progetti</BtnLink>
-          <BtnLink href="#/sostienici">Dai una mano</BtnLink>
+    <div className="animate-fade-in-up">
+      {/* hero cinematografica a tutta pagina */}
+      <section className="-mx-5 relative h-[68vh] min-h-[430px] flex flex-col justify-end overflow-hidden">
+        <img src="./hero-gramignata.jpg" alt="Il tramonto sulla valle di San Martino"
+          className="absolute inset-0 w-full h-full object-cover object-bottom hero-zoom" />
+        <div className="absolute inset-0 hero-fade" />
+        <div className="relative px-5 pb-12 text-center">
+          <p className="text-[11px] tracked text-white/90 mb-4">San Martino Vallata · Appennino modenese</p>
+          <h1 className="font-display text-5xl sm:text-7xl text-white leading-[1.05]">La valle che<br />non si arrende</h1>
+          <div className="w-14 h-[2px] mx-auto mt-6" style={{ background: '#A8322A' }} />
+          <p className="text-neutral-200 mt-6 max-w-xl mx-auto text-[15px] leading-relaxed">
+            Trenta abitanti, quattro oratori, mille anni di storia. San Martino si stava spegnendo:
+            noi abbiamo deciso di riaccenderlo — un sentiero, una festa, un'idea alla volta.
+          </p>
+          <div className="flex flex-wrap gap-3 justify-center mt-8">
+            <BtnLink href="#/gemello" primary>Esplora la valle in 3D</BtnLink>
+            <BtnLink href="#/progetti">I progetti</BtnLink>
+          </div>
         </div>
       </section>
 
-      <section>
-        <Card className="border-white/30">
-          <div className="flex flex-col sm:flex-row items-center gap-6">
-            <img src="./canonica.jpg" alt="Chiesa di San Martino" className="w-full sm:w-44 h-32 object-cover" />
-            <div className="flex-1 text-center sm:text-left">
-              <Label>Evento in corso</Label>
-              <h2 className="text-2xl font-bold text-white">Into the Wild — First Edition</h2>
-              <p className="text-neutral-300 text-sm mt-1">Sabato 1 agosto · camminata sui sentieri ritrovati · colazione per tutti</p>
-            </div>
-            <BtnLink href={EVENTO_URL} external primary>Iscriviti</BtnLink>
-          </div>
-        </Card>
+      <div className="space-y-14 mt-14">
+      <section className="reveal">
         <Card className="border-amber-400/40">
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="flex-1 text-center sm:text-left">
-              <Label>Prossimo evento</Label>
-              <h2 className="text-2xl font-bold text-white">La Gramignata</h2>
-              <p className="text-neutral-300 text-sm mt-1">Sabato 8 agosto, ore 19:30 · Chiesa di San Martino · gramigna alla salsiccia, crescentine e gnocco fritto · musica dal vivo con Incontri nello Chalet · 20 € adulti, 10 € bambini</p>
+              <Label>Stasera · sabato 8 agosto</Label>
+              <h2 className="font-display text-3xl text-white">La Gramignata</h2>
+              <p className="text-neutral-300 text-sm mt-2">Ore 19:30 alla Chiesa di San Martino · gramigna alla salsiccia, crescentine e gnocco fritto · musica dal vivo con Incontri nello Chalet</p>
             </div>
-            <BtnLink href="#/gramignata" primary>Iscriviti</BtnLink>
+            <BtnLink href="#/gramignata" primary>La serata</BtnLink>
           </div>
         </Card>
         <Card>
           <div className="flex flex-col sm:flex-row items-center gap-6">
+            <img src="./canonica.jpg" alt="Chiesa di San Martino" className="w-full sm:w-44 h-32 object-cover" />
             <div className="flex-1 text-center sm:text-left">
-              <Label>Partecipa</Label>
-              <h2 className="text-2xl font-bold text-white">🏺 L'anfora delle idee</h2>
-              <p className="text-neutral-300 text-sm mt-1">Come teniamo vivo San Martino? Metti la tua idea, anonima, nell'anfora — di carta alla Tortellonata o digitale qui</p>
+              <Label>È già successo</Label>
+              <h2 className="font-display text-2xl text-white">Into the Wild — in 46 all'alba</h2>
+              <p className="text-neutral-300 text-sm mt-2">Il 1° agosto abbiamo camminato i 6,2 km di sentieri riaperti a mano. C'è il video.</p>
             </div>
-            <BtnLink href="#/idee" primary>Scrivi la tua</BtnLink>
+            <BtnLink href={EVENTO_URL} external>Rivivi la giornata</BtnLink>
           </div>
         </Card>
       </section>
 
-      <section className="grid grid-cols-3 gap-3 text-center">
-        {[['6,2 km', 'di sentieri riaperti dai volontari'], ['7', 'progetti per il borgo'], ['dal 2018', 'al servizio della valle']].map(([n, l]) => (
+      <section className="reveal grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+        {[['~30', 'abitanti che resistono'], ['46', "all'alba sui sentieri"], ['6,2 km', 'riaperti a mano'], ['7', 'progetti per il 2030']].map(([n, l]) => (
           <Card key={l}>
-            <div className="text-3xl font-light text-white">{n}</div>
-            <div className="text-[11px] uppercase tracking-[0.15em] text-neutral-400 mt-2">{l}</div>
+            <div className="font-display text-4xl text-white">{n}</div>
+            <div className="text-[10px] uppercase tracking-[0.15em] text-neutral-400 mt-2 leading-snug">{l}</div>
           </Card>
         ))}
       </section>
 
-      <section>
-        <a href="#/gemello" className="block">
-          <Card className="border-white/30 hover:border-white transition text-center py-10">
-            <Label>Innovazione</Label>
-            <h2 className="text-2xl font-bold text-white">Esplora il gemello digitale</h2>
-            <p className="text-neutral-300 text-sm mt-2 max-w-md mx-auto">
-              La valle in 3D — rilievo reale, satellite, sentieri — con i progetti di rigenerazione
-              georeferenziati sul territorio. Toccali, sorvolali.
-            </p>
-            <span className="inline-block mt-5 bg-white text-black px-6 py-3 font-semibold uppercase tracking-[0.15em] text-xs">Entra nel gemello</span>
-          </Card>
+      <section className="reveal">
+        <a href="#/gemello" className="block group">
+          <div className="relative overflow-hidden border border-neutral-800 hover:border-[#C9A227] transition">
+            <img src="./canonica.jpg" alt="" className="w-full h-56 object-cover opacity-50 group-hover:opacity-65 group-hover:scale-[1.03] transition duration-700" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+              <Label>Il gemello digitale</Label>
+              <h2 className="font-display text-3xl text-white">Sorvola la valle</h2>
+              <p className="text-neutral-300 text-sm mt-2 max-w-md">Il territorio vero in 3D: la chiesa, gli oratori, i sentieri, la frana del 1746. E il racconto che si guarda come un film.</p>
+              <span className="inline-block mt-5 bg-white text-black px-6 py-3 font-semibold uppercase tracking-[0.15em] text-xs">Entra</span>
+            </div>
+          </div>
         </a>
       </section>
 
-      <section>
+      <section className="reveal">
         <Label>Dal dossier San Martino 2030</Label>
         <div className="grid sm:grid-cols-2 gap-3">
           {PROGETTI.slice(0, 4).map((p) => (
             <a key={p.id} href="#/progetti" className="block">
               <Card className="h-full hover:border-neutral-500 transition">
-                <h3 className="font-bold text-white">{p.titolo}</h3>
+                <h3 className="font-display text-xl text-white">{p.titolo}</h3>
                 <p className="text-neutral-300 text-sm mt-2">{p.sintesi}</p>
               </Card>
             </a>
           ))}
         </div>
       </section>
+
+      <section className="reveal text-center border-t border-neutral-800 pt-12">
+        <p className="font-display italic text-2xl text-neutral-200 max-w-lg mx-auto leading-relaxed">
+          «Questa valle era dei Da Gomola, legati a Matilde di Canossa. La chiesa cadde con la frana del 1746 e fu ricostruita. Noi siamo solo l'ultimo capitolo.»
+        </p>
+        <div className="mt-6">
+          <BtnLink href="#/storie">Le storie della valle</BtnLink>
+        </div>
+      </section>
+      </div>
     </div>
   );
 }
@@ -170,7 +188,7 @@ function SchedaProgetto({ p }: { p: Progetto }) {
 function Progetti() {
   return (
     <div className="space-y-5 animate-fade-in-up pt-10">
-      <h1 className="text-3xl font-bold text-white">I progetti</h1>
+      <h1 className="font-display text-4xl text-white">I progetti</h1>
       <p className="text-neutral-300 text-[15px] max-w-2xl">
         Sei progetti concreti per far rivivere San Martino, dal dossier "San Martino 2030".
         Ognuno ha un obiettivo, un budget e una strada per finanziarlo. Le barre si muovono
@@ -185,7 +203,7 @@ function Progetti() {
 function Storie() {
   return (
     <div className="space-y-5 animate-fade-in-up pt-10">
-      <h1 className="text-3xl font-bold text-white">Le storie</h1>
+      <h1 className="font-display text-4xl text-white">Le storie</h1>
       <p className="text-neutral-300 text-[15px] max-w-2xl">
         Il borgo raccontato da chi lo vive: i lavori sui sentieri, gli eventi, e presto
         l'archivio della memoria — foto d'epoca e voci di chi San Martino l'ha visto cambiare.
@@ -210,7 +228,7 @@ function Storie() {
 function Sostienici() {
   return (
     <div className="space-y-5 animate-fade-in-up pt-10">
-      <h1 className="text-3xl font-bold text-white">Dai una mano</h1>
+      <h1 className="font-display text-4xl text-white">Dai una mano</h1>
       <p className="text-neutral-300 text-[15px] max-w-2xl">
         San Martino rinasce con il tempo, le braccia e — sì — anche i fondi di chi ci crede.
         Ogni contributo, di qualsiasi forma, resta nella valle.
@@ -265,7 +283,7 @@ function Sostienici() {
 function ChiSiamo() {
   return (
     <div className="space-y-5 animate-fade-in-up pt-10">
-      <h1 className="text-3xl font-bold text-white">Chi siamo</h1>
+      <h1 className="font-display text-4xl text-white">Chi siamo</h1>
       <Card>
         <p className="text-neutral-200 text-[15px] leading-relaxed">
           <span className="text-white font-semibold">Associazione di Promozione Sociale San Martino 2.0 APS</span> —
@@ -342,7 +360,10 @@ export default function App() {
       </button>
       <header className="sticky top-0 z-40 bg-black/95 backdrop-blur border-b border-neutral-800">
         <div className="max-w-3xl mx-auto px-5 h-14 flex items-center justify-between">
-          <a href="#/" className="font-bold tracking-tight">SM<span className="text-neutral-400">2030</span></a>
+          <a href="#/" className="flex items-center gap-2">
+            <Mark className="w-7 h-7 mark-fg" />
+            <span className="font-display text-lg leading-none">San Martino <span className="gold">2030</span></span>
+          </a>
           <nav className="flex gap-4 sm:gap-6 overflow-x-auto">
             {nav.map((n) => (
               <a key={n.r} href={'#/' + (n.r === 'home' ? '' : n.r)}
@@ -366,7 +387,8 @@ export default function App() {
         {route === 'idee' && <Idee />}
       </main>
       <footer className="border-t border-neutral-800 py-10 text-center space-y-3">
-        <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-400">San Martino 2.0 — The Valley</p>
+        <Mark className="w-10 h-10 mx-auto mark-fg" />
+        <p className="text-[11px] tracked gold">San Martino 2030 — la valle che non si arrende</p>
         <p className="text-xs text-neutral-500">APS per la rinascita di San Martino Vallata · Polinago (MO)</p>
         <a href={EVENTO_URL} target="_blank" rel="noreferrer"
           className="inline-block text-xs text-neutral-300 underline underline-offset-4 hover:text-white">

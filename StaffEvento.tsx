@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Html5Qrcode } from 'html5-qrcode';
 import { ttStaffList, ttCheckIn, ttCheckInN, ttResetCheckin, ttGetTicket, ttStaffAdd } from './supa';
 
@@ -284,7 +285,7 @@ export default function StaffEvento() {
       {msg && <p className="text-center text-sm text-amber-300">{msg}</p>}
 
       {/* ---- pannello conferma presenze: finestra in primo piano ---- */}
-      {conf && (
+      {conf && createPortal(
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-end sm:items-center justify-center p-3"
           onClick={() => setConf(null)}>
         <div className="w-full max-w-md hairline bg-neutral-950 p-4 space-y-4 max-h-[88vh] overflow-y-auto"
@@ -322,7 +323,8 @@ export default function StaffEvento() {
             Se gli altri arrivano dopo, ritocca il nome nella lista e aggiorna il numero.
           </p>
         </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ---- aggiunta all'ingresso ---- */}

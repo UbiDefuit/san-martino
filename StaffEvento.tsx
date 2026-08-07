@@ -283,9 +283,12 @@ export default function StaffEvento() {
       </p>
       {msg && <p className="text-center text-sm text-amber-300">{msg}</p>}
 
-      {/* ---- pannello conferma presenze ---- */}
+      {/* ---- pannello conferma presenze: finestra in primo piano ---- */}
       {conf && (
-        <div className="hairline bg-neutral-950 p-4 space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-end sm:items-center justify-center p-3"
+          onClick={() => setConf(null)}>
+        <div className="w-full max-w-md hairline bg-neutral-950 p-4 space-y-4 max-h-[88vh] overflow-y-auto"
+          onClick={(e) => e.stopPropagation()}>
           <div className="text-center">
             <p className="text-[10px] tracked gold">Chi è arrivato?</p>
             <p className="font-display text-2xl text-white mt-1">{conf.name}</p>
@@ -318,6 +321,7 @@ export default function StaffEvento() {
           <p className="text-neutral-500 text-[11px] text-center">
             Se gli altri arrivano dopo, ritocca il nome nella lista e aggiorna il numero.
           </p>
+        </div>
         </div>
       )}
 

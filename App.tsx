@@ -52,13 +52,13 @@ function Home() {
   return (
     <div className="animate-fade-in-up">
       {/* hero cinematografica a tutta pagina */}
-      <section className="-mx-5 relative h-[68vh] min-h-[430px] flex flex-col justify-end overflow-hidden">
+      <section className="-mx-5 relative min-h-[62vh] sm:min-h-[68vh] pt-24 sm:pt-28 flex flex-col justify-end overflow-hidden">
         <img src="./hero-gramignata.jpg" alt="Il tramonto sulla valle di San Martino"
           className="absolute inset-0 w-full h-full object-cover object-bottom hero-zoom" />
         <div className="absolute inset-0 hero-fade" />
         <div className="relative px-5 pb-12 text-center">
           <p className="text-[11px] tracked text-white/90 mb-4">San Martino Vallata · Appennino modenese</p>
-          <h1 className="font-display text-5xl sm:text-7xl text-white leading-[1.05]">La valle che<br />non si arrende</h1>
+          <h1 className="font-display text-4xl sm:text-7xl text-white leading-[1.08]">La valle che<br />non si arrende</h1>
           <div className="w-14 h-[2px] mx-auto mt-6" style={{ background: '#A8322A' }} />
           <p className="text-neutral-200 mt-6 max-w-xl mx-auto text-[15px] leading-relaxed">
             Trenta abitanti, quattro oratori, mille anni di storia. San Martino si stava spegnendo:
@@ -345,26 +345,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-black text-white font-sans">
-      <button onClick={() => setLight(!light)} title={light ? 'Tema scuro' : 'Tema chiaro'}
-        className="fixed top-3 right-3 z-50 w-9 h-9 flex items-center justify-center border border-neutral-700 bg-black/80 backdrop-blur text-white hover:border-white transition">
-        {light ? (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px] mx-auto">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
-        ) : (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px] mx-auto">
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-          </svg>
-        )}
-      </button>
       <header className="sticky top-0 z-40 bg-black/95 backdrop-blur border-b border-neutral-800">
         <div className="max-w-3xl mx-auto px-5 h-14 flex items-center justify-between">
-          <a href="#/" className="flex items-center gap-2">
+          <a href="#/" className="flex items-center gap-2 shrink-0">
             <Mark2030 className="w-7 h-7 mark-fg" />
-            <span className="font-display text-lg leading-none">San Martino <span className="gold">2030</span></span>
+            <span className="font-display text-base sm:text-lg leading-none whitespace-nowrap">San Martino <span className="gold">2030</span></span>
           </a>
-          <nav className="flex gap-4 sm:gap-6 overflow-x-auto">
+          <nav className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar ml-4">
             {nav.map((n) => (
               <a key={n.r} href={'#/' + (n.r === 'home' ? '' : n.r)}
                 className={'text-[11px] uppercase tracking-[0.15em] whitespace-nowrap transition ' +
@@ -373,6 +360,19 @@ export default function App() {
               </a>
             ))}
           </nav>
+          <button onClick={() => setLight(!light)} title={light ? 'Tema scuro' : 'Tema chiaro'}
+            className="shrink-0 ml-3 w-8 h-8 flex items-center justify-center border border-neutral-700 text-white hover:border-white transition">
+            {light ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+              </svg>
+            )}
+          </button>
         </div>
       </header>
       <main className="max-w-3xl mx-auto px-5 pb-20">

@@ -106,3 +106,7 @@ html.light .mark-fg { color: #141414; }
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
 .reveal-in { opacity: 1; transform: none; }
 html.light .hero-zoom { filter: none; }
+
+/* nav mobile: scorre senza barra visibile */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }

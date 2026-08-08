@@ -103,8 +103,8 @@ html.light .mark-fg { color: #141414; }
 /* ---------- Home spettacolare ---------- */
 .hero-zoom { animation: heroZoom 18s ease-out forwards; }
 @keyframes heroZoom { from { transform: scale(1.12); } to { transform: scale(1); } }
-.reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
-.reveal-in { opacity: 1; transform: none; }
+/* reveal disattivato: su mobile lasciava i contenuti invisibili */
+.reveal, .reveal-in { opacity: 1; transform: none; }
 html.light .hero-zoom { filter: none; }
 
 /* nav mobile: scorre senza barra visibile */

@@ -358,7 +358,7 @@ export default function App() {
         <div className="max-w-3xl mx-auto px-5 h-14 flex items-center justify-between">
           <a href="#/" className="flex items-center gap-2 shrink-0">
             <Mark2030 className="w-8 h-8 mark-fg" />
-            <span className="hidden sm:inline font-display text-lg leading-none whitespace-nowrap">San Martino <span className="gold">2030</span></span>
+            <span className="font-display text-base sm:text-lg leading-none whitespace-nowrap">San Martino <span className="gold">2030</span></span>
           </a>
           <div className="flex items-center">
           <nav className="hidden sm:flex gap-6 ml-4">

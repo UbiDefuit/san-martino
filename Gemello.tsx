@@ -40,6 +40,7 @@ export default function Gemello() {
   const [showStorica, setShowStorica] = useState(false);
   const [showFrana, setShowFrana] = useState(false);
   const [legenda, setLegenda] = useState(false);
+  const [info, setInfo] = useState(false);
   const luoghiMk = useRef<maplibregl.Marker[]>([]);
   const progettiMk = useRef<maplibregl.Marker[]>([]);
   const [ready, setReady] = useState(false);
@@ -354,13 +355,22 @@ export default function Gemello() {
 
   return (
     <div className="animate-fade-in-up pt-10 space-y-5">
-      <h1 className="text-3xl font-bold text-white">Il gemello digitale</h1>
-      <p className="text-neutral-300 text-[15px] max-w-2xl">
-        Questo non è un rendering: è il territorio della frazione di San Martino — il nucleo storico,
-        Cà Carloni, il Poggio, la chiesa e il Monte San Martino (perimetro indicativo tratteggiato).
-        In bianco, i 6,2 km di sentieri riaperti dai volontari. E ogni progetto di rigenerazione è lì,
-        al suo posto sul territorio: <span className="text-white">tocca i pin bianchi</span> per i progetti, <span className="text-white">tocca i nomi dei borghi</span> per scendere a livello delle case.
-      </p>
+      <div className="flex items-center gap-3">
+        <h1 className="text-3xl font-bold text-white">Il gemello digitale</h1>
+        <button onClick={() => setInfo(!info)} aria-label="Informazioni"
+          className={'w-7 h-7 shrink-0 rounded-full border font-display text-[15px] italic transition ' +
+            (info ? 'border-white text-white' : 'border-neutral-600 text-neutral-400 hover:border-white hover:text-white')}>
+          i
+        </button>
+      </div>
+      {info && (
+        <p className="text-neutral-300 text-[15px] max-w-2xl">
+          Questo non è un rendering: è il territorio della frazione di San Martino — il nucleo storico,
+          Cà Carloni, il Poggio, la chiesa e il Monte San Martino (perimetro indicativo tratteggiato).
+          In bianco, i 6,2 km di sentieri riaperti dai volontari. E ogni progetto di rigenerazione è lì,
+          al suo posto sul territorio: <span className="text-white">tocca i pin bianchi</span> per i progetti, <span className="text-white">tocca i nomi dei borghi</span> per scendere a livello delle case.
+        </p>
+      )}
       <div className="relative">
         <div id="gemello" className="h-[62vh] border border-neutral-800" />
         {showStorica && (

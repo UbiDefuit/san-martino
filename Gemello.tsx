@@ -33,7 +33,6 @@ export default function Gemello() {
   const [panorama, setPanorama] = useState<{ foto: string; titolo: string } | null>(null);
   const [zoomed, setZoomed] = useState(false);
   const [luogoSel, setLuogoSel] = useState<{ geo: [number, number]; nome: string } | null>(null);
-  const [racconto, setRacconto] = useState(false);
   const [showSentiero, setShowSentiero] = useState(true);
   const [showPerimetro, setShowPerimetro] = useState(true);
   const [showBorghi, setShowBorghi] = useState(false);
@@ -43,8 +42,6 @@ export default function Gemello() {
   const [legenda, setLegenda] = useState(false);
   const luoghiMk = useRef<maplibregl.Marker[]>([]);
   const progettiMk = useRef<maplibregl.Marker[]>([]);
-  const [sottotitolo, setSottotitolo] = useState('');
-  const raccontoRef = useRef(false);
   const [ready, setReady] = useState(false);
   const [luci, setLuci] = useState<Luce[]>([]);
   const luciRef = useRef<Luce[]>([]);
@@ -208,26 +205,6 @@ export default function Gemello() {
         paint: { 'line-color': '#ffffff', 'line-width': 1.5, 'line-dasharray': [3, 3], 'line-opacity': 0.55 },
       });
 
-      // strato notte + luci dei nuclei (per il finale del racconto)
-      map.addLayer({ id: 'notte', type: 'background', paint: { 'background-color': '#04070c', 'background-opacity': 0 } });
-      const NUCLEI: [number, number][] = [
-        [44.38851, 10.68466], [44.38740, 10.69393], [44.38599, 10.69274],
-        [44.38437, 10.69189], [44.3872, 10.6893],
-      ];
-      map.addSource('luci', {
-        type: 'geojson',
-        data: { type: 'FeatureCollection', features: NUCLEI.map((n, i) => ({ type: 'Feature', properties: { idx: i }, geometry: { type: 'Point', coordinates: [n[1], n[0]] } })) },
-      });
-      map.addLayer({
-        id: 'luci-glow', type: 'circle', source: 'luci',
-        filter: ['<', ['get', 'idx'], -1],
-        paint: { 'circle-color': '#ffd9a0', 'circle-radius': 18, 'circle-blur': 1, 'circle-opacity': 0.9 },
-      });
-      map.addLayer({
-        id: 'luci-core', type: 'circle', source: 'luci',
-        filter: ['<', ['get', 'idx'], -1],
-        paint: { 'circle-color': '#fff3d6', 'circle-radius': 4, 'circle-opacity': 1 },
-      });
       // le luci della comunità ("Riaccendi la valle")
       map.addSource('luci-com', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
       map.addLayer({
@@ -375,70 +352,6 @@ export default function Gemello() {
     document.getElementById('gemello')?.classList.remove('scena-pulita');
   };
 
-  // "Il racconto della valle": tour cinematico con sottotitoli e finale notturno
-  const attesa = (ms: number) => new Promise((r) => setTimeout(r, ms));
-  const stopRacconto = () => {
-    raccontoRef.current = false;
-    setRacconto(false); setSottotitolo('');
-    document.getElementById('gemello')?.classList.remove('scena-pulita');
-    const map = mapRef.current;
-    if (map) {
-      map.setPaintProperty('notte', 'background-opacity', 0);
-      map.setFilter('luci-glow', ['<', ['get', 'idx'], -1]);
-      map.setFilter('luci-core', ['<', ['get', 'idx'], -1]);
-      map.easeTo({ center: [10.6905, 44.3838], zoom: 12.8, pitch: 60, bearing: 168, duration: 2000 });
-    }
-  };
-  const avviaRacconto = async () => {
-    const map = mapRef.current;
-    if (!map || racconto) return;
-    setRacconto(true);
-    document.getElementById('gemello')?.classList.add('scena-pulita');
-    raccontoRef.current = true;
-    const tappe: { c: [number, number]; z: number; p: number; b: number; t: string; hold: number }[] = [
-      { c: [10.68466, 44.38851], z: 16.6, p: 55, b: 160, t: 'San Martino. Il nucleo che dà il nome alla frazione, sulla via che cuce la vallata.', hold: 2400 },
-      { c: [10.6893, 44.3872], z: 17.0, p: 55, b: 168, t: 'La chiesa: parrocchia dal 1627. Travolta dalle frane del 1746–47, riaperta al culto nel 1756 su un colle più sicuro.', hold: 2800 },
-      { c: [10.69083, 44.38831], z: 17.0, p: 55, b: 165, t: 'L’Oratorio della Madonna della Rondine, 1644: quattro secoli di devozione.', hold: 2400 },
-      { c: [10.69274, 44.38599], z: 16.6, p: 55, b: 172, t: 'Cà Carloni, affacciata sui campi.', hold: 2200 },
-      { c: [10.69189, 44.38437], z: 16.6, p: 55, b: 175, t: 'Il Poggio — i tetti che vogliamo rivedere abitati.', hold: 2400 },
-      { c: [10.6894, 44.3790], z: 14.6, p: 62, b: 168, t: 'E sopra tutto il Monte San Martino: base partigiana nel 1944, oggi 6,2 km di sentieri riaperti a mano dai volontari.', hold: 3000 },
-    ];
-    try {
-      for (const tp of tappe) {
-        if (!raccontoRef.current) return;
-        setSottotitolo(tp.t);
-        map.flyTo({ center: tp.c, zoom: tp.z, pitch: tp.p, bearing: tp.b, duration: 3400 });
-        await attesa(3400 + tp.hold);
-      }
-      if (!raccontoRef.current) return;
-      // il finale: cala la notte, la valle si riaccende
-      setSottotitolo('Poi, una casa alla volta, la valle si è spenta.');
-      map.easeTo({ center: [10.6905, 44.3850], zoom: 13.3, pitch: 58, bearing: 168, duration: 3000 });
-      map.setPaintProperty('notte', 'background-opacity-transition' as any, { duration: 3500 } as any);
-      map.setPaintProperty('notte', 'background-opacity', 0.78);
-      await attesa(4800);
-      if (!raccontoRef.current) return;
-      setSottotitolo('Ogni progetto riaccende una luce.');
-      for (let i = 0; i < 5; i++) {
-        if (!raccontoRef.current) return;
-        map.setFilter('luci-glow', ['<=', ['get', 'idx'], i]);
-        map.setFilter('luci-core', ['<=', ['get', 'idx'], i]);
-        await attesa(900);
-      }
-      await attesa(1200);
-      if (!raccontoRef.current) return;
-      if (luciRef.current.length > 0) {
-        setSottotitolo(`E non siamo soli: ${luciRef.current.length} ${luciRef.current.length === 1 ? 'luce accesa' : 'luci accese'} da chi crede in questa valle.`);
-        await attesa(3200);
-        if (!raccontoRef.current) return;
-      }
-      setSottotitolo('SAN MARTINO 2030 — LA VALLE CHE NON SI ARRENDE');
-      await attesa(4000);
-    } finally {
-      if (raccontoRef.current) stopRacconto();
-    }
-  };
-
   return (
     <div className="animate-fade-in-up pt-10 space-y-5">
       <h1 className="text-3xl font-bold text-white">Il gemello digitale</h1>
@@ -473,7 +386,7 @@ export default function Gemello() {
             ◎ Street View
           </a>
         )}
-        {!racconto && (
+        {(
           <div className="absolute top-3 right-3 z-10 w-48 bg-black/85 border border-neutral-700 backdrop-blur text-left">
             <button onClick={() => setLegenda(!legenda)}
               className="w-full px-3 py-2.5 text-[11px] uppercase tracking-[0.2em] text-white flex justify-between items-center">
@@ -504,13 +417,6 @@ export default function Gemello() {
                 </div>
               </div>
             )}
-          </div>
-        )}
-        {sottotitolo && (
-          <div className="absolute inset-x-0 bottom-5 text-center px-10 pointer-events-none z-10">
-            <span className="inline-block bg-black/75 text-white text-sm sm:text-base px-5 py-3 leading-relaxed backdrop-blur animate-fade-in-up" key={sottotitolo}>
-              {sottotitolo}
-            </span>
           </div>
         )}
         <div className="absolute inset-0 pointer-events-none z-[5] gemello-vignetta" />
@@ -577,10 +483,6 @@ export default function Gemello() {
           </>
         )}
       </div>
-            <button onClick={racconto ? stopRacconto : avviaRacconto} disabled={!ready}
-        className="w-full bg-white text-black px-3 py-3.5 font-semibold uppercase tracking-[0.15em] text-xs transition disabled:opacity-40 hover:bg-neutral-200">
-        {racconto ? 'Ferma il racconto' : '▶ Il racconto della valle (60s)'}
-      </button>
       <div className="grid grid-cols-1 gap-3">
         <a href="https://ubidefuit.github.io/camminata-san-martino/" target="_blank" rel="noreferrer"
           className="border border-neutral-700 text-white hover:border-white px-3 py-3.5 font-semibold uppercase tracking-[0.15em] text-xs transition text-center">

@@ -328,8 +328,9 @@ export default function App() {
     localStorage.setItem('sm2030_theme', light ? 'light' : 'dark');
   }, [light]);
   const [route, setRoute] = useState<Route>(routeFromHash());
+  const [menu, setMenu] = useState(false);
   useEffect(() => {
-    const on = () => { setRoute(routeFromHash()); window.scrollTo(0, 0); };
+    const on = () => { setRoute(routeFromHash()); setMenu(false); window.scrollTo(0, 0); };
     window.addEventListener('hashchange', on);
     return () => window.removeEventListener('hashchange', on);
   }, []);
@@ -348,10 +349,10 @@ export default function App() {
       <header className="sticky top-0 z-40 bg-black/95 backdrop-blur border-b border-neutral-800">
         <div className="max-w-3xl mx-auto px-5 h-14 flex items-center justify-between">
           <a href="#/" className="flex items-center gap-2 shrink-0">
-            <Mark2030 className="w-7 h-7 mark-fg" />
-            <span className="font-display text-base sm:text-lg leading-none whitespace-nowrap">San Martino <span className="gold">2030</span></span>
+            <Mark2030 className="w-8 h-8 mark-fg" />
+            <span className="hidden sm:inline font-display text-lg leading-none whitespace-nowrap">San Martino <span className="gold">2030</span></span>
           </a>
-          <nav className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar ml-4">
+          <nav className="hidden sm:flex gap-6 ml-4">
             {nav.map((n) => (
               <a key={n.r} href={'#/' + (n.r === 'home' ? '' : n.r)}
                 className={'text-[11px] uppercase tracking-[0.15em] whitespace-nowrap transition ' +
@@ -373,7 +374,30 @@ export default function App() {
               </svg>
             )}
           </button>
+          <button onClick={() => setMenu(!menu)} aria-label="Menu"
+            className="sm:hidden shrink-0 ml-2 w-8 h-8 flex items-center justify-center border border-neutral-700 text-white hover:border-white transition">
+            {menu ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-4 h-4">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-4 h-4">
+                <path d="M4 7h16M4 12h16M4 17h16" />
+              </svg>
+            )}
+          </button>
         </div>
+        {menu && (
+          <nav className="sm:hidden border-t border-neutral-800 bg-black">
+            {nav.map((n) => (
+              <a key={n.r} href={'#/' + (n.r === 'home' ? '' : n.r)} onClick={() => setMenu(false)}
+                className={'block px-5 py-3.5 text-[12px] uppercase tracking-[0.2em] border-b border-neutral-900 ' +
+                  (route === n.r ? 'text-white' : 'text-neutral-400')}>
+                {n.label}
+              </a>
+            ))}
+          </nav>
+        )}
       </header>
       <main className="max-w-3xl mx-auto px-5 pb-20">
         {route === 'home' && <Home />}

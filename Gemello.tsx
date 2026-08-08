@@ -40,7 +40,7 @@ export default function Gemello() {
   const [showProgetti, setShowProgetti] = useState(true);
   const [showStorica, setShowStorica] = useState(false);
   const [showFrana, setShowFrana] = useState(false);
-  const [legenda, setLegenda] = useState(true);
+  const [legenda, setLegenda] = useState(false);
   const luoghiMk = useRef<maplibregl.Marker[]>([]);
   const progettiMk = useRef<maplibregl.Marker[]>([]);
   const [sottotitolo, setSottotitolo] = useState('');

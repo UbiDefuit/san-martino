@@ -352,6 +352,7 @@ export default function App() {
             <Mark2030 className="w-8 h-8 mark-fg" />
             <span className="hidden sm:inline font-display text-lg leading-none whitespace-nowrap">San Martino <span className="gold">2030</span></span>
           </a>
+          <div className="flex items-center">
           <nav className="hidden sm:flex gap-6 ml-4">
             {nav.map((n) => (
               <a key={n.r} href={'#/' + (n.r === 'home' ? '' : n.r)}
@@ -386,6 +387,7 @@ export default function App() {
               </svg>
             )}
           </button>
+          </div>
         </div>
         {menu && (
           <nav className="sm:hidden border-t border-neutral-800 bg-black">

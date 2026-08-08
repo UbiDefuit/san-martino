@@ -97,7 +97,7 @@ function Home() {
       </section>
 
       <section className="reveal grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-        {[['~30', 'abitanti che resistono'], ['46', "all'alba sui sentieri"], ['6,2 km', 'riaperti a mano'], ['7', 'progetti per il 2030']].map(([n, l]) => (
+        {[['~30', 'abitanti che resistono'], ['46', "all'alba sui sentieri"], ['6,2 km', 'riaperti a mano'], ['2030', "l'anno che ci siamo dati"]].map(([n, l]) => (
           <Card key={l}>
             <div className="font-display text-4xl text-white">{n}</div>
             <div className="text-[10px] uppercase tracking-[0.15em] text-neutral-400 mt-2 leading-snug">{l}</div>
@@ -190,11 +190,19 @@ function Progetti() {
     <div className="space-y-5 animate-fade-in-up pt-10">
       <h1 className="font-display text-4xl text-white">I progetti</h1>
       <p className="text-neutral-300 text-[15px] max-w-2xl">
-        Sei progetti concreti per far rivivere San Martino, dal dossier "San Martino 2030".
-        Ognuno ha un obiettivo, un budget e una strada per finanziarlo. Le barre si muovono
-        con le donazioni, i bandi vinti e gli sponsor: seguile crescere.
+        Questi sono i primi due progetti avviati. Gli altri li scegliamo insieme:
+        le idee raccolte con l'anfora e con il form entrano nel piano San Martino 2030.
       </p>
       {PROGETTI.map((p) => <SchedaProgetto key={p.id} p={p} />)}
+      <div className="bg-neutral-950 border border-neutral-800 p-6 text-center">
+        <p className="font-display text-2xl text-white">Il prossimo progetto lo proponi tu</p>
+        <p className="text-neutral-300 text-sm mt-2 max-w-md mx-auto">
+          Stiamo raccogliendo le idee della comunità: scrivi la tua, anche in due righe.
+        </p>
+        <a href="#/idee" className="inline-block mt-5 bg-white text-black px-6 py-3 font-semibold uppercase tracking-[0.15em] text-xs">
+          Dicci la tua idea
+        </a>
+      </div>
     </div>
   );
 }

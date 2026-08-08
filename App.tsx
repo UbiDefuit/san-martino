@@ -61,7 +61,7 @@ function Home() {
           <h1 className="font-display text-4xl sm:text-7xl text-white leading-[1.08]">La valle che<br />non si arrende</h1>
           <div className="w-14 h-[2px] mx-auto mt-6" style={{ background: '#A8322A' }} />
           <p className="text-neutral-200 mt-6 max-w-xl mx-auto text-[15px] leading-relaxed">
-            Trenta abitanti, quattro oratori, mille anni di storia. San Martino si stava spegnendo:
+            Quattro oratori, mille anni di storia. San Martino si stava spegnendo:
             noi abbiamo deciso di riaccenderlo — un sentiero, una festa, un'idea alla volta.
           </p>
           <div className="flex flex-wrap gap-3 justify-center mt-8">
@@ -96,8 +96,8 @@ function Home() {
         </Card>
       </section>
 
-      <section className="reveal grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-        {[['~30', 'abitanti che resistono'], ['46', "all'alba sui sentieri"], ['6,2 km', 'riaperti a mano'], ['2030', "l'anno che ci siamo dati"]].map(([n, l]) => (
+      <section className="reveal grid grid-cols-3 gap-3 text-center">
+        {[['46', "all'alba sui sentieri"], ['6,2 km', 'riaperti a mano'], ['2030', "l'anno che ci siamo dati"]].map(([n, l]) => (
           <Card key={l}>
             <div className="font-display text-4xl text-white">{n}</div>
             <div className="text-[10px] uppercase tracking-[0.15em] text-neutral-400 mt-2 leading-snug">{l}</div>

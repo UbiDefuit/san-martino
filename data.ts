@@ -79,10 +79,6 @@ export const PROGETTI: Progetto[] = [
 export interface Storia { id: string; titolo: string; testo: string; data: string; }
 export const STORIE: Storia[] = [
   {
-    id: 'palazzo-ciatti', titolo: 'Il palazzo dei Ciatti e l\u2019ombra di Matilde', data: 'Tradizione',
-    testo: 'La memoria di San Martino racconta di tre torri di avvistamento e di un legame con Matilde di Canossa, la grande contessa che domin\u00f2 questi Appennini. Al centro del racconto c\u2019\u00e8 il palazzo della famiglia Ciatti, che la tradizione associa a quel sistema difensivo. Nessun documento lo prova \u2014 ancora. Ma i Da Gomola, feudatari di questa valle, furono davvero legati a Matilde: la leggenda cammina su un sentiero di storia vera, e la ricerca \u00e8 aperta. [Fonte: tradizione locale raccolta da E. Zuccarini, 1998]',
-  },
-  {
     id: 'da-cappella-a-parrocchia', titolo: 'Da cappella a parrocchia', data: '1569\u20131627',
     testo: 'Prima ancora di essere parrocchia, \u201cVallata\u201d compare nell\u2019indice di una visita pastorale del 1569 conservata nell\u2019Archivio Diocesano di Modena. Nel 1627 la comunit\u00e0 ottenne l\u2019autonomia da Cassano: una piccola frazione di montagna che conquista la propria chiesa. La tradizione popolare racconta di una donna ricca che avrebbe finanziato l\u2019edificio per non dover pi\u00f9 scendere a Cassano \u2014 leggenda, forse, ma con dentro un nucleo di verit\u00e0 che stiamo cercando negli archivi. [Fonti: ACMo O.I.33; CEI]',
   },

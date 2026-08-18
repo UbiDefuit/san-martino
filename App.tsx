@@ -4,13 +4,14 @@ import Gemello from './Gemello';
 import Gramignata from './Gramignata';
 import StaffEvento from './StaffEvento';
 import Idee from './Idee';
+import Memorie from './Memorie';
 import Mark2030 from './Mark2030';
 
-type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'sostienici' | 'chisiamo' | 'gramignata' | 'idee' | 'staff';
+type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'memorie' | 'sostienici' | 'chisiamo' | 'gramignata' | 'idee' | 'staff';
 
 const routeFromHash = (): Route => {
   const h = location.hash.replace('#/', '').split('?')[0];
-  return (['progetti', 'gemello', 'storie', 'sostienici', 'chisiamo', 'gramignata', 'idee', 'staff'].includes(h) ? h : 'home') as Route;
+  return (['progetti', 'gemello', 'storie', 'memorie', 'sostienici', 'chisiamo', 'gramignata', 'idee', 'staff'].includes(h) ? h : 'home') as Route;
 };
 
 const eur = (n: number) => n.toLocaleString('it-IT') + ' €';
@@ -348,6 +349,7 @@ export default function App() {
     { r: 'progetti', label: 'Progetti' },
     { r: 'gemello', label: 'Gemello' },
     { r: 'storie', label: 'Storie' },
+    { r: 'memorie', label: 'Memorie' },
     { r: 'sostienici', label: 'Sostienici' },
     { r: 'chisiamo', label: 'Chi siamo' },
   ];
@@ -414,6 +416,7 @@ export default function App() {
         {route === 'progetti' && <Progetti />}
         {route === 'gemello' && <Gemello />}
         {route === 'storie' && <Storie />}
+        {route === 'memorie' && <Memorie />}
         {route === 'sostienici' && <Sostienici />}
         {route === 'chisiamo' && <ChiSiamo />}
         {route === 'gramignata' && <Gramignata />}

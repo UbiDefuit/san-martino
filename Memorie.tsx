@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { createPortal } from 'react-dom';
 import { EMAIL } from './data';
-import XRayPlayer from './XRayPlayer';
+import XRayPlayer, { XRAY_TRAILER } from './XRayPlayer';
 
 const CAST = [
   ['Tiziano', 'Tiziano.jpg'], ['Clorinda', 'Clorinda.jpg'], ['Eulario', 'Eulario.jpg'],
@@ -66,16 +65,7 @@ export default function Memorie() {
       </p>
 
       {xray && <XRayPlayer src="./memorie/xray-anteprima.mp4" onClose={() => setXray(false)} />}
-      {trailer && createPortal(
-        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4" onClick={() => setTrailer(false)}>
-          <div className="w-full max-w-3xl" onClick={(e) => e.stopPropagation()}>
-            <video src="./memorie/trailer.mp4" controls autoPlay playsInline className="w-full border border-neutral-700" />
-            <button onClick={() => setTrailer(false)}
-              className="mt-3 border border-neutral-600 text-white px-5 py-2.5 text-xs uppercase tracking-[0.15em] hover:border-white">
-              Chiudi
-            </button>
-          </div>
-        </div>, document.body)}
+      {trailer && <XRayPlayer src="./memorie/trailer.mp4" dati={XRAY_TRAILER} onClose={() => setTrailer(false)} />}
     </div>
   );
 }

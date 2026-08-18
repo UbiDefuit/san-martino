@@ -22,10 +22,26 @@ const PERSONE: { nome: string; img: string; intervalli: [number, number][] }[] =
   { nome: 'Viterbo "il Fabbro"', img: C + 'Viterbo_il_Fabbro.jpg', intervalli: [[960, 1004]] },
   { nome: 'Romano', img: C + 'Romano.jpg', intervalli: [[1056, 1098]] },
 ];
-const inScena = (t: number): Persona[] =>
-  PERSONE.filter((p) => p.intervalli.some(([a, b]) => t >= a && t < b));
 
-export default function XRayPlayer({ src, onClose }: { src: string; onClose: () => void }) {
+/* X-Ray del trailer: stessa logica, timeline del montaggio (cartello 3,2 s + clip da 6,5 s). */
+export const XRAY_TRAILER: { nome: string; img: string; intervalli: [number, number][] }[] = [
+  { nome: 'Tiziano', img: C + 'Tiziano.jpg', intervalli: [[3.2, 9.7], [22.7, 29.2]] },
+  { nome: 'Clorinda', img: C + 'Clorinda.jpg', intervalli: [[9.7, 16.2]] },
+  { nome: 'Eulario', img: C + 'Eulario.jpg', intervalli: [[16.2, 22.7]] },
+  { nome: 'Ornella', img: C + 'Ornella.jpg', intervalli: [[22.7, 29.2]] },
+  { nome: 'Giulia', img: C + 'Giulia.jpg', intervalli: [[29.2, 35.7]] },
+  { nome: 'Mary', img: C + 'Mary.jpg', intervalli: [[35.7, 42.2]] },
+  { nome: 'Irma', img: C + 'Irma.jpg', intervalli: [[35.7, 42.2]] },
+  { nome: 'Armida', img: C + 'Armida.jpg', intervalli: [[42.2, 48.7]] },
+  { nome: 'Viterbo "il Fabbro"', img: C + 'Viterbo_il_Fabbro.jpg', intervalli: [[42.2, 48.7]] },
+  { nome: 'Romano', img: C + 'Romano.jpg', intervalli: [[48.7, 55.2]] },
+];
+
+type Dati = typeof PERSONE;
+const inScena = (dati: Dati, t: number): Persona[] =>
+  dati.filter((p) => p.intervalli.some(([a, b]) => t >= a && t < b));
+
+export default function XRayPlayer({ src, onClose, dati = PERSONE }: { src: string; onClose: () => void; dati?: Dati }) {
   const vid = useRef<HTMLVideoElement>(null);
   const [presenti, setPresenti] = useState<Persona[]>([]);
   const [pausa, setPausa] = useState(false);
@@ -34,7 +50,7 @@ export default function XRayPlayer({ src, onClose }: { src: string; onClose: () 
     const v = vid.current; if (!v) return;
     const tick = () => {
       const t = v.currentTime;
-      setPresenti(inScena(t));
+      setPresenti(inScena(dati, t));
     };
     const onPause = () => { setPausa(true); tick(); };
     const onPlay = () => setPausa(false);
@@ -42,7 +58,7 @@ export default function XRayPlayer({ src, onClose }: { src: string; onClose: () 
     v.addEventListener('pause', onPause);
     v.addEventListener('play', onPlay);
     return () => { v.removeEventListener('timeupdate', tick); v.removeEventListener('pause', onPause); v.removeEventListener('play', onPlay); };
-  }, []);
+  }, [dati]);
 
   return createPortal(
     <div className="fixed inset-0 z-50 bg-black flex items-center justify-center" onClick={onClose}>
@@ -76,7 +92,7 @@ export default function XRayPlayer({ src, onClose }: { src: string; onClose: () 
             )) : <p className="text-neutral-400 text-xs">Nessuno in scena — paesaggi della frazione.</p>}
             <p className="text-[10px] tracked gold mt-6 mb-3">Nel film</p>
             <div className="grid grid-cols-3 gap-2">
-              {PERSONE.map((p) => (
+              {dati.map((p) => (
                 <img key={p.nome} src={p.img} alt={p.nome} title={p.nome} className="w-full object-cover border border-neutral-800" />
               ))}
             </div>

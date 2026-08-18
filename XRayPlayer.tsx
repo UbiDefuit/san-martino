@@ -8,7 +8,7 @@ type Persona = { nome: string; img: string };
 const C = './memorie/cast/';
 const PERSONE: { nome: string; img: string; intervalli: [number, number][] }[] = [
   { nome: 'Tiziano', img: C + 'Tiziano.jpg', intervalli: [[12, 56], [292, 504], [584, 596], [956, 968], [1028, 1058]] },
-  { nome: 'Clorinda', img: C + 'Clorinda.jpg', intervalli: [[54, 174]] },
+  { nome: 'Gelinda', img: C + 'Gelinda.jpg', intervalli: [[54, 174]] },
   { nome: 'Eulario', img: C + 'Eulario.jpg', intervalli: [[194, 286]] },
   { nome: 'Ornella', img: C + 'Ornella.jpg', intervalli: [[286, 472]] },
   { nome: 'Giulia', img: C + 'Giulia.jpg', intervalli: [[506, 588]] },
@@ -18,23 +18,23 @@ const PERSONE: { nome: string; img: string; intervalli: [number, number][] }[] =
   { nome: 'Gustavo', img: C + 'Gustavo.jpg', intervalli: [[900, 928]] },
   { nome: 'Bianca', img: C + 'Bianca.jpg', intervalli: [[836, 886]] },
   { nome: 'Gigino', img: C + 'Gigino.jpg', intervalli: [[928, 958]] },
-  { nome: 'Armida', img: C + 'Armida.jpg', intervalli: [[930, 1004], [1028, 1058]] },
+  { nome: 'Armida', img: C + 'Armida.jpg', intervalli: [[1028, 1058]] },
   { nome: 'Viterbo "il Fabbro"', img: C + 'Viterbo_il_Fabbro.jpg', intervalli: [[960, 1004]] },
   { nome: 'Romano', img: C + 'Romano.jpg', intervalli: [[1056, 1098]] },
 ];
 
 /* X-Ray del trailer: stessa logica, timeline del montaggio (cartello 3,2 s + clip da 6,5 s). */
 export const XRAY_TRAILER: { nome: string; img: string; intervalli: [number, number][] }[] = [
-  { nome: 'Tiziano', img: C + 'Tiziano.jpg', intervalli: [[3.2, 9.7], [22.7, 29.2]] },
-  { nome: 'Clorinda', img: C + 'Clorinda.jpg', intervalli: [[9.7, 16.2]] },
+  { nome: 'Tiziano', img: C + 'Tiziano.jpg', intervalli: [[3.2, 9.7], [22.7, 29.2], [48.7, 55.2]] },
+  { nome: 'Gelinda', img: C + 'Gelinda.jpg', intervalli: [[9.7, 16.2]] },
   { nome: 'Eulario', img: C + 'Eulario.jpg', intervalli: [[16.2, 22.7]] },
   { nome: 'Ornella', img: C + 'Ornella.jpg', intervalli: [[22.7, 29.2]] },
   { nome: 'Giulia', img: C + 'Giulia.jpg', intervalli: [[29.2, 35.7]] },
   { nome: 'Mary', img: C + 'Mary.jpg', intervalli: [[35.7, 42.2]] },
   { nome: 'Irma', img: C + 'Irma.jpg', intervalli: [[35.7, 42.2]] },
-  { nome: 'Armida', img: C + 'Armida.jpg', intervalli: [[42.2, 48.7]] },
   { nome: 'Viterbo "il Fabbro"', img: C + 'Viterbo_il_Fabbro.jpg', intervalli: [[42.2, 48.7]] },
-  { nome: 'Romano', img: C + 'Romano.jpg', intervalli: [[48.7, 55.2]] },
+  { nome: 'Armida', img: C + 'Armida.jpg', intervalli: [[48.7, 55.2]] },
+  { nome: 'Romano', img: C + 'Romano.jpg', intervalli: [[55.2, 61.7]] },
 ];
 
 type Dati = typeof PERSONE;

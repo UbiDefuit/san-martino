@@ -103,8 +103,34 @@ html.light .mark-fg { color: #141414; }
 /* ---------- Home spettacolare ---------- */
 .hero-zoom { animation: heroZoom 18s ease-out forwards; }
 @keyframes heroZoom { from { transform: scale(1.12); } to { transform: scale(1); } }
-/* reveal disattivato: su mobile lasciava i contenuti invisibili */
-.reveal, .reveal-in { opacity: 1; transform: none; }
+/* reveal: comparsa dolce allo scroll, con doppia rete di sicurezza (vedi useReveal) */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s ease; }
+.reveal-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+/* hero: ingresso scaglionato degli elementi */
+@keyframes heroEl { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.hero-el { opacity: 0; animation: heroEl .9s ease forwards; }
+.hd1 { animation-delay: .15s } .hd2 { animation-delay: .3s } .hd3 { animation-delay: .5s }
+.hd4 { animation-delay: .65s } .hd5 { animation-delay: .85s }
+
+/* lucciole d'oro nella hero — le luci della valle */
+.lucciole { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.lucciole span { position: absolute; bottom: 8%; width: 4px; height: 4px; border-radius: 50%;
+  background: #E0BF5C; box-shadow: 0 0 10px 3px rgba(224,191,92,.45); opacity: 0;
+  animation: lucciola linear infinite; }
+@keyframes lucciola {
+  0% { transform: translate(0,0) scale(.7); opacity: 0; }
+  10% { opacity: .9; }
+  50% { opacity: .45; transform: translate(18px,-26vh) scale(1); }
+  100% { transform: translate(-10px,-54vh) scale(.6); opacity: 0; } }
+
+/* carte che respirano al passaggio */
+.lift { transition: transform .5s ease, border-color .5s ease, box-shadow .5s ease; }
+.lift:hover { transform: translateY(-4px); border-color: #C9A227;
+  box-shadow: 0 14px 44px -20px rgba(201,162,39,.3); }
+
+html { scroll-behavior: smooth; }
 html.light .hero-zoom { filter: none; }
 
 /* nav mobile: scorre senza barra visibile */

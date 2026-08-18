@@ -21,7 +21,7 @@ function Label({ children }: { children: React.ReactNode }) {
 }
 
 function Card({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <div className={'bg-neutral-950 border border-neutral-800 p-6 ' + className}>{children}</div>;
+  return <div className={'bg-neutral-950 border border-neutral-800 p-6 lift ' + className}>{children}</div>;
 }
 
 function BtnLink({ href, children, primary = false, external = false }: any) {
@@ -39,12 +39,15 @@ function BtnLink({ href, children, primary = false, external = false }: any) {
 // ---------- Home ----------
 function useReveal() {
   useEffect(() => {
-    const els = document.querySelectorAll('.reveal');
+    const els = Array.from(document.querySelectorAll('.reveal'));
+    const mostra = (el: Element) => el.classList.add('reveal-in');
+    if (!('IntersectionObserver' in window)) { els.forEach(mostra); return; }
     const io = new IntersectionObserver((es) => es.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add('reveal-in'); io.unobserve(e.target); }
-    }), { threshold: 0.12 });
+      if (e.isIntersecting) { mostra(e.target); io.unobserve(e.target); }
+    }), { threshold: 0.08, rootMargin: '0px 0px -4% 0px' });
     els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    const t = setTimeout(() => els.forEach(mostra), 1600); // nulla può restare invisibile
+    return () => { clearTimeout(t); io.disconnect(); };
   }, []);
 }
 
@@ -57,15 +60,20 @@ function Home() {
         <img src="./hero-gramignata.jpg" alt="Il tramonto sulla valle di San Martino"
           className="absolute inset-0 w-full h-full object-cover object-bottom hero-zoom" />
         <div className="absolute inset-0 hero-fade" />
+        <div className="lucciole" aria-hidden="true">
+          {[0,1,2,3,4,5,6].map((i) => (
+            <span key={i} style={{ left: (8 + i * 13) + '%', animationDelay: (i * 1.9) + 's', animationDuration: (9 + (i % 4) * 3) + 's' }} />
+          ))}
+        </div>
         <div className="relative px-5 pb-12 text-center">
-          <p className="text-[11px] tracked text-white/90 mb-4">San Martino Vallata · Appennino modenese</p>
-          <h1 className="font-display text-4xl sm:text-7xl text-white leading-[1.08]">La valle che<br />non si arrende</h1>
-          <div className="w-14 h-[2px] mx-auto mt-6" style={{ background: '#A8322A' }} />
-          <p className="text-neutral-200 mt-6 max-w-xl mx-auto text-[15px] leading-relaxed">
+          <p className="hero-el hd1 text-[11px] tracked text-white/90 mb-4">San Martino Vallata · Appennino modenese</p>
+          <h1 className="hero-el hd2 font-display text-4xl sm:text-7xl text-white leading-[1.08]">La valle che<br />non si arrende</h1>
+          <div className="hero-el hd3 w-14 h-[2px] mx-auto mt-6" style={{ background: '#A8322A' }} />
+          <p className="hero-el hd4 text-neutral-200 mt-6 max-w-xl mx-auto text-[15px] leading-relaxed">
             Quattro oratori, mille anni di storia. San Martino si stava spegnendo:
             noi abbiamo deciso di riaccenderlo — un sentiero, una festa, un'idea alla volta.
           </p>
-          <div className="flex flex-wrap gap-3 justify-center mt-8">
+          <div className="hero-el hd5 flex flex-wrap gap-3 justify-center mt-8">
             <BtnLink href="#/gemello" primary>Esplora la valle in 3D</BtnLink>
             <BtnLink href="#/progetti">I progetti</BtnLink>
           </div>

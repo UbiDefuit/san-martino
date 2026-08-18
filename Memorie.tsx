@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { EMAIL } from './data';
 
-const VOLTI = [
-  { img: './memorie/volto1.jpg' }, { img: './memorie/volto2.jpg' },
-  { img: './memorie/volto3.jpg' }, { img: './memorie/volto4.jpg' },
-  { img: './memorie/volto5.jpg' }, { img: './memorie/volto6.jpg' },
+const CAST = [
+  ['Tiziano', 'Tiziano.jpg'], ['Clorinda', 'Clorinda.jpg'], ['Eulario', 'Eulario.jpg'],
+  ['Ornella', 'Ornella.jpg'], ['Giulia', 'Giulia.jpg'], ['Mary', 'Mary.jpg'],
+  ['Irma', 'Irma.jpg'], ['Gilda', 'Gilda.jpg'], ['Bianca', 'Bianca.jpg'],
+  ['Gustavo', 'Gustavo.jpg'], ['Gigino', 'Gigino.jpg'], ['Armida', 'Armida.jpg'],
+  ['Viterbo "il Fabbro"', 'Viterbo_il_Fabbro.jpg'], ['Romano', 'Romano.jpg'],
 ];
 
 export default function Memorie() {
@@ -42,21 +44,13 @@ export default function Memorie() {
       <section>
         <p className="text-[10px] tracked gold mb-1">I protagonisti</p>
         <h2 className="font-display text-2xl text-white mb-4">I volti del paese</h2>
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-          {VOLTI.map((v, i) => (
-            <figure key={i}>
-              <img src={v.img} alt={'Volto ' + (i + 1)} className="w-full border border-neutral-800" />
-              <figcaption className="text-[11px] text-neutral-500 mt-1.5 leading-tight">Chi è? Aiutaci a dargli un nome</figcaption>
+        <div className="grid grid-cols-3 sm:grid-cols-7 gap-3">
+          {CAST.map(([nome, img]) => (
+            <figure key={img}>
+              <img src={'./memorie/cast/' + img} alt={nome} className="w-full border border-neutral-800" />
+              <figcaption className="text-[12px] text-neutral-200 mt-1.5 leading-tight font-display">{nome}</figcaption>
             </figure>
           ))}
-        </div>
-        <div className="bg-neutral-950 border border-neutral-800 p-5 mt-5">
-          <p className="text-neutral-200 text-sm">
-            <span className="text-white font-semibold">Riconosci qualcuno?</span> Stiamo dando un nome a ogni persona
-            del filmato, con l'aiuto di chi li ha conosciuti. Scrivici a{' '}
-            <a href={'mailto:' + EMAIL} className="underline underline-offset-4 text-white">{EMAIL}</a>{' '}
-            o dillo a un volontario: ogni nome ritrovato è un pezzo di memoria salvata.
-          </p>
         </div>
       </section>
 

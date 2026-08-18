@@ -4,7 +4,7 @@ import XRayPlayer, { XRAY_TRAILER } from './XRayPlayer';
 
 const CAST = [
   ['Tiziano', 'Tiziano.jpg'], ['Gelinda', 'Gelinda.jpg'], ['Eulario', 'Eulario.jpg'],
-  ['Ornella', 'Ornella.jpg'], ['Giulia', 'Giulia.jpg'], ['Mary', 'Mary.jpg'],
+  ['Ornella', 'Ornella.jpg'], ['Clorinda', 'Clorinda.jpg'], ['Giulia', 'Giulia.jpg'], ['Mary', 'Mary.jpg'],
   ['Irma', 'Irma.jpg'], ['Gilda', 'Gilda.jpg'], ['Bianca', 'Bianca.jpg'],
   ['Gustavo', 'Gustavo.jpg'], ['Gigino', 'Gigino.jpg'], ['Armida', 'Armida.jpg'],
   ['Viterbo "il Fabbro"', 'Viterbo_il_Fabbro.jpg'], ['Romano', 'Romano.jpg'],

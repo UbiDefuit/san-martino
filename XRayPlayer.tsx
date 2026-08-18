@@ -15,7 +15,7 @@ const PERSONE: { nome: string; img: string; intervalli: [number, number][] }[] =
   { nome: 'Mary', img: C + 'Mary.jpg', intervalli: [[594, 630], [706, 740]] },
   { nome: 'Irma', img: C + 'Irma.jpg', intervalli: [[594, 630], [706, 740]] },
   { nome: 'Gilda', img: C + 'Gilda.jpg', intervalli: [[738, 832]] },
-  { nome: 'Gustavo', img: C + 'Gustavo.jpg', intervalli: [[834, 900]] },
+  { nome: 'Gustavo', img: C + 'Gustavo.jpg', intervalli: [[900, 928]] },
   { nome: 'Bianca', img: C + 'Bianca.jpg', intervalli: [[836, 886]] },
   { nome: 'Gigino', img: C + 'Gigino.jpg', intervalli: [[928, 958]] },
   { nome: 'Armida', img: C + 'Armida.jpg', intervalli: [[930, 1004], [1028, 1058]] },

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { EMAIL } from './data';
+import XRayPlayer from './XRayPlayer';
 
 const CAST = [
   ['Tiziano', 'Tiziano.jpg'], ['Clorinda', 'Clorinda.jpg'], ['Eulario', 'Eulario.jpg'],
@@ -12,6 +13,7 @@ const CAST = [
 
 export default function Memorie() {
   const [trailer, setTrailer] = useState(false);
+  const [xray, setXray] = useState(false);
   return (
     <div className="animate-fade-in-up pt-10 space-y-12">
       {/* billboard */}
@@ -33,10 +35,12 @@ export default function Memorie() {
               className="bg-white text-black px-6 py-3.5 font-semibold uppercase tracking-[0.15em] text-xs hover:bg-neutral-200 transition">
               ▶ Guarda il trailer
             </button>
-            <span className="border border-neutral-700 text-neutral-400 px-6 py-3.5 uppercase tracking-[0.15em] text-xs cursor-default">
-              Film completo — presto nell'archivio
-            </span>
+            <button onClick={() => setXray(true)}
+              className="border border-[#C9A227] text-[#E0BF5C] px-6 py-3.5 font-semibold uppercase tracking-[0.15em] text-xs hover:bg-[#C9A227]/10 transition">
+              Anteprima con X-Ray
+            </button>
           </div>
+          <p className="text-neutral-500 text-xs mt-3">Nell'anteprima (primi 5 minuti), metti in pausa: compare chi è in scena, come su Prime Video. Il film completo arriva nell'archivio.</p>
         </div>
       </section>
 
@@ -61,6 +65,7 @@ export default function Memorie() {
         del paese, portacele — le digitalizziamo e le riportiamo alla luce.
       </p>
 
+      {xray && <XRayPlayer src="./memorie/xray-anteprima.mp4" onClose={() => setXray(false)} />}
       {trailer && createPortal(
         <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4" onClick={() => setTrailer(false)}>
           <div className="w-full max-w-3xl" onClick={(e) => e.stopPropagation()}>

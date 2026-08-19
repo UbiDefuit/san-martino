@@ -87,11 +87,26 @@ function Home() {
         <Card className="border-amber-400/40">
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="flex-1 text-center sm:text-left">
-              <Label>Stasera · sabato 8 agosto</Label>
-              <h2 className="font-display text-3xl text-white">La Gramignata</h2>
-              <p className="text-neutral-300 text-sm mt-2">Ore 19:30 alla Chiesa di San Martino · gramigna alla salsiccia, crescentine e gnocco fritto · musica dal vivo con Incontri nello Chalet</p>
+              <Label>L'estate continua · venerdì 21 e 28 agosto</Label>
+              <h2 className="font-display text-3xl text-white">Ciaccio &amp; Sloo</h2>
+              <p className="text-neutral-300 text-sm mt-2">
+                Apericena a buffet alla Chiesa di San Martino: spritz, birra, crescentine e ciacci —
+                e la specialità della casa, <span className="text-white">il ciaccio con gelato</span>,
+                tre gusti assortiti, come una focaccina da gelateria (lo "sloo", per chi è della valle).
+                Musica 70–80–90: la playlist della valle. Aperto a tutti, <span className="text-white">paghi quanto vuoi</span>.
+              </p>
             </div>
-            <BtnLink href="#/gramignata" primary>La serata</BtnLink>
+            <BtnLink href={"https://wa.me/?text=" + encodeURIComponent("Ciaccio & Sloo — venerdì 21 e 28 agosto alla Chiesa di San Martino Vallata. Apericena a buffet e ciaccio col gelato, musica 70-80-90. Aperto a tutti, paghi quanto vuoi! https://ubidefuit.github.io/san-martino/")} external primary>Passaparola</BtnLink>
+          </div>
+        </Card>
+        <Card>
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+            <div className="flex-1 text-center sm:text-left">
+              <Label>È già successo</Label>
+              <h2 className="font-display text-2xl text-white">La Gramignata — 8 agosto</h2>
+              <p className="text-neutral-300 text-sm mt-2">Gramigna alla salsiccia, crescentine e gnocco fritto sotto le stelle, la musica degli Incontri nello Chalet e l'anfora che si è riempita di idee per il paese.</p>
+            </div>
+            <BtnLink href="#/gramignata">La serata</BtnLink>
           </div>
         </Card>
         <Card>

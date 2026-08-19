@@ -136,3 +136,8 @@ html.light .hero-zoom { filter: none; }
 /* nav mobile: scorre senza barra visibile */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+
+/* hero video: le voci del 1987 dietro il titolo */
+.hero-video { opacity: 0; animation: heroVideoIn 2.5s ease .4s forwards; filter: saturate(1.05); }
+@keyframes heroVideoIn { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .hero-video { display: none; } }

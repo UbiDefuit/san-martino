@@ -88,15 +88,15 @@ function Home() {
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="flex-1 text-center sm:text-left">
               <Label>L'estate continua · venerdì 21 e 28 agosto</Label>
-              <h2 className="font-display text-3xl text-white">Ciaccio &amp; Sloo</h2>
+              <h2 className="font-display text-3xl text-white">Ciaccio &amp; Slô</h2>
               <p className="text-neutral-300 text-sm mt-2">
                 Apericena a buffet alla Chiesa di San Martino: spritz, birra, crescentine e ciacci —
                 e la specialità della casa, <span className="text-white">il ciaccio con gelato</span>,
-                tre gusti assortiti, come una focaccina da gelateria (lo "sloo", per chi è della valle).
+                tre gusti assortiti, come una focaccina da gelateria (lo "slô", per chi è della valle).
                 Musica 70–80–90: la playlist della valle. Aperto a tutti, <span className="text-white">paghi quanto vuoi</span>.
               </p>
             </div>
-            <BtnLink href={"https://wa.me/?text=" + encodeURIComponent("Ciaccio & Sloo — venerdì 21 e 28 agosto alla Chiesa di San Martino Vallata. Apericena a buffet e ciaccio col gelato, musica 70-80-90. Aperto a tutti, paghi quanto vuoi! https://ubidefuit.github.io/san-martino/")} external primary>Passaparola</BtnLink>
+            <BtnLink href={"https://wa.me/?text=" + encodeURIComponent("Ciaccio & Slô — venerdì 21 e 28 agosto alla Chiesa di San Martino Vallata. Apericena a buffet e ciaccio col gelato, musica 70-80-90. Aperto a tutti, paghi quanto vuoi! https://ubidefuit.github.io/san-martino/")} external primary>Passaparola</BtnLink>
           </div>
         </Card>
         <Card>

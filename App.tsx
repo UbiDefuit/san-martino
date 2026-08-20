@@ -59,7 +59,7 @@ function Home() {
   return (
     <div className="animate-fade-in-up">
       {/* hero cinematografica a tutta pagina */}
-      <section className="-mx-5 relative min-h-[62vh] sm:min-h-[68vh] pt-24 sm:pt-28 flex flex-col justify-end overflow-hidden">
+      <section className="hero-cinema -mx-5 relative min-h-[62vh] sm:min-h-[68vh] pt-24 sm:pt-28 flex flex-col justify-end overflow-hidden">
         <img src="./hero-gramignata.jpg" alt="Il tramonto sulla valle di San Martino"
           className="absolute inset-0 w-full h-full object-cover object-bottom hero-zoom" />
         <video key={heroIdx} src={HERO_LOOPS[heroIdx]} autoPlay muted loop playsInline poster="./hero-gramignata.jpg"

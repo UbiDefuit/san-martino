@@ -84,7 +84,6 @@ html.light img.logo-brand { filter: invert(1); border-color: #d2d2cf !important;
 .hairline { border: 1px solid rgba(201,162,39,.45); }
 .hero-fade { background: linear-gradient(to bottom, rgba(11,11,12,.55) 0%, rgba(11,11,12,0) 38%, rgba(11,11,12,.35) 72%, #0B0B0C 100%); }
 .badge-disc { background: #0B0B0C; border-radius: 9999px; }
-html.light .hero-fade { background: linear-gradient(to bottom, rgba(244,244,242,.35) 0%, rgba(244,244,242,0) 40%, rgba(244,244,242,.5) 72%, #f4f4f2 100%); }
 html.light .badge-disc { background: #f4f4f2; }
 html.light .gold { color: #8a6a11 !important; }
 
@@ -141,3 +140,19 @@ html.light .hero-zoom { filter: none; }
 .hero-video { opacity: 0; animation: heroVideoIn 2.5s ease .4s forwards; filter: saturate(1.05); }
 @keyframes heroVideoIn { to { opacity: 1; } }
 /* il video resta visibile anche con animazioni ridotte: è il cuore della home */
+
+/* ---------- tema chiaro: correzioni ---------- */
+html.light .bg-black\/95 { background-color: rgba(244,244,242,.95) !important; }
+html.light .border-neutral-900 { border-color: #e2e2df !important; }
+html.light .bg-black\/70, html.light .bg-black\/75 { background-color: rgba(255,255,255,.9) !important; }
+
+/* la hero resta cinematografica anche col tema chiaro: testo chiaro sul video */
+html.light .hero-cinema .text-white { color: #F3EFE6 !important; }
+html.light .hero-cinema .text-white\/90 { color: rgba(255,255,255,.9) !important; }
+html.light .hero-cinema .text-neutral-200 { color: #e6e3db !important; }
+html.light .hero-cinema .bg-white { background-color: #ffffff !important; }
+html.light .hero-cinema .text-black { color: #000000 !important; }
+html.light .hero-cinema .hover\:bg-neutral-200:hover { background-color: #e5e5e5 !important; }
+html.light .hero-cinema .bg-black\/30 { background-color: rgba(0,0,0,.3) !important; }
+html.light .hero-cinema .border-white\/40 { border-color: rgba(255,255,255,.4) !important; }
+html.light .hero-cinema .border-neutral-700 { border-color: rgba(255,255,255,.5) !important; }

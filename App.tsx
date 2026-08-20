@@ -55,16 +55,30 @@ const HERO_LOOPS = ['./hero-voci.mp4', './hero-voci-2.mp4', './hero-voci-3.mp4',
 
 function Home() {
   useReveal();
-  const [heroSrc] = useState(() => HERO_LOOPS[new Date().getHours() % HERO_LOOPS.length]); // cambia ogni ora
+  const [heroIdx, setHeroIdx] = useState(() => new Date().getHours() % HERO_LOOPS.length); // parte con la scena dell'ora
   return (
     <div className="animate-fade-in-up">
       {/* hero cinematografica a tutta pagina */}
       <section className="-mx-5 relative min-h-[62vh] sm:min-h-[68vh] pt-24 sm:pt-28 flex flex-col justify-end overflow-hidden">
         <img src="./hero-gramignata.jpg" alt="Il tramonto sulla valle di San Martino"
           className="absolute inset-0 w-full h-full object-cover object-bottom hero-zoom" />
-        <video src={heroSrc} autoPlay muted loop playsInline poster="./hero-gramignata.jpg"
+        <video key={heroIdx} src={HERO_LOOPS[heroIdx]} autoPlay muted loop playsInline poster="./hero-gramignata.jpg"
           aria-hidden="true" className="hero-video absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 hero-fade" />
+        <div className="absolute bottom-4 right-4 z-10 flex items-center gap-3">
+          <div className="flex gap-1.5">
+            {HERO_LOOPS.map((_, i) => (
+              <button key={i} onClick={() => setHeroIdx(i)} aria-label={'Scena ' + (i + 1)}
+                className={'w-2 h-2 rounded-full transition ' + (i === heroIdx ? 'bg-[#E0BF5C]' : 'bg-white/35 hover:bg-white/70')} />
+            ))}
+          </div>
+          <button onClick={() => setHeroIdx((heroIdx + 1) % HERO_LOOPS.length)} aria-label="Cambia scena"
+            className="w-9 h-9 rounded-full border border-white/40 bg-black/30 backdrop-blur text-white/90 hover:border-white transition flex items-center justify-center">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+              <path d="M21 12a9 9 0 1 1-2.64-6.36" /><path d="M21 3v6h-6" />
+            </svg>
+          </button>
+        </div>
         <div className="lucciole" aria-hidden="true">
           {[0,1,2,3,4,5,6].map((i) => (
             <span key={i} style={{ left: (8 + i * 13) + '%', animationDelay: (i * 1.9) + 's', animationDuration: (9 + (i % 4) * 3) + 's' }} />

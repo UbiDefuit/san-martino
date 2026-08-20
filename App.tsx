@@ -51,15 +51,18 @@ function useReveal() {
   }, []);
 }
 
+const HERO_LOOPS = ['./hero-voci.mp4', './hero-voci-2.mp4', './hero-voci-3.mp4', './hero-voci-4.mp4'];
+
 function Home() {
   useReveal();
+  const [heroSrc] = useState(() => HERO_LOOPS[Math.floor(Math.random() * HERO_LOOPS.length)]);
   return (
     <div className="animate-fade-in-up">
       {/* hero cinematografica a tutta pagina */}
       <section className="-mx-5 relative min-h-[62vh] sm:min-h-[68vh] pt-24 sm:pt-28 flex flex-col justify-end overflow-hidden">
         <img src="./hero-gramignata.jpg" alt="Il tramonto sulla valle di San Martino"
           className="absolute inset-0 w-full h-full object-cover object-bottom hero-zoom" />
-        <video src="./hero-voci.mp4" autoPlay muted loop playsInline poster="./hero-gramignata.jpg"
+        <video src={heroSrc} autoPlay muted loop playsInline poster="./hero-gramignata.jpg"
           aria-hidden="true" className="hero-video absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 hero-fade" />
         <div className="lucciole" aria-hidden="true">

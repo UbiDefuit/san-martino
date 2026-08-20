@@ -1,5 +1,5 @@
 // PWA piattaforma San Martino 2030 — network-first con riserva offline
-const CACHE = 'sm2030-v59';
+const CACHE = 'sm2030-v60';
 const PRECACHE = ['./', './index.html', './manifest.json', './icon-512.png', './icona-app.svg', './canonica.jpg', './stemma-polinago.png'];
 
 self.addEventListener('install', (e) => {

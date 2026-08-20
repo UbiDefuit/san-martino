@@ -56,14 +56,16 @@ const HERO_LOOPS = ['./hero-voci.mp4', './hero-voci-2.mp4', './hero-voci-3.mp4',
 function Home() {
   useReveal();
   const [heroIdx, setHeroIdx] = useState(() => new Date().getHours() % HERO_LOOPS.length); // parte con la scena dell'ora
+  const [heroAudio, setHeroAudio] = useState(false);
   return (
     <div className="animate-fade-in-up">
       {/* hero cinematografica a tutta pagina */}
       <section className="hero-cinema -mx-5 relative min-h-[62vh] sm:min-h-[68vh] pt-24 sm:pt-28 flex flex-col justify-end overflow-hidden">
         <img src="./hero-gramignata.jpg" alt="Il tramonto sulla valle di San Martino"
           className="absolute inset-0 w-full h-full object-cover object-bottom hero-zoom" />
-        <video key={heroIdx} src={HERO_LOOPS[heroIdx]} autoPlay muted loop playsInline poster="./hero-gramignata.jpg"
-          ref={(el) => { if (el) { el.muted = true; const p = el.play(); if (p) p.catch(() => {}); } }}
+        <video key={heroIdx + (heroAudio ? "-a" : "-m")} src={HERO_LOOPS[heroIdx]} autoPlay muted loop playsInline poster="./hero-gramignata.jpg"
+          ref={(el) => { if (el) { el.muted = !heroAudio; const p = el.play(); if (p) p.catch(() => {}); } }}
+          onVolumeChange={(e) => { /* tiene allineato lo stato se il browser interviene */ }}
           aria-hidden="true" className="hero-video absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 hero-fade" />
         <div className="absolute bottom-4 right-4 z-10 flex items-center gap-3">
@@ -73,6 +75,19 @@ function Home() {
                 className={'w-2 h-2 rounded-full transition ' + (i === heroIdx ? 'bg-[#E0BF5C]' : 'bg-white/35 hover:bg-white/70')} />
             ))}
           </div>
+          <button onClick={() => setHeroAudio(!heroAudio)} aria-label={heroAudio ? 'Spegni le voci' : 'Ascolta le voci'} title={heroAudio ? 'Spegni le voci' : 'Ascolta le voci del 1987'}
+            className={'w-9 h-9 rounded-full border backdrop-blur transition flex items-center justify-center ' +
+              (heroAudio ? 'border-[#E0BF5C] bg-black/40 text-[#E0BF5C]' : 'border-white/40 bg-black/30 text-white/90 hover:border-white')}>
+            {heroAudio ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+            )}
+          </button>
           <button onClick={() => setHeroIdx((heroIdx + 1) % HERO_LOOPS.length)} aria-label="Cambia scena"
             className="w-9 h-9 rounded-full border border-white/40 bg-black/30 backdrop-blur text-white/90 hover:border-white transition flex items-center justify-center">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">

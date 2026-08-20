@@ -55,7 +55,7 @@ const HERO_LOOPS = ['./hero-voci.mp4', './hero-voci-2.mp4', './hero-voci-3.mp4',
 
 function Home() {
   useReveal();
-  const [heroSrc] = useState(() => HERO_LOOPS[Math.floor(Math.random() * HERO_LOOPS.length)]);
+  const [heroSrc] = useState(() => HERO_LOOPS[new Date().getHours() % HERO_LOOPS.length]); // cambia ogni ora
   return (
     <div className="animate-fade-in-up">
       {/* hero cinematografica a tutta pagina */}

@@ -63,6 +63,7 @@ function Home() {
         <img src="./hero-gramignata.jpg" alt="Il tramonto sulla valle di San Martino"
           className="absolute inset-0 w-full h-full object-cover object-bottom hero-zoom" />
         <video key={heroIdx} src={HERO_LOOPS[heroIdx]} autoPlay muted loop playsInline poster="./hero-gramignata.jpg"
+          ref={(el) => { if (el) { el.muted = true; const p = el.play(); if (p) p.catch(() => {}); } }}
           aria-hidden="true" className="hero-video absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 hero-fade" />
         <div className="absolute bottom-4 right-4 z-10 flex items-center gap-3">

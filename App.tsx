@@ -379,8 +379,8 @@ function ChiSiamo() {
       <h1 className="font-display text-4xl text-white">Chi siamo</h1>
       <Card>
         <p className="font-display text-2xl text-white leading-snug">
-          Siamo volontari: gente del borgo, figli e nipoti di chi c'è nato,
-          persone che questa valle l'hanno scelta.
+          Siamo volontari: gente del borgo, chi ci è cresciuto,
+          chi questa valle l'ha scelta.
         </p>
         <p className="text-neutral-300 text-[15px] leading-relaxed mt-4">
           Puliamo sentieri, organizziamo feste, raccogliamo memorie e costruiamo — anche digitalmente —

@@ -90,6 +90,13 @@ function Home() {
   useReveal();
   const [heroIdx, setHeroIdx] = useState(() => new Date().getHours() % HERO_LOOPS.length); // parte con la scena dell'ora
   const [heroAudio, setHeroAudio] = useState(false);
+  const heroVid = useRef<HTMLVideoElement | null>(null);
+  useEffect(() => {
+    const el = heroVid.current;
+    if (heroAudio && el) window.dispatchEvent(new CustomEvent('sm-voce', { detail: el }));
+    else window.dispatchEvent(new Event('sm-voce-off'));
+    return () => window.dispatchEvent(new Event('sm-voce-off'));
+  }, [heroAudio, heroIdx]);
   const tocco = useRef<{ x: number; y: number } | null>(null);
   return (
     <div className="animate-fade-in-up">
@@ -105,7 +112,7 @@ function Home() {
         <img src="./hero-gramignata.jpg" alt="Il tramonto sulla valle di San Martino"
           className="absolute inset-0 w-full h-full object-cover object-bottom hero-zoom" />
         <video key={heroIdx + (heroAudio ? "-a" : "-m")} src={HERO_LOOPS[heroIdx]} autoPlay muted loop playsInline poster="./hero-gramignata.jpg"
-          ref={(el) => { if (el) { el.muted = !heroAudio; const p = el.play(); if (p) p.catch(() => {}); } }}
+          ref={(el) => { heroVid.current = el; if (el) { el.muted = !heroAudio; const p = el.play(); if (p) p.catch(() => {}); } }}
           onVolumeChange={(e) => { /* tiene allineato lo stato se il browser interviene */ }}
           aria-hidden="true" className="hero-video absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 hero-fade" />
@@ -478,6 +485,46 @@ export default function App() {
   }, [light]);
   const [route, setRoute] = useState<Route>(routeFromHash());
   const [menu, setMenu] = useState(false);
+
+  // il crinale che parla davvero: le barre del logo seguono la voce
+  useEffect(() => {
+    let ctx: AudioContext | null = null;
+    let analyser: AnalyserNode | null = null;
+    const sorgenti = new WeakMap<HTMLMediaElement, MediaElementAudioSourceNode>();
+    let raf = 0;
+    const barre = () => document.querySelectorAll<SVGRectElement>('#marchio-vivo .mark-bar');
+    const livelli = [0, 0, 0, 0, 0, 0, 0];
+    const bande = [1, 2, 4, 6, 9, 13, 18];
+    const ferma = () => {
+      cancelAnimationFrame(raf); raf = 0;
+      barre().forEach((b) => { b.style.animation = ''; b.style.transform = ''; });
+    };
+    const parte = (e: Event) => {
+      const el = (e as CustomEvent).detail as HTMLMediaElement;
+      try {
+        if (!ctx) { ctx = new AudioContext(); analyser = ctx.createAnalyser(); analyser.fftSize = 64; analyser.connect(ctx.destination); }
+        ctx.resume();
+        if (!sorgenti.has(el)) { const s = ctx.createMediaElementSource(el); sorgenti.set(el, s); }
+        sorgenti.get(el)!.connect(analyser!);
+        const dati = new Uint8Array(analyser!.frequencyBinCount);
+        const passo = () => {
+          analyser!.getByteFrequencyData(dati);
+          const bs = barre();
+          bs.forEach((b, i) => {
+            const v = (dati[bande[i]] || 0) / 255;
+            livelli[i] = livelli[i] * 0.65 + v * 0.35;
+            b.style.animation = 'none';
+            b.style.transform = 'scaleY(' + (0.45 + livelli[i] * 0.85).toFixed(3) + ')';
+          });
+          raf = requestAnimationFrame(passo);
+        };
+        if (!raf) raf = requestAnimationFrame(passo);
+      } catch { /* se l'audio non è instradabile, il logo continua a respirare */ }
+    };
+    window.addEventListener('sm-voce', parte);
+    window.addEventListener('sm-voce-off', ferma);
+    return () => { window.removeEventListener('sm-voce', parte); window.removeEventListener('sm-voce-off', ferma); ferma(); if (ctx) ctx.close(); };
+  }, []);
   useEffect(() => {
     const on = () => { setRoute(routeFromHash()); setMenu(false); window.scrollTo(0, 0); };
     window.addEventListener('hashchange', on);
@@ -500,7 +547,7 @@ export default function App() {
       <header className="sticky top-0 z-40 bg-black/95 backdrop-blur border-b border-neutral-800">
         <div className="max-w-3xl mx-auto px-5 h-14 flex items-center justify-between">
           <a href="#/" className="flex items-center gap-2 shrink-0">
-            <Mark2030 className="w-8 h-8 mark-fg" />
+            <span id="marchio-vivo" className="contents"><Mark2030 className="w-8 h-8 mark-fg" /></span>
             <span className="font-display text-base sm:text-lg leading-none whitespace-nowrap">San Martino <span className="gold">2030</span></span>
           </a>
           <div className="flex items-center">

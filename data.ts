@@ -19,12 +19,12 @@ export interface Progetto {
 
 export const PROGETTI: Progetto[] = [
   {
-    id: 'memoria', geo: [44.38790, 10.68870], titolo: 'La memoria del borgo',
-    sintesi: 'Foto d\'epoca, voci degli anziani, storie delle famiglie: l\'archivio di San Martino.',
-    descrizione: 'Ogni anziano che se ne va porta con sé un pezzo di San Martino. Stiamo raccogliendo foto d\'epoca, interviste e storie per costruire l\'archivio digitale del borgo — che vivrà su questa piattaforma e in una mostra annuale.',
-    azioni: ['Raccolta materiali porta a porta', 'Digitalizzazione e pubblicazione nelle Storie', 'QR sui luoghi raccontati e mostra annuale'],
-    budgetMin: 3000, budgetMax: 8000, raccolti: 0, stato: 'in avvio',
-    fonti: 'Crowdfunding civico, 5×1000, fondazioni',
+    id: 'voci', geo: [44.38790, 10.68870], titolo: 'Le voci di San Martino — il paese che si racconta',
+    sintesi: 'Trenta nuove interviste agli ultimi testimoni, il museo diffuso con le targhe nelle borgate, l\'archivio della memoria.',
+    descrizione: 'Il film del 1987 di Don Paolo, restaurato quest\'estate, ci ha ridato dodici voci di persone che non ci sono più. Ora tocca a chi può ancora raccontare: trenta interviste all\'ultima generazione nata nelle borgate, la digitalizzazione delle foto di famiglia, le targhe permanenti del museo diffuso — inquadri il QR sul muro e senti chi abitava lì — e la restituzione al paese con mostra e camminata della memoria. Candidato all\'Avviso Richieste Libere 2026 della Fondazione di Modena (esito entro novembre).',
+    azioni: ['30 interviste videoregistrate con formazione dei volontari alla storia orale', 'Digitalizzazione di foto e documenti di famiglia e ricerche d\'archivio', 'Targhe permanenti del museo diffuso nelle borgate e integrazione nel gemello 3D', 'Mostra e camminata della memoria con i testimoni come narratori'],
+    budgetMin: 11500, budgetMax: 11500, raccolti: 2500, stato: 'candidato a bando',
+    fonti: 'Fondazione di Modena (richiesti 9.000 €), quote sociali, 5×1000, offerte agli eventi',
   },
   {
     id: 'gemello', geo: [44.38860, 10.69050], titolo: 'Il gemello digitale di San Martino',

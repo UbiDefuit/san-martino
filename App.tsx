@@ -389,7 +389,7 @@ function ChiSiamo() {
       </Card>
 
       <section className="grid sm:grid-cols-3 gap-3 text-center">
-        {[['2018', 'nati il 23 settembre, con nove firme'], ['8 anni', 'di feste, sentieri e lavori'], ['1', 'defibrillatore, al Poggio']].map(([n, l]) => (
+        {[['2018', 'nati il 23 settembre, con nove firme'], ['8 anni', 'di feste, sentieri e lavori'], ['1987', 'il film del paese, restaurato']].map(([n, l]) => (
           <Card key={l}>
             <div className="font-display text-3xl text-white">{n}</div>
             <div className="text-[10px] uppercase tracking-[0.15em] text-neutral-400 mt-2 leading-snug">{l}</div>
@@ -413,7 +413,6 @@ function ChiSiamo() {
         <ul className="text-neutral-200 text-[15px] leading-relaxed space-y-2">
           <li>· La <span className="text-white">Festa di San Martino</span> ogni novembre — polenta, vino novello e castagne</li>
           <li>· Il <span className="text-white">centro estivo</span> per i ragazzi della valle</li>
-          <li>· Il <span className="text-white">defibrillatore</span> finanziato per Il Poggio</li>
           <li>· Una dotazione tutta nostra: <span className="text-white">tensostruttura, tavoli, cucina attrezzata, luci esterne</span></li>
           <li>· La <span className="text-white">canonica</span> della parrocchia, nostra sede, di cui curiamo la manutenzione</li>
           <li>· <span className="text-white">6,2 km di sentieri</span> riaperti a mano, e le memorie del paese digitalizzate</li>

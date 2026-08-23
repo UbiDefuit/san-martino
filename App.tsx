@@ -325,8 +325,7 @@ function Sostienici() {
         <Label>Con la firma: 5×1000</Label>
         <p className="text-neutral-200 text-[15px] leading-relaxed">
           Nella dichiarazione dei redditi, firma nel riquadro degli enti del Terzo settore e indica il nostro codice fiscale: non ti costa nulla,
-          per San Martino vale moltissimo. Il codice fiscale da indicare arriverà qui
-          appena completata la registrazione.
+          per San Martino vale moltissimo. 
         </p>
         <div className="mt-4 border border-neutral-700 p-4 text-center">
           <p className="text-[11px] uppercase tracking-[0.25em] text-neutral-400">Codice fiscale APS</p>
@@ -352,22 +351,46 @@ function ChiSiamo() {
     <div className="space-y-5 animate-fade-in-up pt-10">
       <h1 className="font-display text-4xl text-white">Chi siamo</h1>
       <Card>
+        <p className="font-display text-2xl text-white leading-snug">
+          Siamo volontari: gente del borgo, figli e nipoti di chi c'è nato,
+          persone che questa valle l'hanno scelta.
+        </p>
+        <p className="text-neutral-300 text-[15px] leading-relaxed mt-4">
+          Puliamo sentieri, organizziamo feste, raccogliamo memorie e costruiamo — anche digitalmente —
+          il futuro di un posto che non vogliamo veder sparire.
+        </p>
+      </Card>
+
+      <section className="grid sm:grid-cols-3 gap-3 text-center">
+        {[['2018', 'nati il 23 settembre, con nove firme'], ['8 anni', 'di feste, sentieri e lavori'], ['1', 'defibrillatore, al Poggio']].map(([n, l]) => (
+          <Card key={l}>
+            <div className="font-display text-3xl text-white">{n}</div>
+            <div className="text-[10px] uppercase tracking-[0.15em] text-neutral-400 mt-2 leading-snug">{l}</div>
+          </Card>
+        ))}
+      </section>
+
+      <Card>
+        <Label>Cosa facciamo, per statuto</Label>
         <p className="text-neutral-200 text-[15px] leading-relaxed">
           <span className="text-white font-semibold">Associazione di Promozione Sociale San Martino 2.0 APS</span> —
-          per tutti “The Valley” — è nata per la tutela e la rinascita del territorio
-          montano di San Martino Vallata. Sede: via Carloni 5, loc. San Martino, 41040 Polinago (MO).
-          Da statuto operiamo, senza scopo di lucro, per la salvaguardia dell'ambiente, la tutela e la
-          valorizzazione del patrimonio culturale e del paesaggio, le attività culturali, educative e
-          ricreative di interesse sociale e l'inclusione delle persone fragili (D.lgs 117/17, Codice del Terzo settore).
-          Siamo nati il 23 settembre 2018, con nove firme in via Carloni, e la nostra sede è nella
-          canonica della parrocchia, di cui curiamo la manutenzione. In otto anni: la Festa di San Martino
-          ogni novembre, il centro estivo per i ragazzi, il defibrillatore finanziato per Il Poggio,
-          e una dotazione tutta nostra — tensostruttura, tavoli, cucina attrezzata, luci esterne —
-          che fa vivere gli eventi della valle.
-          Siamo volontari: gente del borgo, figli e nipoti di chi c'è nato, persone che
-          hanno scelto questa valle. Puliamo sentieri, organizziamo eventi, raccogliamo memorie
-          e costruiamo — anche digitalmente — il futuro di un posto che non vogliamo veder sparire.
+          per tutti “The Valley” — è nata per la tutela e la rinascita del territorio montano di San Martino Vallata.
+          Operiamo senza scopo di lucro per la salvaguardia dell'ambiente, la tutela e la valorizzazione del
+          patrimonio culturale e del paesaggio, le attività culturali, educative e ricreative di interesse sociale
+          e l'inclusione delle persone fragili (D.lgs 117/17, Codice del Terzo settore).
         </p>
+      </Card>
+
+      <Card>
+        <Label>Otto anni di cose fatte</Label>
+        <ul className="text-neutral-200 text-[15px] leading-relaxed space-y-2">
+          <li>· La <span className="text-white">Festa di San Martino</span> ogni novembre — polenta, vino novello e castagne</li>
+          <li>· Il <span className="text-white">centro estivo</span> per i ragazzi della valle</li>
+          <li>· Il <span className="text-white">defibrillatore</span> finanziato per Il Poggio</li>
+          <li>· Una dotazione tutta nostra: <span className="text-white">tensostruttura, tavoli, cucina attrezzata, luci esterne</span></li>
+          <li>· La <span className="text-white">canonica</span> della parrocchia, nostra sede, di cui curiamo la manutenzione</li>
+          <li>· <span className="text-white">6,2 km di sentieri</span> riaperti a mano, e le memorie del paese digitalizzate</li>
+        </ul>
       </Card>
       <Card>
         <Label>Con il patrocinio</Label>

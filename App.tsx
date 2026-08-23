@@ -52,7 +52,7 @@ function useReveal() {
   }, []);
 }
 
-const HERO_LOOPS = ['./hero-voci.mp4', './hero-voci-2.mp4', './hero-voci-3.mp4', './hero-voci-4.mp4'];
+const HERO_LOOPS = ['./hero-voci.mp4', './hero-voci-2.mp4', './hero-voci-3.mp4', './hero-voci-4.mp4', './hero-voci-5.mp4', './hero-voci-6.mp4'];
 
 function Home() {
   useReveal();

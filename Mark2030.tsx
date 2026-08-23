@@ -10,7 +10,8 @@ export default function Mark2030({ className = '', gold = '#E0BF5C' }: { classNa
         const cx = 50 + (i - 3) * 11.5;
         return (
           <rect key={i} x={cx - 2.6} y={70 - h} width="5.2" height={h} rx="2.6"
-            fill={i === 3 ? gold : 'currentColor'} />
+            fill={i === 3 ? gold : 'currentColor'} className="mark-bar"
+            style={{ animationDuration: (2.1 + i * 0.23) + 's', animationDelay: (-i * 0.4) + 's' }} />
         );
       })}
       <line x1="40" y1="82" x2="60" y2="82" stroke="#A8322A" strokeWidth="3" strokeLinecap="round" />

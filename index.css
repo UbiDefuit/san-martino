@@ -156,3 +156,9 @@ html.light .hero-cinema .hover\:bg-neutral-200:hover { background-color: #e5e5e5
 html.light .hero-cinema .bg-black\/30 { background-color: rgba(0,0,0,.3) !important; }
 html.light .hero-cinema .border-white\/40 { border-color: rgba(255,255,255,.4) !important; }
 html.light .hero-cinema .border-neutral-700 { border-color: rgba(255,255,255,.5) !important; }
+
+/* il crinale che parla: le barre respirano come un'onda sonora */
+.mark-bar { transform-box: fill-box; transform-origin: center bottom;
+  animation: markBar 2.4s ease-in-out infinite; }
+@keyframes markBar { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.68); } }
+@media (prefers-reduced-motion: reduce) { .mark-bar { animation: none; } }

@@ -169,7 +169,7 @@ function Home() {
           <div className="relative overflow-hidden border border-neutral-800 hover:border-[#C9A227] transition bg-neutral-950">
             <div className="flex gap-0 overflow-hidden opacity-45 group-hover:opacity-60 transition">
               {['Tiziano','Gelinda','Eulario','Ornella','Giulia','Malia','Gilda','Gigino'].map((n) => (
-                <img key={n} src={'./memorie/cast/' + n + '.jpg'} alt="" className="w-1/4 sm:w-1/8 h-40 object-cover" />
+                <img key={n} src={'./memorie/cast/' + n + '.jpg'} alt="" className="w-1/4 sm:w-[12.5%] h-96 sm:h-44 object-cover" />
               ))}
             </div>
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 bg-gradient-to-t from-black/85 via-black/50 to-black/60">

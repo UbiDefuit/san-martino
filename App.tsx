@@ -536,10 +536,7 @@ export default function App() {
         <Mark2030 className="w-10 h-10 mx-auto mark-fg" />
         <p className="text-[11px] tracked gold">San Martino 2030 — la valle che non si arrende</p>
         <p className="text-xs text-neutral-500">APS per la rinascita di San Martino Vallata · Polinago (MO)</p>
-        <a href={EVENTO_URL} target="_blank" rel="noreferrer"
-          className="inline-block text-xs text-neutral-300 underline underline-offset-4 hover:text-white">
-          → App dell'evento Into the Wild
-        </a>
+        
       </footer>
     </div>
   );

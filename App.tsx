@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PROGETTI, STORIE, EVENTO_URL, WHATSAPP_URL, EMAIL, Progetto } from './data';
 import Gemello from './Gemello';
 import Gramignata from './Gramignata';
@@ -58,10 +58,18 @@ function Home() {
   useReveal();
   const [heroIdx, setHeroIdx] = useState(() => new Date().getHours() % HERO_LOOPS.length); // parte con la scena dell'ora
   const [heroAudio, setHeroAudio] = useState(false);
+  const tocco = useRef<{ x: number; y: number } | null>(null);
   return (
     <div className="animate-fade-in-up">
       {/* hero cinematografica a tutta pagina */}
-      <section className="hero-cinema -mx-5 relative min-h-[62vh] sm:min-h-[68vh] pt-24 sm:pt-28 flex flex-col justify-end overflow-hidden">
+      <section className="hero-cinema -mx-5 relative min-h-[62vh] sm:min-h-[68vh] pt-24 sm:pt-28 flex flex-col justify-end overflow-hidden"
+        onTouchStart={(e) => { tocco.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }}
+        onTouchEnd={(e) => {
+          const t = tocco.current; tocco.current = null; if (!t) return;
+          const dx = e.changedTouches[0].clientX - t.x, dy = e.changedTouches[0].clientY - t.y;
+          if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5)
+            setHeroIdx((heroIdx + (dx < 0 ? 1 : HERO_LOOPS.length - 1)) % HERO_LOOPS.length);
+        }}>
         <img src="./hero-gramignata.jpg" alt="Il tramonto sulla valle di San Martino"
           className="absolute inset-0 w-full h-full object-cover object-bottom hero-zoom" />
         <video key={heroIdx + (heroAudio ? "-a" : "-m")} src={HERO_LOOPS[heroIdx]} autoPlay muted loop playsInline poster="./hero-gramignata.jpg"

@@ -5,13 +5,14 @@ import Gramignata from './Gramignata';
 import StaffEvento from './StaffEvento';
 import Idee from './Idee';
 import Memorie from './Memorie';
+import Voci from './Voci';
 import Mark2030 from './Mark2030';
 
-type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'memorie' | 'sostienici' | 'chisiamo' | 'gramignata' | 'idee' | 'staff';
+type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'memorie' | 'voci' | 'sostienici' | 'chisiamo' | 'gramignata' | 'idee' | 'staff';
 
 const routeFromHash = (): Route => {
   const h = location.hash.replace('#/', '').split('?')[0];
-  return (['progetti', 'gemello', 'storie', 'memorie', 'sostienici', 'chisiamo', 'gramignata', 'idee', 'staff'].includes(h) ? h : 'home') as Route;
+  return (['progetti', 'gemello', 'storie', 'memorie', 'voci', 'sostienici', 'chisiamo', 'gramignata', 'idee', 'staff'].includes(h) ? h : 'home') as Route;
 };
 
 const eur = (n: number) => n.toLocaleString('it-IT') + ' €';
@@ -153,6 +154,24 @@ function Home() {
             <BtnLink href={EVENTO_URL} external>Rivivi la giornata</BtnLink>
           </div>
         </Card>
+      </section>
+
+      <section className="reveal">
+        <a href="#/voci" className="block group">
+          <div className="relative overflow-hidden border border-neutral-800 hover:border-[#C9A227] transition bg-neutral-950">
+            <div className="flex gap-0 overflow-hidden opacity-45 group-hover:opacity-60 transition">
+              {['Tiziano','Gelinda','Eulario','Ornella','Giulia','Malia','Gilda','Gigino'].map((n) => (
+                <img key={n} src={'./memorie/cast/' + n + '.jpg'} alt="" className="w-1/4 sm:w-1/8 h-40 object-cover" />
+              ))}
+            </div>
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 bg-gradient-to-t from-black/85 via-black/50 to-black/60">
+              <Label>Il paese che si racconta</Label>
+              <h2 className="font-display text-3xl text-white">Le voci di San Martino</h2>
+              <p className="text-neutral-200 text-sm mt-2 max-w-md">Tocca un volto del 1987 e senti la sua voce. Quasi nessuno di loro c'è più.</p>
+              <span className="inline-block mt-5 bg-white text-black px-6 py-3 font-semibold uppercase tracking-[0.15em] text-xs">Ascolta la valle</span>
+            </div>
+          </div>
+        </a>
       </section>
 
       <section className="reveal grid grid-cols-3 gap-3 text-center">
@@ -431,6 +450,7 @@ export default function App() {
     { r: 'gemello', label: 'Gemello' },
     { r: 'storie', label: 'Storie' },
     { r: 'memorie', label: 'Memorie' },
+    { r: 'voci', label: 'Le voci' },
     { r: 'sostienici', label: 'Sostienici' },
     { r: 'chisiamo', label: 'Chi siamo' },
   ];
@@ -498,6 +518,7 @@ export default function App() {
         {route === 'gemello' && <Gemello />}
         {route === 'storie' && <Storie />}
         {route === 'memorie' && <Memorie />}
+        {route === 'voci' && <Voci />}
         {route === 'sostienici' && <Sostienici />}
         {route === 'chisiamo' && <ChiSiamo />}
         {route === 'gramignata' && <Gramignata />}

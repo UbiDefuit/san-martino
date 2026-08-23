@@ -11,7 +11,6 @@ export const VOCI: Voce[] = [
   { id: 'Ornella', nome: 'Ornella e Clorinda', dove: 'Nel cortile dei panni stesi', anno: '1987' },
   { id: 'Giulia', nome: 'Giulia', dove: 'Nel vicolo del borgo', anno: '1987' },
   { id: 'Malia', nome: 'Malia', dove: 'Al balcone', anno: '1987' },
-  { id: 'Gilda', nome: 'Gilda', dove: 'In casa, a letto', anno: '1987' },
   { id: 'Bianca', nome: 'Bianca', dove: 'Al capezzale', anno: '1987' },
   { id: 'Gustavo', nome: 'Gustavo', dove: 'Sulla porta di casa', anno: '1987' },
   { id: 'Gigino', nome: 'Gigino', dove: 'Seduto sul muretto', anno: '1987' },

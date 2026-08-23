@@ -38,6 +38,38 @@ function BtnLink({ href, children, primary = false, external = false }: any) {
 }
 
 // ---------- Home ----------
+
+function Cifra({ testo }: { testo: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const m = testo.match(/^(~?)(\d+(?:,\d+)?)(.*)$/);
+  const [txt, setTxt] = useState(m ? m[1] + '0' + m[3] : testo);
+  useEffect(() => {
+    if (!m) { setTxt(testo); return; }
+    const el = ref.current; if (!el) return;
+    const dec = m[2].includes(',') ? 1 : 0;
+    const target = parseFloat(m[2].replace(',', '.'));
+    let raf = 0, fatto = false;
+    const anima = () => {
+      fatto = true;
+      const t0 = performance.now(), durata = 1400;
+      const step = (now: number) => {
+        const p = Math.min(1, (now - t0) / durata);
+        const e = 1 - Math.pow(1 - p, 3);
+        setTxt(m[1] + (target * e).toFixed(dec).replace('.', ',') + m[3]);
+        if (p < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+    if (!('IntersectionObserver' in window)) { setTxt(testo); return; }
+    const io = new IntersectionObserver((es) => { if (es[0].isIntersecting) { io.disconnect(); anima(); } }, { threshold: 0.4 });
+    io.observe(el);
+    const t = setTimeout(() => { if (!fatto) setTxt(testo); }, 3500); // nulla resta a zero
+    return () => { cancelAnimationFrame(raf); io.disconnect(); clearTimeout(t); };
+  }, []);
+  return <div ref={ref} className="font-display text-4xl text-white">{txt}</div>;
+}
+
+
 function useReveal() {
   useEffect(() => {
     const els = Array.from(document.querySelectorAll('.reveal'));
@@ -77,6 +109,7 @@ function Home() {
           onVolumeChange={(e) => { /* tiene allineato lo stato se il browser interviene */ }}
           aria-hidden="true" className="hero-video absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 hero-fade" />
+        <div className="grana" aria-hidden="true" />
         <div className="absolute bottom-4 right-4 z-10 flex items-center gap-3">
           <div className="flex gap-1.5">
             {HERO_LOOPS.map((_, i) => (
@@ -185,7 +218,7 @@ function Home() {
       <section className="reveal grid grid-cols-3 gap-3 text-center">
         {[['46', "all'alba sui sentieri"], ['6,2 km', 'riaperti a mano'], ['2030', "l'anno che ci siamo dati"]].map(([n, l]) => (
           <Card key={l}>
-            <div className="font-display text-4xl text-white">{n}</div>
+            <Cifra testo={n} />
             <div className="text-[10px] uppercase tracking-[0.15em] text-neutral-400 mt-2 leading-snug">{l}</div>
           </Card>
         ))}

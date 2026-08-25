@@ -301,6 +301,14 @@ function SchedaProgetto({ p }: { p: Progetto }) {
             {p.azioni.map((a) => <li key={a}>— {a}</li>)}
           </ul>
           <p className="text-neutral-400 text-xs uppercase tracking-[0.15em] pt-2">Fonti candidate: {p.fonti}</p>
+          {p.bando && (
+            <div className="border border-[#C9A227]/40 bg-[#C9A227]/5 p-4 mt-3">
+              <p className="text-[10px] tracked gold mb-2">{p.bando.titolo}</p>
+              <ul className="space-y-2">
+                {p.bando.punti.map((x) => <li key={x.slice(0, 20)} className="text-[13px] leading-relaxed">{x}</li>)}
+              </ul>
+            </div>
+          )}
         </div>
       )}
       <button onClick={() => setOpen(!open)}

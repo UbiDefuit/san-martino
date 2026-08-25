@@ -13,7 +13,8 @@ export interface Progetto {
   budgetMin: number;
   budgetMax: number;
   raccolti: number;          // aggiornare a mano (per ora)
-  stato: 'in corso' | 'in avvio' | 'in progettazione' | 'in valutazione';
+  stato: string;
+  bando?: { titolo: string; punti: string[] };
   fonti: string;
 }
 
@@ -25,6 +26,17 @@ export const PROGETTI: Progetto[] = [
     azioni: ['30 interviste videoregistrate con formazione dei volontari alla storia orale', 'Digitalizzazione di foto e documenti di famiglia e ricerche d\'archivio', 'Targhe permanenti del museo diffuso nelle borgate e integrazione nel gemello 3D', 'Mostra e camminata della memoria con i testimoni come narratori'],
     budgetMin: 11500, budgetMax: 11500, raccolti: 2500, stato: 'candidato a bando',
     fonti: 'Fondazione di Modena (richiesti 9.000 €), quote sociali, 5×1000, offerte agli eventi',
+    bando: {
+      titolo: 'Il bando, in breve — per i soci',
+      punti: [
+        'Cos\'è: Avviso “Richieste Libere 2026 – 2ª sessione” della Fondazione di Modena (la fondazione della Cassa di Risparmio), Area Cultura, sfida “Patrimonio dinamico”.',
+        'Quanto: chiediamo 9.000 € su un costo totale di 11.500 €. Il resto (2.500 €, il 21,7%) lo mettiamo noi con quote sociali, 5×1000 e offerte — il minimo richiesto era il 10%, stare sopra è un punto a favore.',
+        'Quando: domanda entro il 31 agosto 2026; l\'esito arriva entro il 20 novembre. Il progetto si svolge da ottobre 2026 a dicembre 2027.',
+        'Come pagano: a consuntivo — prima si fanno le attività e si conservano le fatture, poi la Fondazione rimborsa fino a 9.000 €.',
+        'Come ci valutano: chiarezza del progetto, originalità sul territorio, rete locale (Comune, Parrocchia, archivi), cofinanziamento sopra il minimo, sostenibilità e affidabilità dell\'ente. Per l\'Area Cultura premiano esplicitamente le aree marginali e l\'uso del digitale: siamo esattamente lì.',
+        'Il nostro asso: la fase pilota è già fatta con mezzi nostri — film del 1987 restaurato, voci online, targhe QR. Non promettiamo: mostriamo.',
+      ],
+    },
   },
   {
     id: 'gemello', geo: [44.38860, 10.69050], titolo: 'Il gemello digitale di San Martino',

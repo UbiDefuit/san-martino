@@ -40,8 +40,6 @@ export default function Gemello() {
   const [showStorica, setShowStorica] = useState(false);
   const [showFrana, setShowFrana] = useState(false);
   const [legenda, setLegenda] = useState(false);
-  const [notte, setNotte] = useState(false);
-  const notteAnim = useRef(0);
   const [info, setInfo] = useState(false);
   const luoghiMk = useRef<maplibregl.Marker[]>([]);
   const progettiMk = useRef<maplibregl.Marker[]>([]);
@@ -52,25 +50,6 @@ export default function Gemello() {
   const [borgataLuce, setBorgataLuce] = useState('San Martino');
   const [luceAccesa, setLuceAccesa] = useState<string | null>(null);
   const [accendendo, setAccendendo] = useState(false);
-
-  // il sole si spegne sulla valle: il buio lo fa il canvas, il cielo la mappa
-  useEffect(() => {
-    const map = mapRef.current; if (!map || !map.getLayer || !map.getLayer('notte-tinta')) return;
-    try {
-      (map as any).setSky(notte
-        ? { 'sky-color': '#03060e', 'horizon-color': '#0e1a30', 'fog-color': '#070b14', 'sky-horizon-blend': 0.5, 'horizon-fog-blend': 0.6, 'fog-ground-blend': 0.8 }
-        : { 'sky-color': '#0e1a2b', 'horizon-color': '#c98a4b', 'fog-color': '#1a1f28', 'sky-horizon-blend': 0.6, 'horizon-fog-blend': 0.55, 'fog-ground-blend': 0.72 });
-      map.setPaintProperty('notte-tinta', 'fill-opacity', notte ? 0.22 : 0);
-      map.setPaintProperty('notte-tinta', 'fill-opacity-transition', { duration: 2200 } as any);
-      const t = setTimeout(() => {
-        try {
-          map.setLayoutProperty('case-glow', 'visibility', notte ? 'visible' : 'none');
-          map.setLayoutProperty('case-luce', 'visibility', notte ? 'visible' : 'none');
-        } catch { /* ok */ }
-      }, notte ? 900 : 0);
-      return () => clearTimeout(t);
-    } catch { /* ok */ }
-  }, [notte]);
 
   useEffect(() => {
     const map = new maplibregl.Map({
@@ -165,20 +144,6 @@ export default function Gemello() {
       map.addSource('frana', { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: { type: 'Polygon', coordinates: [FRANA] } } });
       map.addLayer({ id: 'frana-fill', type: 'fill', source: 'frana', layout: { visibility: 'none' }, paint: { 'fill-color': '#d97706', 'fill-opacity': 0.14 } });
       map.addLayer({ id: 'frana-line', type: 'line', source: 'frana', layout: { visibility: 'none' }, paint: { 'line-color': '#f59e0b', 'line-width': 2, 'line-dasharray': [2, 2], 'line-opacity': 0.85 } });
-      // la notte in valle: velo blu sul mondo e finestre accese nelle borgate
-      const MONDO: [number, number][] = [[-180, -85], [180, -85], [180, 85], [-180, 85], [-180, -85]];
-      map.addSource('notte-tinta', { type: 'geojson', data: { type: 'Feature', properties: {}, geometry: { type: 'Polygon', coordinates: [MONDO] } } });
-      map.addLayer({ id: 'notte-tinta', type: 'fill', source: 'notte-tinta', paint: { 'fill-color': '#0a1428', 'fill-opacity': 0 } });
-      map.addSource('case-accese', { type: 'geojson', data: { type: 'FeatureCollection', features: LUOGHI.filter((l) => l.nome !== 'Monte San Martino').map((l) => ({ type: 'Feature', properties: { n: l.nome }, geometry: { type: 'Point', coordinates: [l.geo[1], l.geo[0]] } })) } as any });
-      map.addLayer({ id: 'case-glow', type: 'circle', source: 'case-accese', layout: { visibility: 'none' }, paint: { 'circle-color': '#E0BF5C', 'circle-blur': 1.7, 'circle-opacity': 0.45, 'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 3, 14, 9, 17, 20] as any } });
-      map.addLayer({ id: 'case-luce', type: 'circle', source: 'case-accese', layout: { visibility: 'none' }, paint: { 'circle-color': '#FFE9A8', 'circle-blur': 0.25, 'circle-opacity': 0.95, 'circle-radius': ['interpolate', ['linear'], ['zoom'], 11, 1.2, 14, 2.6, 17, 5] as any } });
-      // tremolio delle finestre: come fiamme dietro i vetri
-      const flicker = () => {
-        const m = mapRef.current; if (!m) return;
-        try { if (m.getLayer('case-luce') && m.getLayoutProperty('case-luce', 'visibility') === 'visible') m.setPaintProperty('case-luce', 'circle-opacity', 0.78 + Math.random() * 0.22); } catch { /* ok */ }
-        setTimeout(flicker, 140 + Math.random() * 240);
-      };
-      flicker();
       // toponimi — nascosti di default: si accendono dalla legenda
       LUOGHI.forEach((l) => {
         const el = document.createElement('button');
@@ -407,13 +372,7 @@ export default function Gemello() {
         </p>
       )}
       <div className="relative">
-        <div id="gemello" className={"h-[62vh] border border-neutral-800" + (notte ? " notte-mode" : "")} />
-        <div className={'gemello-stelle' + (notte ? ' stelle-on' : '')} aria-hidden="true"><i style={{left:'55.2%',top:'35.8%',animationDelay:'3.9s',animationDuration:'3.7s'}} /><i style={{left:'30.8%',top:'26.5%',animationDelay:'1.4s',animationDuration:'4.1s'}} /><i style={{left:'88.3%',top:'10.5%',animationDelay:'1.2s',animationDuration:'3.6s'}} /><i style={{left:'29.3%',top:'25.1%',animationDelay:'1.0s',animationDuration:'3.9s'}} /><i style={{left:'82.1%',top:'33.5%',animationDelay:'3.6s',animationDuration:'4.0s'}} /><i style={{left:'46.8%',top:'50.7%',animationDelay:'3.6s',animationDuration:'3.4s'}} /><i style={{left:'25.7%',top:'50.6%',animationDelay:'2.4s',animationDuration:'3.2s'}} /><i style={{left:'83.5%',top:'35.9%',animationDelay:'0.2s',animationDuration:'4.2s'}} /><i style={{left:'70.2%',top:'52.0%',animationDelay:'3.6s',animationDuration:'3.1s'}} /><i style={{left:'25.5%',top:'45.3%',animationDelay:'0.7s',animationDuration:'4.7s'}} /><i style={{left:'93.7%',top:'42.8%',animationDelay:'1.6s',animationDuration:'2.5s'}} /><i style={{left:'9.1%',top:'29.0%',animationDelay:'3.3s',animationDuration:'3.4s'}} /><i style={{left:'26.9%',top:'45.5%',animationDelay:'0.6s',animationDuration:'4.0s'}} /><i style={{left:'44.6%',top:'32.7%',animationDelay:'1.4s',animationDuration:'3.2s'}} /><i style={{left:'83.0%',top:'13.8%',animationDelay:'0.9s',animationDuration:'2.7s'}} /><i style={{left:'43.3%',top:'35.8%',animationDelay:'2.4s',animationDuration:'4.8s'}} /><i style={{left:'49.5%',top:'49.8%',animationDelay:'2.6s',animationDuration:'4.0s'}} /><i style={{left:'6.1%',top:'48.8%',animationDelay:'3.4s',animationDuration:'2.7s'}} /><i style={{left:'62.1%',top:'22.0%',animationDelay:'1.4s',animationDuration:'3.6s'}} /><i style={{left:'2.5%',top:'45.2%',animationDelay:'2.6s',animationDuration:'4.3s'}} /><i style={{left:'35.8%',top:'7.6%',animationDelay:'3.8s',animationDuration:'4.4s'}} /><i style={{left:'79.4%',top:'49.5%',animationDelay:'3.1s',animationDuration:'2.9s'}} /><i style={{left:'58.4%',top:'37.8%',animationDelay:'3.9s',animationDuration:'2.4s'}} /><i style={{left:'89.3%',top:'22.7%',animationDelay:'3.9s',animationDuration:'3.1s'}} /><i style={{left:'96.6%',top:'34.7%',animationDelay:'3.5s',animationDuration:'3.3s'}} /><i style={{left:'67.3%',top:'16.1%',animationDelay:'2.3s',animationDuration:'3.6s'}} /><i style={{left:'21.8%',top:'9.9%',animationDelay:'0.6s',animationDuration:'3.5s'}} /><i style={{left:'9.0%',top:'23.3%',animationDelay:'1.2s',animationDuration:'3.1s'}} /><i style={{left:'73.4%',top:'30.5%',animationDelay:'2.6s',animationDuration:'3.1s'}} /><i style={{left:'85.0%',top:'16.6%',animationDelay:'2.2s',animationDuration:'4.7s'}} /><i style={{left:'24.7%',top:'35.7%',animationDelay:'2.7s',animationDuration:'2.8s'}} /><i style={{left:'49.4%',top:'4.9%',animationDelay:'1.8s',animationDuration:'4.8s'}} /><i style={{left:'12.0%',top:'31.9%',animationDelay:'0.9s',animationDuration:'3.9s'}} /><i style={{left:'21.0%',top:'23.3%',animationDelay:'3.0s',animationDuration:'3.3s'}} /><i style={{left:'7.0%',top:'22.5%',animationDelay:'1.8s',animationDuration:'2.6s'}} /><i style={{left:'70.1%',top:'6.8%',animationDelay:'0.4s',animationDuration:'2.2s'}} /><i style={{left:'60.8%',top:'12.4%',animationDelay:'1.2s',animationDuration:'4.0s'}} /><i style={{left:'98.9%',top:'7.9%',animationDelay:'1.0s',animationDuration:'4.4s'}} /><i style={{left:'35.3%',top:'5.6%',animationDelay:'0.4s',animationDuration:'3.4s'}} /><i style={{left:'67.5%',top:'38.5%',animationDelay:'0.9s',animationDuration:'3.8s'}} /><i style={{left:'67.6%',top:'12.5%',animationDelay:'0.2s',animationDuration:'2.2s'}} /><i style={{left:'79.3%',top:'5.9%',animationDelay:'3.6s',animationDuration:'3.0s'}} /></div>
-        <button onClick={() => setNotte(!notte)}
-          className="absolute bottom-8 right-3 z-10 bg-black/80 border border-neutral-600 text-white px-4 py-2.5 text-[11px] uppercase tracking-[0.2em] backdrop-blur hover:border-[#E0BF5C] transition"
-          title={notte ? 'Riporta il giorno sulla valle' : 'Spegni il sole: si accendono le borgate'}>
-          {notte ? '\u2600 Giorno' : '\u263E Notte in valle'}
-        </button>
+        <div id="gemello" className="h-[62vh] border border-neutral-800" />
         {showStorica && (
           <div className="absolute bottom-8 left-3 z-10 max-w-[280px] bg-black/80 border border-neutral-700 backdrop-blur px-3 py-2.5">
             <p className="text-[10px] uppercase tracking-[0.2em] text-amber-400 mb-1">La valle nel 1853</p>

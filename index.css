@@ -197,3 +197,32 @@ html.light ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8a6a
   background: radial-gradient(360px circle at var(--mx,50%) var(--my,50%), rgba(224,191,92,.14), transparent 65%);
   transition: opacity .45s ease; }
 .lift:hover::after { opacity: 1; }
+
+/* ---------- il crinale che si disegna ---------- */
+.ridge-path { fill: none; stroke: rgba(224,191,92,.8); stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1400; stroke-dashoffset: 1400; }
+.ridge.reveal-in .ridge-path { animation: ridgeDraw 2.4s cubic-bezier(.4,0,.2,1) .1s forwards; }
+@keyframes ridgeDraw { to { stroke-dashoffset: 0; } }
+.ridge-mist { opacity: 0; transition: opacity 1.4s ease 1.6s; }
+.ridge.reveal-in .ridge-mist { opacity: 1; }
+.ridge-dot { fill: #E0BF5C; opacity: 0; }
+.ridge.reveal-in .ridge-dot { animation: ridgeDotIn .6s ease 2.1s forwards; }
+@keyframes ridgeDotIn { from { opacity: 0; transform: scale(.3); transform-box: fill-box; transform-origin: center; }
+  to { opacity: 1; transform: scale(1); } }
+.ridge-eco { fill: none; stroke: #E0BF5C; stroke-width: 1; }
+.ridge.reveal-in .ridge-eco { animation: ridgeEco 2.8s ease-out 2.5s infinite; }
+@keyframes ridgeEco { 0% { opacity: .8; transform: scale(1); transform-box: fill-box; transform-origin: center; }
+  70% { opacity: 0; transform: scale(4.5); } 100% { opacity: 0; transform: scale(4.5); } }
+.ridge-label { fill: rgba(224,191,92,.85); font-size: 7px; letter-spacing: .22em; text-transform: uppercase;
+  opacity: 0; transition: opacity .9s ease 2.4s; }
+.ridge.reveal-in .ridge-label { opacity: 1; }
+html.light .ridge-path { stroke: rgba(138,106,17,.85); }
+html.light .ridge-dot { fill: #8a6a11; }
+html.light .ridge-eco { stroke: #8a6a11; }
+html.light .ridge-label { fill: rgba(138,106,17,.95); }
+@media (prefers-reduced-motion: reduce) {
+  .ridge-path { stroke-dashoffset: 0; animation: none; }
+  .ridge-dot, .ridge-label, .ridge-mist { opacity: 1; animation: none; }
+  .ridge-eco { display: none; }
+}

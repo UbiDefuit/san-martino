@@ -86,6 +86,30 @@ function useReveal() {
 
 const HERO_LOOPS = ['./hero-voci.mp4', './hero-voci-2.mp4', './hero-voci-3.mp4', './hero-voci-4.mp4', './hero-voci-5.mp4', './hero-voci-6.mp4'];
 
+
+/* il crinale che si disegna: il profilo della valle tracciato a inchiostro allo scroll */
+function Crinale({ label }: { label?: string }) {
+  return (
+    <div className="reveal ridge -mx-5 select-none" aria-hidden="true">
+      <svg viewBox="0 0 800 96" preserveAspectRatio="none" className="block w-full h-16 sm:h-20">
+        <defs>
+          <linearGradient id="ridgeMist" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#C9A227" stopOpacity="0.10" />
+            <stop offset="100%" stopColor="#C9A227" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path className="ridge-mist" fill="url(#ridgeMist)" stroke="none"
+          d="M0,74 L60,64 L120,68 L185,46 L245,54 L305,28 L345,14 L385,26 L450,46 L515,38 L575,58 L635,50 L710,66 L800,58 L800,96 L0,96 Z" />
+        <path className="ridge-path"
+          d="M0,74 L60,64 L120,68 L185,46 L245,54 L305,28 L345,14 L385,26 L450,46 L515,38 L575,58 L635,50 L710,66 L800,58" />
+        <circle className="ridge-dot" cx="345" cy="14" r="3.2" />
+        <circle className="ridge-dot ridge-eco" cx="345" cy="14" r="3.2" />
+        {label && <text className="ridge-label" x="345" y="7" textAnchor="middle">{label}</text>}
+      </svg>
+    </div>
+  );
+}
+
 function Home() {
   useReveal();
   const [heroIdx, setHeroIdx] = useState(() => new Date().getHours() % HERO_LOOPS.length); // parte con la scena dell'ora
@@ -231,6 +255,8 @@ function Home() {
         ))}
       </section>
 
+      <Crinale label="San Martino Vallata" />
+
       <section className="reveal">
         <a href="#/gemello" className="block group">
           <div className="relative overflow-hidden border border-neutral-800 hover:border-[#C9A227] transition">
@@ -259,7 +285,9 @@ function Home() {
         </div>
       </section>
 
-      <section className="reveal text-center border-t border-neutral-800 pt-12">
+      <Crinale />
+
+      <section className="reveal text-center pt-4">
         <p className="font-display italic text-2xl text-neutral-200 max-w-lg mx-auto leading-relaxed">
           «Questa valle era dei Da Gomola, legati a Matilde di Canossa. La chiesa cadde con la frana del 1746 e fu ricostruita. Noi siamo solo l'ultimo capitolo.»
         </p>

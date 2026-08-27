@@ -235,3 +235,7 @@ html.light .ridge-label { fill: rgba(138,106,17,.95); }
   animation: stella ease-in-out infinite; }
 @keyframes stella { 0%, 100% { opacity: .15; } 50% { opacity: .95; } }
 @media (prefers-reduced-motion: reduce) { .gemello-stelle i { animation: none; opacity: .7; } }
+
+/* la notte scende sull'intero canvas: funziona a ogni zoom e inclinazione */
+#gemello .maplibregl-canvas { transition: filter 2.4s ease; }
+#gemello.notte-mode .maplibregl-canvas { filter: brightness(0.38) saturate(0.45) contrast(1.06); }

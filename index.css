@@ -171,3 +171,29 @@ html.light .hero-cinema .border-neutral-700 { border-color: rgba(255,255,255,.5)
   0% { background-position: 0 0; } 25% { background-position: -38px 28px; }
   50% { background-position: 26px -22px; } 75% { background-position: -18px -32px; }
   100% { background-position: 0 0; } }
+
+/* ---------- rifiniture: la pagina entra come una dissolvenza di pellicola ---------- */
+.page-enter { animation: pageIn .45s ease both; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .page-enter { animation: none; } }
+
+/* scrollbar brandizzata: sottile, oro sul buio */
+* { scrollbar-width: thin; scrollbar-color: rgba(201,162,39,.55) rgba(20,20,20,.9); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #0B0B0C; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8a6a11, #C9A227); border-radius: 8px; border: 2px solid #0B0B0C; }
+::-webkit-scrollbar-thumb:hover { background: #E0BF5C; }
+html.light * { scrollbar-color: rgba(138,106,17,.6) #e9e9e6; }
+html.light ::-webkit-scrollbar-track { background: #e9e9e6; }
+html.light ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8a6a11, #b08d1f); border-color: #e9e9e6; }
+
+/* selezione del testo e focus: oro della valle */
+::selection { background: rgba(201,162,39,.85); color: #0B0B0C; }
+:focus-visible { outline: 2px solid #C9A227; outline-offset: 2px; border-radius: 2px; }
+
+/* luce dorata che segue il mouse sulle card .lift */
+.lift { position: relative; overflow: hidden; }
+.lift::after { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: radial-gradient(360px circle at var(--mx,50%) var(--my,50%), rgba(224,191,92,.14), transparent 65%);
+  transition: opacity .45s ease; }
+.lift:hover::after { opacity: 1; }

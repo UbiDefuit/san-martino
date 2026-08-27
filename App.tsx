@@ -539,6 +539,19 @@ export default function App() {
     return () => window.removeEventListener('hashchange', on);
   }, []);
 
+  // la luce dorata segue il mouse sulle card
+  useEffect(() => {
+    const move = (e: PointerEvent) => {
+      const card = (e.target as HTMLElement).closest?.('.lift') as HTMLElement | null;
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+      card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+    };
+    window.addEventListener('pointermove', move, { passive: true });
+    return () => window.removeEventListener('pointermove', move);
+  }, []);
+
   const nav: { r: Route; label: string }[] = [
     { r: 'home', label: 'Home' },
     { r: 'progetti', label: 'Progetti' },
@@ -607,7 +620,7 @@ export default function App() {
           </nav>
         )}
       </header>
-      <main className="max-w-3xl mx-auto px-5 pb-20">
+      <main key={route} className="max-w-3xl mx-auto px-5 pb-20 page-enter">
         {route === 'home' && <Home />}
         {route === 'progetti' && <Progetti />}
         {route === 'gemello' && <Gemello />}

@@ -226,3 +226,12 @@ html.light .ridge-label { fill: rgba(138,106,17,.95); }
   .ridge-dot, .ridge-label, .ridge-mist { opacity: 1; animation: none; }
   .ridge-eco { display: none; }
 }
+
+/* ---------- la notte in valle: stelle sul gemello ---------- */
+.gemello-stelle { position: absolute; inset: 0; pointer-events: none; overflow: hidden; opacity: 0; transition: opacity 2.2s ease .6s; }
+.gemello-stelle.stelle-on { opacity: 1; }
+.gemello-stelle i { position: absolute; width: 2px; height: 2px; border-radius: 50%;
+  background: #ffffff; box-shadow: 0 0 6px 1px rgba(255,255,255,.7);
+  animation: stella ease-in-out infinite; }
+@keyframes stella { 0%, 100% { opacity: .15; } 50% { opacity: .95; } }
+@media (prefers-reduced-motion: reduce) { .gemello-stelle i { animation: none; opacity: .7; } }

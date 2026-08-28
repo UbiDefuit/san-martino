@@ -374,7 +374,7 @@ export default function Gemello() {
         : [C[0] + Math.cos(ang) * r * 1.35, C[1] + Math.sin(ang) * r];
       const el = document.createElement('button');
       el.className = 'voce-pin' + (fissa ? ' voce-casa' : '');
-      el.innerHTML = '<span class="voce-onda"></span><span class="voce-cuore">' + (fissa ? '\u2302' : '\u266A') + '</span><span class="voce-nome">' + v.nome + '</span>';
+      el.innerHTML = '<span class="voce-onda"></span><span class="voce-cuore">' + (fissa ? '\u2302' : '\u266A') + '</span><span class="voce-nome' + (fissa ? ' voce-nome-fisso' : '') + '">' + (fissa ? 'La casa di ' : '') + v.nome + '</span>';
       el.title = (fissa ? 'La casa di ' : 'Ascolta ') + v.nome + ' (1987)';
       el.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -398,6 +398,23 @@ export default function Gemello() {
     map.easeTo({ center: C, zoom: 15.6, pitch: 55, bearing: 168, duration: 2200 } as any);
     return () => { vociMk.current.forEach((m) => m.remove()); vociMk.current = []; };
   }, [vociOn, bozze, posiziona]);
+
+  // deep link dalle targhe: #/gemello?voce=Gelinda
+  useEffect(() => {
+    if (!ready) return;
+    const q = location.hash.split('?')[1] || '';
+    const id = new URLSearchParams(q).get('voce');
+    if (!id) return;
+    const v = VOCI.find((x) => x.id.toLowerCase() === id.toLowerCase());
+    if (!v) return;
+    setVociOn(true);
+    const t = setTimeout(() => {
+      setVoceSel(v);
+      const g = bozze[v.id] || v.geo;
+      if (g) mapRef.current?.easeTo({ center: [g[1], g[0]], zoom: 17, pitch: 55, duration: 2500 } as any);
+    }, 900);
+    return () => clearTimeout(t);
+  }, [ready]);
 
   // modalita' posiziona: un clic sulla mappa posa la voce scelta
   useEffect(() => {
@@ -537,8 +554,12 @@ export default function Gemello() {
           <div className="absolute bottom-8 left-3 right-3 sm:right-auto sm:w-[340px] z-20 bg-black/90 border border-[#C9A227]/60 backdrop-blur p-3">
             <div className="flex items-start justify-between gap-3 mb-2">
               <div>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-amber-300">{voceSel.dove} · 1987</p>
-                <p className="font-display text-xl text-white leading-tight">{voceSel.nome}</p>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-amber-300">
+                  {(bozze[voceSel.id] || voceSel.geo) ? 'Qui abitava \u00B7 la sua voce, 1987' : voceSel.dove + ' \u00B7 1987'}
+                </p>
+                <p className="font-display text-xl text-white leading-tight">
+                  {(bozze[voceSel.id] || voceSel.geo) ? 'La casa di ' + voceSel.nome : voceSel.nome}
+                </p>
               </div>
               <button onClick={() => setVoceSel(null)} className="text-neutral-400 hover:text-white text-lg leading-none px-1" aria-label="Chiudi">{'\u00D7'}</button>
             </div>

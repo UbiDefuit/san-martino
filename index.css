@@ -177,15 +177,19 @@ html.light .hero-cinema .border-neutral-700 { border-color: rgba(255,255,255,.5)
 @keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .page-enter { animation: none; } }
 
-/* scrollbar brandizzata: sottile, oro sul buio */
-* { scrollbar-width: thin; scrollbar-color: rgba(201,162,39,.55) rgba(20,20,20,.9); }
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: #0B0B0C; }
-::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8a6a11, #C9A227); border-radius: 8px; border: 2px solid #0B0B0C; }
-::-webkit-scrollbar-thumb:hover { background: #E0BF5C; }
-html.light * { scrollbar-color: rgba(138,106,17,.6) #e9e9e6; }
-html.light ::-webkit-scrollbar-track { background: #e9e9e6; }
-html.light ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8a6a11, #b08d1f); border-color: #e9e9e6; }
+/* scrollbar brandizzata: solo su desktop col mouse — sul telefono resta quella di sistema */
+@media (pointer: fine) and (min-width: 768px) {
+  * { scrollbar-width: thin; scrollbar-color: rgba(201,162,39,.55) rgba(20,20,20,.9); }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #0B0B0C; }
+  ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8a6a11, #C9A227); border-radius: 8px; border: 2px solid #0B0B0C; }
+  ::-webkit-scrollbar-thumb:hover { background: #E0BF5C; }
+  html.light * { scrollbar-color: rgba(138,106,17,.6) #e9e9e6; }
+  html.light ::-webkit-scrollbar-track { background: #e9e9e6; }
+  html.light ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #8a6a11, #b08d1f); border-color: #e9e9e6; }
+}
+/* mai scorrimento orizzontale della pagina */
+html, body { overflow-x: clip; }
 
 /* selezione del testo e focus: oro della valle */
 ::selection { background: rgba(201,162,39,.85); color: #0B0B0C; }

@@ -64,11 +64,10 @@ export default function Gemello() {
         sources: {
           sat: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, attribution: 'Esri, Maxar, Earthstar Geographics', maxzoom: 18 },
           dem: { type: 'raster-dem', tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'], encoding: 'terrarium', tileSize: 256, maxzoom: 14 },
-          demhs: { type: 'raster-dem', tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'], encoding: 'terrarium', tileSize: 256, maxzoom: 14 },
           ortofoto: {
             type: 'raster',
-            tiles: ['https://servizigis.regione.emilia-romagna.it/wms/agea2023_rgb?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=Agea2023_RGB&STYLES=&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/jpeg'],
-            tileSize: 256,
+            tiles: ['https://servizigis.regione.emilia-romagna.it/wms/agea2023_rgb?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=Agea2023_RGB&STYLES=&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=512&HEIGHT=512&FORMAT=image/jpeg'],
+            tileSize: 512,
             attribution: 'Ortofoto AGEA 2023 — Regione Emilia-Romagna',
           },
           storica: {
@@ -81,7 +80,7 @@ export default function Gemello() {
         layers: [
           { id: 'bg', type: 'background', paint: { 'background-color': '#181a17' } },
           { id: 'sat', type: 'raster', source: 'sat' },
-          { id: 'rilievo', type: 'hillshade', source: 'demhs', paint: { 'hillshade-exaggeration': 0.45, 'hillshade-shadow-color': '#0b0d10', 'hillshade-highlight-color': '#f5e9cf', 'hillshade-accent-color': '#2c2a24' } },
+          { id: 'rilievo', type: 'hillshade', source: 'dem', paint: { 'hillshade-exaggeration': 0.45, 'hillshade-shadow-color': '#0b0d10', 'hillshade-highlight-color': '#f5e9cf', 'hillshade-accent-color': '#2c2a24' } },
           { id: 'ortofoto', type: 'raster', source: 'ortofoto', minzoom: 13, paint: { 'raster-fade-duration': 300 } },
           { id: 'storica', type: 'raster', source: 'storica', minzoom: 11, layout: { visibility: 'none' }, paint: { 'raster-fade-duration': 300, 'raster-opacity': 1 } },
         ],

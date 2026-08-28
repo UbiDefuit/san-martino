@@ -226,3 +226,21 @@ html.light .ridge-label { fill: rgba(138,106,17,.95); }
   .ridge-dot, .ridge-label, .ridge-mist { opacity: 1; animation: none; }
   .ridge-eco { display: none; }
 }
+
+/* ---------- le voci nel paesaggio ---------- */
+.voce-pin { position: relative; background: none; border: none; cursor: pointer; padding: 0; width: 34px; height: 34px; }
+.voce-cuore { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%; background: rgba(11,11,12,.82);
+  border: 1.5px solid #C9A227; color: #E0BF5C; font-size: 15px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.6); transition: transform .3s ease, background .3s ease; }
+.voce-pin:hover .voce-cuore { transform: scale(1.15); background: #C9A227; color: #0B0B0C; }
+.voce-onda { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid rgba(224,191,92,.8);
+  animation: voceOnda 2.6s ease-out infinite; }
+@keyframes voceOnda { 0% { transform: scale(.9); opacity: .9; } 70% { transform: scale(2.1); opacity: 0; } 100% { opacity: 0; } }
+.voce-nome { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 4px;
+  font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #F3EFE6; white-space: nowrap;
+  text-shadow: 0 1px 4px rgba(0,0,0,.95); opacity: 0; transition: opacity .3s ease; pointer-events: none; }
+.voce-pin:hover .voce-nome { opacity: 1; }
+.storica-mode .voce-nome { color: #1c1917; text-shadow: 0 1px 4px rgba(255,255,255,.9); }
+@media (prefers-reduced-motion: reduce) { .voce-onda { animation: none; opacity: .4; } }
+.scena-pulita .voce-pin { display: none !important; }

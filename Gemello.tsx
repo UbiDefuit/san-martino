@@ -4,6 +4,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { TRACK } from './track';
 import { elencoLuci, accendiLuce, Luce, supa } from './supa';
 import { PROGETTI, Progetto } from './data';
+import { VOCI, Voce } from './Voci';
 
 const eur = (n: number) => n.toLocaleString('it-IT') + ' €';
 
@@ -40,6 +41,10 @@ export default function Gemello() {
   const [showStorica, setShowStorica] = useState(false);
   const [showFrana, setShowFrana] = useState(false);
   const [legenda, setLegenda] = useState(false);
+  const [vociOn, setVociOn] = useState(false);
+  const [voceSel, setVoceSel] = useState<Voce | null>(null);
+  const vociMk = useRef<maplibregl.Marker[]>([]);
+  const voceVid = useRef<HTMLVideoElement | null>(null);
   const [info, setInfo] = useState(false);
   const luoghiMk = useRef<maplibregl.Marker[]>([]);
   const progettiMk = useRef<maplibregl.Marker[]>([]);
@@ -340,6 +345,42 @@ export default function Gemello() {
     setZoomed(true);
   };
 
+  // le voci nel paesaggio: la costellazione del 1987 attorno al borgo
+  useEffect(() => {
+    const map = mapRef.current; if (!map) return;
+    vociMk.current.forEach((m) => m.remove()); vociMk.current = [];
+    if (!vociOn) { setVoceSel(null); return; }
+    const C: [number, number] = [10.68466, 44.38851]; // il nucleo del paese
+    VOCI.forEach((v, i) => {
+      const ang = (i / VOCI.length) * Math.PI * 2 - Math.PI / 2;
+      const r = 0.00065 + (i % 3) * 0.00028;
+      const pos: [number, number] = [C[0] + Math.cos(ang) * r * 1.35, C[1] + Math.sin(ang) * r];
+      const el = document.createElement('button');
+      el.className = 'voce-pin';
+      el.innerHTML = '<span class="voce-onda"></span><span class="voce-cuore">\u266A</span><span class="voce-nome">' + v.nome + '</span>';
+      el.title = 'Ascolta ' + v.nome + ' (1987)';
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setVoceSel(v);
+        map.easeTo({ center: pos, zoom: Math.max(map.getZoom(), 16.2), pitch: 55, duration: 1600 } as any);
+      });
+      vociMk.current.push(new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat(pos).addTo(map));
+    });
+    map.easeTo({ center: C, zoom: 15.6, pitch: 55, bearing: 168, duration: 2200 } as any);
+    return () => { vociMk.current.forEach((m) => m.remove()); vociMk.current = []; };
+  }, [vociOn]);
+
+  // la voce dalla mappa fa ballare il crinale in alto
+  useEffect(() => {
+    const el = voceVid.current;
+    if (voceSel && el) {
+      const go = () => window.dispatchEvent(new CustomEvent('sm-voce', { detail: el }));
+      el.addEventListener('play', go);
+      return () => { el.removeEventListener('play', go); window.dispatchEvent(new Event('sm-voce-off')); };
+    }
+    window.dispatchEvent(new Event('sm-voce-off'));
+  }, [voceSel]);
+
   const diveTo = (l: { geo: [number, number]; zoom: number; nome?: string }) => {
     setZoomed(true);
     setLuogoSel(l.nome ? (l as { geo: [number, number]; nome: string }) : null);
@@ -373,6 +414,25 @@ export default function Gemello() {
       )}
       <div className="relative">
         <div id="gemello" className="h-[62vh] border border-neutral-800" />
+        <button onClick={() => setVociOn(!vociOn)}
+          className={'absolute bottom-8 right-3 z-10 px-4 py-2.5 text-[11px] uppercase tracking-[0.2em] backdrop-blur border transition ' +
+            (vociOn ? 'bg-[#C9A227] text-black border-[#C9A227] font-semibold' : 'bg-black/80 text-white border-neutral-600 hover:border-[#E0BF5C]')}
+          title="Le voci del 1987 compaiono nel paesaggio">
+          {'\u266A'} Le voci del 1987
+        </button>
+        {voceSel && (
+          <div className="absolute bottom-8 left-3 right-3 sm:right-auto sm:w-[340px] z-20 bg-black/90 border border-[#C9A227]/60 backdrop-blur p-3">
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-amber-300">{voceSel.dove} · 1987</p>
+                <p className="font-display text-xl text-white leading-tight">{voceSel.nome}</p>
+              </div>
+              <button onClick={() => setVoceSel(null)} className="text-neutral-400 hover:text-white text-lg leading-none px-1" aria-label="Chiudi">{'\u00D7'}</button>
+            </div>
+            <video ref={voceVid} src={'./voci/' + voceSel.id + '.mp4'} controls autoPlay playsInline className="w-full bg-black border border-neutral-800" />
+            <p className="text-[10px] text-neutral-500 mt-2">Posizione indicativa nel borgo — le targhe del museo diffuso segneranno i punti esatti. <a href="#/voci" className="underline hover:text-neutral-300">Tutte le voci &rarr;</a></p>
+          </div>
+        )}
         {showStorica && (
           <div className="absolute bottom-8 left-3 z-10 max-w-[280px] bg-black/80 border border-neutral-700 backdrop-blur px-3 py-2.5">
             <p className="text-[10px] uppercase tracking-[0.2em] text-amber-400 mb-1">La valle nel 1853</p>

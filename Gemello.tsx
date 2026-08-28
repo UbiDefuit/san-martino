@@ -42,6 +42,8 @@ export default function Gemello() {
   const [showFrana, setShowFrana] = useState(false);
   const [legenda, setLegenda] = useState(false);
   const [vociOn, setVociOn] = useState(false);
+  const [pieno, setPieno] = useState(false);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
   const [voceSel, setVoceSel] = useState<Voce | null>(null);
   const vociMk = useRef<maplibregl.Marker[]>([]);
   const voceVid = useRef<HTMLVideoElement | null>(null);
@@ -380,6 +382,20 @@ export default function Gemello() {
     window.dispatchEvent(new Event('sm-voce-off'));
   }, [voceSel]);
 
+  // schermo intero: la valle occupa tutto, la mappa si riadatta
+  useEffect(() => {
+    const on = () => {
+      setPieno(!!document.fullscreenElement);
+      setTimeout(() => mapRef.current?.resize(), 120);
+    };
+    document.addEventListener('fullscreenchange', on);
+    return () => document.removeEventListener('fullscreenchange', on);
+  }, []);
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else wrapRef.current?.requestFullscreen?.();
+  };
+
   const diveTo = (l: { geo: [number, number]; zoom: number; nome?: string }) => {
     setZoomed(true);
     setLuogoSel(l.nome ? (l as { geo: [number, number]; nome: string }) : null);
@@ -411,8 +427,14 @@ export default function Gemello() {
           al suo posto sul territorio: <span className="text-white">tocca i pin bianchi</span> per i progetti, <span className="text-white">tocca i nomi dei borghi</span> per scendere a livello delle case.
         </p>
       )}
-      <div className="relative">
+      <div ref={wrapRef} className="relative gemello-wrap">
         <div id="gemello" className="h-[62vh] border border-neutral-800" />
+        <button onClick={toggleFullscreen}
+          className="absolute bottom-[4.7rem] right-3 z-10 w-10 h-10 flex items-center justify-center bg-black/80 border border-neutral-600 text-white text-base backdrop-blur hover:border-[#E0BF5C] transition"
+          title={pieno ? 'Esci dallo schermo intero (Esc)' : 'Schermo intero'}
+          aria-label={pieno ? 'Esci dallo schermo intero' : 'Schermo intero'}>
+          {pieno ? '\u2716' : '\u26F6'}
+        </button>
         <button onClick={() => setVociOn(!vociOn)}
           className={'absolute bottom-8 right-3 z-10 px-4 py-2.5 text-[11px] uppercase tracking-[0.2em] backdrop-blur border transition ' +
             (vociOn ? 'bg-[#C9A227] text-black border-[#C9A227] font-semibold' : 'bg-black/80 text-white border-neutral-600 hover:border-[#E0BF5C]')}

@@ -244,3 +244,7 @@ html.light .ridge-label { fill: rgba(138,106,17,.95); }
 .storica-mode .voce-nome { color: #1c1917; text-shadow: 0 1px 4px rgba(255,255,255,.9); }
 @media (prefers-reduced-motion: reduce) { .voce-onda { animation: none; opacity: .4; } }
 .scena-pulita .voce-pin { display: none !important; }
+
+/* ---------- gemello a schermo intero ---------- */
+.gemello-wrap:fullscreen { background: #0B0B0C; }
+.gemello-wrap:fullscreen #gemello { height: 100vh; border: none; }

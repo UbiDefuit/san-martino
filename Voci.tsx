@@ -6,16 +6,16 @@ export type Voce = { id: string; nome: string; dove: string; anno: string; geo?:
 /* Le voci del 1987. "dove" si aggiorna man mano che scopriamo chi abitava dove. */
 export const VOCI: Voce[] = [
   { id: 'Tiziano', nome: 'Tiziano', dove: 'Sui campi sopra il paese', anno: '1987' },
-  { id: 'Gelinda', nome: 'Gelinda', dove: 'Sulle scale di casa', anno: '1987' },
-  { id: 'Eulario', nome: 'Eulario', dove: 'Sulla strada della valle', anno: '1987' },
-  { id: 'Clorinda', nome: 'Clorinda', dove: 'Nel cortile dei panni stesi', anno: '1987' },
-  { id: 'Giulia', nome: 'Giulia', dove: 'Nel vicolo del borgo', anno: '1987' },
-  { id: 'Malia', nome: 'Malia', dove: 'Al balcone', anno: '1987' },
-  { id: 'Bianca', nome: 'Bianca', dove: 'Al capezzale', anno: '1987' },
-  { id: 'Gustavo', nome: 'Gustavo', dove: 'Sulla porta di casa', anno: '1987' },
-  { id: 'Gigino', nome: 'Gigino', dove: 'Seduto sul muretto', anno: '1987' },
-  { id: 'Armida', nome: 'Armida', dove: 'Davanti al muro di sasso', anno: '1987' },
-  { id: 'Viterbo', nome: 'Viterbo "il Fabbro"', dove: 'Sulla terrazza', anno: '1987' },
+  { id: 'Gelinda', nome: 'Gelinda', dove: 'Sulle scale di casa', anno: '1987' , geo: [44.390469, 10.685285] },
+  { id: 'Eulario', nome: 'Eulario', dove: 'Sulla strada della valle', anno: '1987' , geo: [44.390456, 10.68532] },
+  { id: 'Clorinda', nome: 'Clorinda', dove: 'Nel cortile dei panni stesi', anno: '1987' , geo: [44.389016, 10.684515] },
+  { id: 'Giulia', nome: 'Giulia', dove: 'Nel vicolo del borgo', anno: '1987' , geo: [44.388809, 10.684289] },
+  { id: 'Malia', nome: 'Malia', dove: 'Al balcone', anno: '1987' , geo: [44.388309, 10.68381] },
+  { id: 'Bianca', nome: 'Bianca', dove: 'Al capezzale', anno: '1987' , geo: [44.388675, 10.683591] },
+  { id: 'Gustavo', nome: 'Gustavo', dove: 'Sulla porta di casa', anno: '1987' , geo: [44.388642, 10.683609] },
+  { id: 'Gigino', nome: 'Gigino', dove: 'Seduto sul muretto', anno: '1987' , geo: [44.388514, 10.683465] },
+  { id: 'Armida', nome: 'Armida', dove: 'Davanti al muro di sasso', anno: '1987' , geo: [44.388847, 10.68377] },
+  { id: 'Viterbo', nome: 'Viterbo "il Fabbro"', dove: 'Sulla terrazza', anno: '1987' , geo: [44.387851, 10.684118] },
 ];
 
 export default function Voci() {

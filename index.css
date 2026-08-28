@@ -248,3 +248,7 @@ html.light .ridge-label { fill: rgba(138,106,17,.95); }
 /* ---------- gemello a schermo intero ---------- */
 .gemello-wrap:fullscreen { background: #0B0B0C; }
 .gemello-wrap:fullscreen #gemello { height: 100vh; border: none; }
+
+/* voce con casa certa: il punto diventa una casina d'oro piena */
+.voce-casa .voce-cuore { background: #C9A227; color: #0B0B0C; font-size: 16px; }
+.voce-casa .voce-onda { animation-duration: 3.6s; }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-export type Voce = { id: string; nome: string; dove: string; anno: string };
+export type Voce = { id: string; nome: string; dove: string; anno: string; geo?: [number, number] };  // geo: [lat, lng] della casa, quando la conosciamo
 
 /* Le voci del 1987. "dove" si aggiorna man mano che scopriamo chi abitava dove. */
 export const VOCI: Voce[] = [

@@ -43,6 +43,12 @@ export default function Gemello() {
   const [legenda, setLegenda] = useState(false);
   const [vociOn, setVociOn] = useState(false);
   const [pieno, setPieno] = useState(false);
+  // modalita' segreta "posiziona le voci": #/gemello?posiziona=1
+  const posiziona = (location.hash.split('?')[1] || '').includes('posiziona');
+  const [bozze, setBozze] = useState<Record<string, [number, number]>>(() => {
+    try { return JSON.parse(localStorage.getItem('sm2030_voci_geo') || '{}'); } catch { return {}; }
+  });
+  const [voceDaPosare, setVoceDaPosare] = useState<string | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [voceSel, setVoceSel] = useState<Voce | null>(null);
   const vociMk = useRef<maplibregl.Marker[]>([]);
@@ -346,7 +352,7 @@ export default function Gemello() {
     setZoomed(true);
   };
 
-  // le voci nel paesaggio: la costellazione del 1987 attorno al borgo
+  // le voci nel paesaggio: casa vera se la conosciamo, altrimenti la costellazione attorno al borgo
   useEffect(() => {
     const map = mapRef.current; if (!map) return;
     vociMk.current.forEach((m) => m.remove()); vociMk.current = [];
@@ -355,21 +361,54 @@ export default function Gemello() {
     VOCI.forEach((v, i) => {
       const ang = (i / VOCI.length) * Math.PI * 2 - Math.PI / 2;
       const r = 0.00065 + (i % 3) * 0.00028;
-      const pos: [number, number] = [C[0] + Math.cos(ang) * r * 1.35, C[1] + Math.sin(ang) * r];
+      const bozza = bozze[v.id];
+      const fissa = bozza || v.geo; // [lat, lng]
+      const pos: [number, number] = fissa
+        ? [fissa[1], fissa[0]]
+        : [C[0] + Math.cos(ang) * r * 1.35, C[1] + Math.sin(ang) * r];
       const el = document.createElement('button');
-      el.className = 'voce-pin';
-      el.innerHTML = '<span class="voce-onda"></span><span class="voce-cuore">\u266A</span><span class="voce-nome">' + v.nome + '</span>';
-      el.title = 'Ascolta ' + v.nome + ' (1987)';
+      el.className = 'voce-pin' + (fissa ? ' voce-casa' : '');
+      el.innerHTML = '<span class="voce-onda"></span><span class="voce-cuore">' + (fissa ? '\u2302' : '\u266A') + '</span><span class="voce-nome">' + v.nome + '</span>';
+      el.title = (fissa ? 'La casa di ' : 'Ascolta ') + v.nome + ' (1987)';
       el.addEventListener('click', (e) => {
         e.stopPropagation();
+        if (posiziona) { setVoceDaPosare(v.id); return; }
         setVoceSel(v);
         map.easeTo({ center: pos, zoom: Math.max(map.getZoom(), 16.2), pitch: 55, duration: 1600 } as any);
       });
-      vociMk.current.push(new maplibregl.Marker({ element: el, anchor: 'center' }).setLngLat(pos).addTo(map));
+      const mk = new maplibregl.Marker({ element: el, anchor: 'center', draggable: posiziona }).setLngLat(pos).addTo(map);
+      if (posiziona) {
+        mk.on('dragend', () => {
+          const ll = mk.getLngLat();
+          setBozze((b) => {
+            const nb = { ...b, [v.id]: [Number(ll.lat.toFixed(6)), Number(ll.lng.toFixed(6))] as [number, number] };
+            localStorage.setItem('sm2030_voci_geo', JSON.stringify(nb));
+            return nb;
+          });
+        });
+      }
+      vociMk.current.push(mk);
     });
     map.easeTo({ center: C, zoom: 15.6, pitch: 55, bearing: 168, duration: 2200 } as any);
     return () => { vociMk.current.forEach((m) => m.remove()); vociMk.current = []; };
-  }, [vociOn]);
+  }, [vociOn, bozze, posiziona]);
+
+  // modalita' posiziona: un clic sulla mappa posa la voce scelta
+  useEffect(() => {
+    const map = mapRef.current; if (!map || !posiziona) return;
+    const onClick = (e: maplibregl.MapMouseEvent) => {
+      if (!voceDaPosare) return;
+      const { lat, lng } = e.lngLat;
+      setBozze((b) => {
+        const nb = { ...b, [voceDaPosare]: [Number(lat.toFixed(6)), Number(lng.toFixed(6))] as [number, number] };
+        localStorage.setItem('sm2030_voci_geo', JSON.stringify(nb));
+        return nb;
+      });
+      setVoceDaPosare(null);
+    };
+    map.on('click', onClick);
+    return () => { map.off('click', onClick); };
+  }, [posiziona, voceDaPosare]);
 
   // la voce dalla mappa fa ballare il crinale in alto
   useEffect(() => {
@@ -428,6 +467,31 @@ export default function Gemello() {
               Territorio vero, non un rendering. <span className="text-amber-300">Tocca i pin bianchi</span> per i progetti,
               <span className="text-amber-300"> i nomi dei borghi</span> per scendere tra le case.
             </p>
+          </div>
+        )}
+        {posiziona && vociOn && (
+          <div className="absolute top-3 left-3 z-20 w-56 bg-black/90 border border-[#C9A227]/60 backdrop-blur p-3">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-amber-300 mb-2">Posiziona le voci</p>
+            <p className="text-[11px] text-neutral-300 mb-2 leading-snug">
+              {voceDaPosare
+                ? <>Tocca la mappa dove sta la casa di <b className="text-white">{voceDaPosare}</b></>
+                : 'Scegli una voce, poi tocca la mappa. Puoi anche trascinare i punti.'}
+            </p>
+            <div className="max-h-40 overflow-y-auto space-y-0.5 mb-2">
+              {VOCI.map((v) => (
+                <button key={v.id} onClick={() => setVoceDaPosare(v.id)}
+                  className={'block w-full text-left text-xs py-0.5 px-1 transition ' +
+                    (voceDaPosare === v.id ? 'bg-[#C9A227] text-black' : bozze[v.id] || v.geo ? 'text-amber-300 hover:text-white' : 'text-neutral-300 hover:text-white')}>
+                  {(bozze[v.id] || v.geo) ? '\u2302 ' : '\u25CB '}{v.nome}
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => { navigator.clipboard.writeText(JSON.stringify(bozze, null, 1)); }}
+                className="flex-1 bg-[#C9A227] text-black text-[10px] uppercase tracking-[0.15em] font-semibold py-1.5 hover:bg-[#E0BF5C] transition">Copia</button>
+              <button onClick={() => { localStorage.removeItem('sm2030_voci_geo'); setBozze({}); }}
+                className="flex-1 border border-neutral-600 text-neutral-300 text-[10px] uppercase tracking-[0.15em] py-1.5 hover:border-white hover:text-white transition">Azzera</button>
+            </div>
           </div>
         )}
         <button onClick={toggleFullscreen}

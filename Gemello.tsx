@@ -544,6 +544,13 @@ export default function Gemello() {
           aria-label={pieno ? 'Esci dallo schermo intero' : 'Schermo intero'}>
           {pieno ? '\u2716' : '\u26F6'}
         </button>
+        {vociOn && !posiziona && (
+          <a href="#/camminata"
+            className="absolute bottom-[7.4rem] right-3 z-10 bg-black/80 border border-neutral-600 text-white px-4 py-2.5 text-[11px] uppercase tracking-[0.2em] backdrop-blur hover:border-[#E0BF5C] transition"
+            title="Cammina per il borgo e le voci ti chiamano da sole">
+            {'\uD83D\uDEB6'} Camminata
+          </a>
+        )}
         <button onClick={() => setVociOn(!vociOn)}
           className={'absolute bottom-8 right-3 z-10 px-4 py-2.5 text-[11px] uppercase tracking-[0.2em] backdrop-blur border transition ' +
             (vociOn ? 'bg-[#C9A227] text-black border-[#C9A227] font-semibold' : 'bg-black/80 text-white border-neutral-600 hover:border-[#E0BF5C]')}

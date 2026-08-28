@@ -43,6 +43,9 @@ export default function Voci() {
         <p className="text-neutral-500 text-xs mt-3 max-w-2xl">
           Nelle borgate stiamo mettendo le targhe: inquadri il QR sul muro e senti chi abitava lì.
         </p>
+        <a href="#/camminata" className="inline-flex items-center gap-2 mt-4 border border-[#C9A227]/60 text-amber-300 px-5 py-2.5 text-[11px] uppercase tracking-[0.2em] hover:bg-[#C9A227] hover:text-black transition">
+          {'\uD83D\uDEB6'} Sei in paese? Fai la camminata della memoria
+        </a>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

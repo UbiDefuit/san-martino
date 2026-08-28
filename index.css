@@ -259,3 +259,16 @@ html.light .ridge-label { fill: rgba(138,106,17,.95); }
 
 /* il nome della casa certa resta sempre visibile */
 .voce-nome-fisso { opacity: 1 !important; font-size: 9px; color: #E0BF5C; }
+
+/* ---------- la camminata della memoria ---------- */
+.cam-casa { position: relative; text-align: center; pointer-events: auto; cursor: pointer; }
+.cam-casa-icona { display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%; background: rgba(11,11,12,.85);
+  border: 1.5px solid #C9A227; color: #E0BF5C; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.6); }
+.cam-casa-nome { display: block; margin-top: 2px; font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  color: #F3EFE6; text-shadow: 0 1px 4px rgba(0,0,0,.95); white-space: nowrap; }
+.cam-casa-fatta .cam-casa-icona { background: #C9A227; color: #0B0B0C; }
+.cam-casa-fatta .cam-casa-nome { color: #E0BF5C; }
+.cam-io { width: 18px; height: 18px; border-radius: 50%; background: #ffffff;
+  border: 3px solid #0a0a0a; box-shadow: 0 0 0 2px #ffffff, 0 2px 10px rgba(0,0,0,.6);
+  animation: pinPulse 2.4s ease-out infinite; }

@@ -6,13 +6,14 @@ import StaffEvento from './StaffEvento';
 import Idee from './Idee';
 import Memorie from './Memorie';
 import Voci from './Voci';
+import Camminata from './Camminata';
 import Mark2030 from './Mark2030';
 
-type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'memorie' | 'voci' | 'sostienici' | 'chisiamo' | 'gramignata' | 'idee' | 'staff';
+type Route = 'home' | 'progetti' | 'gemello' | 'storie' | 'memorie' | 'voci' | 'sostienici' | 'chisiamo' | 'gramignata' | 'idee' | 'staff' | 'camminata';
 
 const routeFromHash = (): Route => {
   const h = location.hash.replace('#/', '').split('?')[0];
-  return (['progetti', 'gemello', 'storie', 'memorie', 'voci', 'sostienici', 'chisiamo', 'gramignata', 'idee', 'staff'].includes(h) ? h : 'home') as Route;
+  return (['progetti', 'gemello', 'storie', 'memorie', 'voci', 'sostienici', 'chisiamo', 'gramignata', 'idee', 'staff', 'camminata'].includes(h) ? h : 'home') as Route;
 };
 
 const eur = (n: number) => n.toLocaleString('it-IT') + ' €';
@@ -660,6 +661,7 @@ export default function App() {
         {route === 'gramignata' && <Gramignata />}
         {route === 'staff' && <StaffEvento />}
         {route === 'idee' && <Idee />}
+        {route === 'camminata' && <Camminata />}
       </main>
       <footer className="border-t border-neutral-800 py-10 text-center space-y-3">
         <Mark2030 className="w-10 h-10 mx-auto mark-fg" />

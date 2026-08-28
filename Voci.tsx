@@ -5,7 +5,7 @@ export type Voce = { id: string; nome: string; dove: string; anno: string; geo?:
 
 /* Le voci del 1987. "dove" si aggiorna man mano che scopriamo chi abitava dove. */
 export const VOCI: Voce[] = [
-  { id: 'Tiziano', nome: 'Tiziano', dove: 'Sui campi sopra il paese', anno: '1987' },
+  { id: 'Tiziano', nome: 'Tiziano', dove: 'Sui campi sopra il paese', anno: '1987', geo: [44.384328, 10.692603] },
   { id: 'Gelinda', nome: 'Gelinda', dove: 'Sulle scale di casa', anno: '1987' , geo: [44.390469, 10.685285] },
   { id: 'Eulario', nome: 'Eulario', dove: 'Sulla strada della valle', anno: '1987' , geo: [44.390456, 10.68532] },
   { id: 'Clorinda', nome: 'Clorinda', dove: 'Nel cortile dei panni stesi', anno: '1987' , geo: [44.38916, 10.684314] },

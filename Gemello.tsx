@@ -49,6 +49,7 @@ export default function Gemello() {
     try { return JSON.parse(localStorage.getItem('sm2030_voci_geo') || '{}'); } catch { return {}; }
   });
   const [voceDaPosare, setVoceDaPosare] = useState<string | null>(null);
+  const [gpsMsg, setGpsMsg] = useState<string | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [voceSel, setVoceSel] = useState<Voce | null>(null);
   const vociMk = useRef<maplibregl.Marker[]>([]);
@@ -482,6 +483,27 @@ export default function Gemello() {
                 ? <>Tocca la mappa dove sta la casa di <b className="text-white">{voceDaPosare}</b></>
                 : 'Scegli una voce, poi tocca la mappa. Puoi anche trascinare i punti.'}
             </p>
+            {voceDaPosare && (
+              <button onClick={() => {
+                setGpsMsg('Cerco il segnale\u2026');
+                navigator.geolocation.getCurrentPosition((p) => {
+                  const lat = Number(p.coords.latitude.toFixed(6));
+                  const lng = Number(p.coords.longitude.toFixed(6));
+                  setBozze((b) => {
+                    const nb = { ...b, [voceDaPosare]: [lat, lng] as [number, number] };
+                    localStorage.setItem('sm2030_voci_geo', JSON.stringify(nb));
+                    return nb;
+                  });
+                  setGpsMsg('Posata a \u00B1' + Math.round(p.coords.accuracy) + ' m \u2014 trascina il punto se serve');
+                  setVoceDaPosare(null);
+                  mapRef.current?.easeTo({ center: [lng, lat], zoom: 17.2, duration: 1500 } as any);
+                }, () => setGpsMsg('GPS non disponibile: consenti la posizione'), { enableHighAccuracy: true, timeout: 12000 });
+              }}
+                className="w-full mb-2 bg-white text-black text-[10px] uppercase tracking-[0.15em] font-semibold py-1.5 hover:bg-neutral-200 transition">
+                {'\uD83D\uDCCD'} Sono davanti alla casa
+              </button>
+            )}
+            {gpsMsg && <p className="text-[10px] text-amber-300 mb-2">{gpsMsg}</p>}
             <div className="max-h-40 overflow-y-auto space-y-0.5 mb-2">
               {VOCI.map((v) => (
                 <button key={v.id} onClick={() => setVoceDaPosare(v.id)}

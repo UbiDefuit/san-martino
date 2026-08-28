@@ -47,7 +47,7 @@ export default function Gemello() {
   const [voceSel, setVoceSel] = useState<Voce | null>(null);
   const vociMk = useRef<maplibregl.Marker[]>([]);
   const voceVid = useRef<HTMLVideoElement | null>(null);
-  const [info, setInfo] = useState(false);
+  const [hint, setHint] = useState(() => !localStorage.getItem('sm2030_gemello_hint'));
   const luoghiMk = useRef<maplibregl.Marker[]>([]);
   const progettiMk = useRef<maplibregl.Marker[]>([]);
   const [ready, setReady] = useState(false);
@@ -391,6 +391,13 @@ export default function Gemello() {
     document.addEventListener('fullscreenchange', on);
     return () => document.removeEventListener('fullscreenchange', on);
   }, []);
+  // suggerimento di benvenuto: appare solo la prima volta, poi svanisce per sempre
+  useEffect(() => {
+    if (!hint) return;
+    const t = setTimeout(() => { setHint(false); localStorage.setItem('sm2030_gemello_hint', '1'); }, 9000);
+    return () => clearTimeout(t);
+  }, [hint]);
+
   const toggleFullscreen = () => {
     if (document.fullscreenElement) document.exitFullscreen();
     else wrapRef.current?.requestFullscreen?.();
@@ -411,24 +418,18 @@ export default function Gemello() {
 
   return (
     <div className="animate-fade-in-up pt-10 space-y-5">
-      <div className="flex items-center gap-3">
-        <h1 className="text-3xl font-bold text-white">Il gemello digitale</h1>
-        <button onClick={() => setInfo(!info)} aria-label="Informazioni"
-          className={'w-7 h-7 shrink-0 rounded-full border font-display text-[15px] italic transition ' +
-            (info ? 'border-white text-white' : 'border-neutral-600 text-neutral-400 hover:border-white hover:text-white')}>
-          i
-        </button>
-      </div>
-      {info && (
-        <p className="text-neutral-300 text-[15px] max-w-2xl">
-          Questo non è un rendering: è il territorio della frazione di San Martino — il nucleo storico,
-          Cà Carloni, il Poggio, la chiesa e il Monte San Martino (perimetro indicativo tratteggiato).
-          In bianco, i 6,2 km di sentieri riaperti dai volontari. E ogni progetto di rigenerazione è lì,
-          al suo posto sul territorio: <span className="text-white">tocca i pin bianchi</span> per i progetti, <span className="text-white">tocca i nomi dei borghi</span> per scendere a livello delle case.
-        </p>
-      )}
+      <h1 className="text-3xl font-bold text-white">Il gemello digitale</h1>
       <div ref={wrapRef} className="relative gemello-wrap">
         <div id="gemello" className="h-[62vh] border border-neutral-800" />
+        {hint && ready && (
+          <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 max-w-[92%] sm:max-w-md bg-black/85 border border-[#C9A227]/50 backdrop-blur px-4 py-2.5 text-center hero-el"
+            onClick={() => { setHint(false); localStorage.setItem('sm2030_gemello_hint', '1'); }}>
+            <p className="text-[12px] text-neutral-100 leading-snug">
+              Territorio vero, non un rendering. <span className="text-amber-300">Tocca i pin bianchi</span> per i progetti,
+              <span className="text-amber-300"> i nomi dei borghi</span> per scendere tra le case.
+            </p>
+          </div>
+        )}
         <button onClick={toggleFullscreen}
           className="absolute bottom-[4.7rem] right-3 z-10 w-10 h-10 flex items-center justify-center bg-black/80 border border-neutral-600 text-white text-base backdrop-blur hover:border-[#E0BF5C] transition"
           title={pieno ? 'Esci dallo schermo intero (Esc)' : 'Schermo intero'}

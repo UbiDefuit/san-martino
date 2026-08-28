@@ -102,6 +102,11 @@ export default function Gemello() {
     const intro = () => {
       if (introDone) return; introDone = true;
       setReady(true);
+      // i crediti partono chiusi: resta solo la i, si apre al tocco
+      setTimeout(() => {
+        const att = document.querySelector('#gemello .maplibregl-ctrl-attrib');
+        if (att) { att.classList.remove('maplibregl-compact-show'); att.removeAttribute('open'); }
+      }, 300);
       map.easeTo({ center: [10.6905, 44.3838], zoom: 13.5, pitch: 63, bearing: 168, duration: 5500, easing: (t) => 1 - Math.pow(1 - t, 3) } as any);
       // lenta orbita finché nessuno tocca la mappa
       let orbit = true;

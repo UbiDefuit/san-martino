@@ -68,7 +68,7 @@ function Cifra({ testo }: { testo: string }) {
     const t = setTimeout(() => { if (!fatto) setTxt(testo); }, 3500); // nulla resta a zero
     return () => { cancelAnimationFrame(raf); io.disconnect(); clearTimeout(t); };
   }, []);
-  return <div ref={ref} className="font-display text-4xl text-white">{txt}</div>;
+  return <div ref={ref} className="font-display text-white whitespace-nowrap text-[clamp(1.15rem,6.5vw,2.25rem)]">{txt}</div>;
 }
 
 

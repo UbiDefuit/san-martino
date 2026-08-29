@@ -76,8 +76,8 @@ export default function Presentazione() {
       titolo: <>I volti del 1987 tornano a parlare</>,
       corpo: (
         <p className="text-neutral-200 text-lg max-w-2xl mx-auto leading-relaxed mt-4">
-          Il filmato è pieno di volti: <b className="text-white">quindici hanno già ritrovato il loro nome</b>,
-          gli altri li stiamo riconoscendo insieme alla comunità — anche stasera, con voi.
+          Nel filmato di Don Paolo compaiono <b className="text-white">più di trenta persone del paese</b>.
+          Le stiamo riconoscendo e riportando online, voce per voce, insieme alla comunità.
           Tocchi un volto e <b className="text-white">senti chi era</b>, nel posto dov'era.
         </p>
       ),

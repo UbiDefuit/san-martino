@@ -669,7 +669,11 @@ export default function App() {
         <Mark2030 className="w-10 h-10 mx-auto mark-fg" />
         <p className="text-[11px] tracked gold">San Martino 2030 — la valle che non si arrende</p>
         <p className="text-xs text-neutral-500">APS per la rinascita di San Martino Vallata · Polinago (MO)</p>
-        
+        <a href="#/presentazione"
+          className="inline-flex items-center gap-2 mt-2 border border-[#C9A227]/50 text-amber-300 px-5 py-2 text-[10px] uppercase tracking-[0.2em] hover:bg-[#C9A227] hover:text-black transition"
+          title="Slide a schermo intero per raccontare il progetto">
+          &#9654; Modalità presentazione
+        </a>
       </footer>
     </div>
   );

@@ -484,7 +484,7 @@ export default function Gemello() {
       <div ref={wrapRef} className="relative gemello-wrap">
         <div id="gemello" className="h-[62vh] border border-neutral-800" />
         {hint && ready && (
-          <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 max-w-[92%] sm:max-w-md bg-black/85 border border-[#C9A227]/50 backdrop-blur px-4 py-2.5 text-center hero-el"
+          <div className="absolute top-16 left-1/2 -translate-x-1/2 z-10 max-w-[92%] sm:max-w-md bg-black/85 border border-[#C9A227]/50 backdrop-blur px-4 py-2.5 text-center hero-el"
             onClick={() => { setHint(false); localStorage.setItem('sm2030_gemello_hint', '1'); }}>
             <p className="text-[12px] text-neutral-100 leading-snug">
               Territorio vero, non un rendering. <span className="text-amber-300">Tocca i pin bianchi</span> per i progetti,

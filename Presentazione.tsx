@@ -76,9 +76,9 @@ export default function Presentazione() {
       titolo: <>I volti del 1987 tornano a parlare</>,
       corpo: (
         <p className="text-neutral-200 text-lg max-w-2xl mx-auto leading-relaxed mt-4">
-          Nel filmato abbiamo riconosciuto <b className="text-white">15 protagonisti</b>, insieme alla comunità.
-          Le loro voci stanno tornando online una a una: tocchi un volto e
-          <b className="text-white"> senti chi era</b>, nel posto dov'era.
+          Il filmato è pieno di volti: <b className="text-white">quindici hanno già ritrovato il loro nome</b>,
+          gli altri li stiamo riconoscendo insieme alla comunità — anche stasera, con voi.
+          Tocchi un volto e <b className="text-white">senti chi era</b>, nel posto dov'era.
         </p>
       ),
       link: { href: '#/voci', label: 'Ascolta le voci' },

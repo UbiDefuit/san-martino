@@ -184,7 +184,7 @@ export default function Camminata() {
 
         {!attiva && (
           <div className="absolute inset-0 z-10 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center text-center px-6">
-            <p className="font-display text-2xl text-white mb-1">11 voci ti aspettano</p>
+            <p className="font-display text-2xl text-white mb-1">{CASE.length} voci ti aspettano</p>
             <p className="text-neutral-300 text-sm mb-5 max-w-xs">Attiva il GPS e cammina: le case ti chiameranno una per una.</p>
             <button onClick={inizia}
               className="bg-[#C9A227] text-black px-8 py-3.5 font-semibold uppercase tracking-[0.18em] text-sm hover:bg-[#E0BF5C] transition">
@@ -235,7 +235,7 @@ export default function Camminata() {
 
       {complete && (
         <div className="border border-[#C9A227]/60 bg-neutral-950 p-6 text-center">
-          <p className="font-display text-2xl text-white">Hai ascoltato tutte le 11 voci.</p>
+          <p className="font-display text-2xl text-white">Hai ascoltato tutte le {CASE.length} voci.</p>
           <p className="text-neutral-300 text-sm mt-2">Il paese ti ha raccontato tutto quello che ricorda — per ora. Grazie di aver camminato con loro.</p>
           <button onClick={() => { salva([]); dentro.current.clear(); }}
             className="mt-4 border border-neutral-600 text-neutral-300 px-5 py-2 text-[11px] uppercase tracking-[0.2em] hover:border-white hover:text-white transition">

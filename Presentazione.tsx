@@ -73,11 +73,12 @@ export default function Presentazione() {
     },
     {
       kicker: 'Il paese che si racconta',
-      titolo: <>11 voci tornate a parlare</>,
+      titolo: <>I volti del 1987 tornano a parlare</>,
       corpo: (
         <p className="text-neutral-200 text-lg max-w-2xl mx-auto leading-relaxed mt-4">
-          Tiziano, Gelinda, Eulario, Clorinda, Giulia, Malia, Bianca, Gustavo, Gigino, Armida, Viterbo.
-          Tocchi un volto e <b className="text-white">senti la sua voce</b>, nel posto dov'era.
+          Nel filmato abbiamo riconosciuto <b className="text-white">15 protagonisti</b>, insieme alla comunità.
+          Le loro voci stanno tornando online una a una: tocchi un volto e
+          <b className="text-white"> senti chi era</b>, nel posto dov'era.
         </p>
       ),
       link: { href: '#/voci', label: 'Ascolta le voci' },
@@ -87,9 +88,9 @@ export default function Presentazione() {
       titolo: <>Ogni voce ha ritrovato la sua casa</>,
       corpo: (
         <p className="text-neutral-200 text-lg max-w-2xl mx-auto leading-relaxed mt-4">
-          Con la memoria di chi c'era abbiamo <b className="text-white">georiferito le 11 case</b> nel gemello
-          digitale: sulla mappa 3D oggi si legge «La casa di Gelinda», «La casa di Viterbo»…
-          E cliccandole, chi ci abitava ti parla.
+          Con la memoria di chi c'era stiamo <b className="text-white">ridando un indirizzo a ogni voce</b>: le prime
+          case sono già sulla mappa 3D — «La casa di Gelinda», «La casa di Viterbo»… — e cliccandole,
+          chi ci abitava ti parla. Presto le mapperemo tutte.
         </p>
       ),
       link: { href: '#/gemello', label: 'Apri il gemello 3D' },

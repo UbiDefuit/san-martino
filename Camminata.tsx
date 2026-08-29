@@ -164,6 +164,19 @@ export default function Camminata() {
           Cammina per San Martino col telefono in mano. Quando passi davanti a una delle case,
           il telefono vibra e chi ci abitava nel 1987 ti parla — con la sua voce. Nessun QR: il paese sa dove sei.
         </p>
+        <div className="grid sm:grid-cols-3 gap-3 mt-5 max-w-2xl">
+          {[
+            ['1', 'Premi «Inizia»', 'Un tocco solo: si attivano GPS e audio. Poi il telefono puoi anche metterlo in tasca.'],
+            ['2', 'Cammina per il borgo', 'Niente QR, niente da inquadrare. Segui la mappa o vai a naso tra le case.'],
+            ['3', 'La casa ti chiama', 'A meno di 18 metri: vibrazione, e la voce di chi ci abitava parte da sola.'],
+          ].map(([n2, t, d]) => (
+            <div key={n2} className="border border-neutral-800 bg-neutral-950 p-4">
+              <span className="font-display text-2xl gold">{n2}</span>
+              <p className="text-white text-sm font-semibold mt-1">{t}</p>
+              <p className="text-neutral-400 text-xs mt-1 leading-relaxed">{d}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="relative">
@@ -233,7 +246,7 @@ export default function Camminata() {
 
       <p className="text-neutral-500 text-xs max-w-2xl">
         Consigli: attiva il GPS, tieni lo schermo acceso e cammina piano — la voce parte entro {RAGGIO_IN} metri dalla casa.
-        Le voci già incontrate restano segnate in oro. Funziona anche senza campo, se hai già aperto il sito una volta.
+        Le voci già incontrate restano segnate in oro. Funziona anche senza campo, se hai già aperto il sito una volta. La tua posizione resta sul telefono: non viene inviata né salvata da nessuna parte.
       </p>
     </div>
   );

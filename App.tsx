@@ -593,6 +593,8 @@ export default function App() {
     { r: 'chisiamo', label: 'Chi siamo' },
   ];
 
+  if (route === 'presentazione') return <Presentazione />;
+
   return (
     <div className="min-h-screen bg-black text-white font-sans">
       <header className="sticky top-0 z-40 bg-black/95 backdrop-blur border-b border-neutral-800">
@@ -663,7 +665,6 @@ export default function App() {
         {route === 'staff' && <StaffEvento />}
         {route === 'idee' && <Idee />}
         {route === 'camminata' && <Camminata />}
-        {route === 'presentazione' && <Presentazione />}
       </main>
       <footer className="border-t border-neutral-800 py-10 text-center space-y-3">
         <Mark2030 className="w-10 h-10 mx-auto mark-fg" />

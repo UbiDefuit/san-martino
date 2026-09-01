@@ -168,7 +168,7 @@ export default function Presentazione() {
 
   return (
     <div ref={wrap}
-      className="fixed inset-0 z-50 bg-black text-white flex flex-col cursor-pointer select-none"
+      className="fixed inset-0 z-[9999] bg-black text-white flex flex-col cursor-pointer select-none"
       onClick={(e) => { if (!(e.target as HTMLElement).closest('a,button')) avanti(); }}>
       <div className="grana" />
       <div className="lucciole" aria-hidden="true">

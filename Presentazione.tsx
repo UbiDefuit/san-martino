@@ -15,7 +15,7 @@ type Slide = {
 
 function Passo({ n, t, d }: { n: string; t: string; d: string }) {
   return (
-    <div className="flex-1 min-w-[200px] border border-[#C9A227]/40 bg-black/40 p-5 text-left">
+    <div className="flex-1 min-w-[200px] border border-[#C9A227]/40 bg-black/40 p-4 sm:p-5 text-left">
       <div className="font-display text-4xl gold">{n}</div>
       <div className="text-white font-semibold mt-2 text-lg">{t}</div>
       <div className="text-neutral-300 text-sm mt-1 leading-relaxed">{d}</div>
@@ -26,7 +26,7 @@ function Passo({ n, t, d }: { n: string; t: string; d: string }) {
 function Cifrona({ n, l }: { n: string; l: string }) {
   return (
     <div className="text-center px-6">
-      <div className="font-display text-6xl sm:text-7xl text-white">{n}</div>
+      <div className="font-display text-4xl sm:text-7xl text-white">{n}</div>
       <div className="text-[11px] uppercase tracking-[0.2em] text-amber-300 mt-2">{l}</div>
     </div>
   );
@@ -51,7 +51,7 @@ export default function Presentazione() {
       kicker: 'Da dove siamo partiti',
       titolo: <>Otto anni di fatti</>,
       corpo: (
-        <div className="flex flex-wrap justify-center gap-6 mt-10">
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-6 sm:mt-10">
           <Cifrona n="46" l="all'alba sui sentieri" />
           <Cifrona n="6,2 km" l="riaperti a mano" />
           <Cifrona n="80+" l="alla Gramignata" />
@@ -63,7 +63,7 @@ export default function Presentazione() {
       kicker: 'Il tesoro ritrovato',
       titolo: <>Un film del 1987, salvato</>,
       corpo: (
-        <p className="text-neutral-200 text-lg max-w-2xl mx-auto leading-relaxed mt-4">
+        <p className="text-neutral-200 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mt-4">
           «Tiziano e i suoi parrocchiani»: 49 minuti girati da Don Paolo casa per casa.
           Quasi tutti i protagonisti non ci sono più. L'abbiamo <b className="text-white">ritrovato, restaurato
           e riportato online</b> — immagine, suono e nomi dei volti, ricostruiti insieme alla comunità.
@@ -75,7 +75,7 @@ export default function Presentazione() {
       kicker: 'Il paese che si racconta',
       titolo: <>I volti del 1987 tornano a parlare</>,
       corpo: (
-        <p className="text-neutral-200 text-lg max-w-2xl mx-auto leading-relaxed mt-4">
+        <p className="text-neutral-200 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mt-4">
           Nel filmato di Don Paolo compaiono <b className="text-white">più di trenta persone del paese</b>.
           Le stiamo riconoscendo e riportando online, voce per voce, insieme alla comunità.
           Tocchi un volto e <b className="text-white">senti chi era</b>, nel posto dov'era.
@@ -87,7 +87,7 @@ export default function Presentazione() {
       kicker: 'La scoperta di questa settimana',
       titolo: <>Ogni voce ha ritrovato la sua casa</>,
       corpo: (
-        <p className="text-neutral-200 text-lg max-w-2xl mx-auto leading-relaxed mt-4">
+        <p className="text-neutral-200 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mt-4">
           Con la memoria di chi c'era stiamo <b className="text-white">ridando un indirizzo a ogni voce</b>: le prime
           case sono già sulla mappa 3D — «La casa di Gelinda», «La casa di Viterbo»… — e cliccandole,
           chi ci abitava ti parla. Presto le mapperemo tutte.
@@ -100,7 +100,7 @@ export default function Presentazione() {
       titolo: <>La camminata della memoria</>,
       corpo: (
         <>
-          <p className="text-neutral-200 text-lg max-w-2xl mx-auto leading-relaxed mt-4 mb-8">
+          <p className="text-neutral-200 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mt-4 mb-8">
             Cammini per il borgo col telefono. Le case ti riconoscono. E ti parlano.
           </p>
           <div className="flex flex-wrap gap-4 justify-center max-w-3xl mx-auto">
@@ -116,7 +116,7 @@ export default function Presentazione() {
       kicker: 'Il prossimo passo',
       titolo: <>Il progetto per la Fondazione di Modena</>,
       corpo: (
-        <div className="max-w-2xl mx-auto text-left mt-6 space-y-3 text-lg text-neutral-200">
+        <div className="max-w-2xl mx-auto text-left mt-6 space-y-2.5 sm:space-y-3 text-base sm:text-lg text-neutral-200">
           <p>→ <b className="text-white">30 nuove interviste</b> agli ultimi testimoni, prima che sia tardi</p>
           <p>→ <b className="text-white">500+ foto e documenti</b> di famiglia digitalizzati</p>
           <p>→ <b className="text-white">Targhe permanenti</b> sulle case: il museo diffuso</p>
@@ -130,7 +130,7 @@ export default function Presentazione() {
       kicker: 'Serve ognuno di voi',
       titolo: <>Cosa vi chiediamo</>,
       corpo: (
-        <div className="max-w-2xl mx-auto text-left mt-6 space-y-3 text-lg text-neutral-200">
+        <div className="max-w-2xl mx-auto text-left mt-6 space-y-2.5 sm:space-y-3 text-base sm:text-lg text-neutral-200">
           <p>→ <b className="text-white">Ricordi e nomi</b>: chi era? dove abitava? come si chiamava quel campo?</p>
           <p>→ <b className="text-white">Foto e documenti</b> nei cassetti: li digitalizziamo e ve li restituiamo</p>
           <p>→ <b className="text-white">Le nonne e i nonni</b>: segnalateci chi può ancora raccontare</p>
@@ -164,11 +164,21 @@ export default function Presentazione() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // swipe sul telefono
+  const tx = useRef<number | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => { tx.current = e.touches[0].clientX; };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (tx.current === null) return;
+    const dx = e.changedTouches[0].clientX - tx.current; tx.current = null;
+    if (dx < -50) avanti(); else if (dx > 50) indietro();
+  };
+
   const s = SLIDES[i];
 
   return (
     <div ref={wrap}
-      className="fixed inset-0 z-[9999] bg-black text-white flex flex-col cursor-pointer select-none"
+      className="fixed inset-0 z-[9999] h-[100dvh] overflow-hidden overscroll-none bg-black text-white flex flex-col cursor-pointer select-none"
+      onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
       onClick={(e) => { if (!(e.target as HTMLElement).closest('a,button')) avanti(); }}>
       <div className="grana" />
       <div className="lucciole" aria-hidden="true">
@@ -185,16 +195,18 @@ export default function Presentazione() {
         <a href="#/" onClick={(e) => e.stopPropagation()} className="text-neutral-500 hover:text-white text-sm" title="Esci dalla presentazione">✕</a>
       </div>
 
-      <div key={i} className="flex-1 flex flex-col items-center justify-center text-center px-6 pb-10 relative z-10 page-enter">
-        <p className="text-[11px] tracked gold mb-4">{s.kicker}</p>
-        <h1 className="font-display text-5xl sm:text-7xl leading-tight">{s.titolo}</h1>
+      <div key={i} className="flex-1 min-h-0 overflow-y-auto px-5 sm:px-6 pb-6 relative z-10 page-enter flex">
+       <div className="m-auto w-full text-center">
+        <p className="text-[11px] tracked gold mb-3 sm:mb-4">{s.kicker}</p>
+        <h1 className="font-display text-3xl sm:text-5xl md:text-7xl leading-tight">{s.titolo}</h1>
         <div className="w-full">{s.corpo}</div>
         {s.link && (
           <a href={s.link.href} onClick={(e) => e.stopPropagation()}
-            className="inline-block mt-10 bg-white text-black px-8 py-3.5 font-semibold uppercase tracking-[0.18em] text-sm hover:bg-[#E0BF5C] transition">
+            className="inline-block mt-6 sm:mt-10 bg-white text-black px-8 py-3.5 font-semibold uppercase tracking-[0.18em] text-sm hover:bg-[#E0BF5C] transition">
             {s.link.label}
           </a>
         )}
+       </div>
       </div>
 
       <div className="relative z-10 flex items-center justify-center gap-2 pb-6">

@@ -93,7 +93,7 @@ export default function Presentazione() {
           chi ci abitava ti parla. Presto le mapperemo tutte.
         </p>
       ),
-      link: { href: '#/gemello', label: 'Apri il gemello 3D' },
+      link: { href: '#/gemello?volo=1', label: 'Guarda il volo delle voci' },
     },
     {
       kicker: 'La novità che presentiamo oggi',

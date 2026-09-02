@@ -27,6 +27,11 @@ export const LUOGHI: { geo: [number, number]; nome: string; big?: boolean; zoom:
 export const slugLuogo = (nome: string) =>
   nome.toLowerCase().replace(/[’']/g, '').replace(/[()]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
+// la rotta del volo: dai campi di Tiziano su fino alle case in cima al borgo
+const ROTTA = ['Tiziano', 'Viterbo', 'Gigino', 'Gustavo', 'Bianca', 'Malia', 'Armida', 'Giulia', 'Clorinda', 'Gelinda', 'Eulario']
+  .map((id) => VOCI.find((v) => v.id === id)!)
+  .filter((v) => v && v.geo);
+
 export default function Gemello() {
   const mapRef = useRef<maplibregl.Map | null>(null);
   const flyTimer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -43,6 +48,13 @@ export default function Gemello() {
   const [legenda, setLegenda] = useState(false);
   const [vociOn, setVociOn] = useState(false);
   const [pieno, setPieno] = useState(false);
+  // il volo delle voci: dal cielo alle case, una voce dopo l'altra
+  const [volo, setVolo] = useState(false);
+  const [voloIdx, setVoloIdx] = useState(-1);      // -1 partenza, n casa n, ROTTA.length fine
+  const [voloCasa, setVoloCasa] = useState(false); // siamo arrivati sopra la casa: parte la voce
+  const [voloTap, setVoloTap] = useState(false);   // l'audio ha bisogno di un tocco
+  const voloVid = useRef<HTMLVideoElement | null>(null);
+  const voloTimer = useRef<number>(0);
   // modalita' segreta "posiziona le voci": #/gemello?posiziona=1
   const posiziona = (location.hash.split('?')[1] || '').includes('posiziona');
   const [bozze, setBozze] = useState<Record<string, [number, number]>>(() => {
@@ -444,6 +456,78 @@ export default function Gemello() {
     window.dispatchEvent(new Event('sm-voce-off'));
   }, [voceSel]);
 
+  // il volo delle voci: regia automatica della camera
+  useEffect(() => {
+    const map = mapRef.current; if (!map || !volo) return;
+    setVoloCasa(false); setVoloTap(false);
+    let vivo = true;
+    const CIELO = { center: [10.6905, 44.3838] as [number, number], zoom: 12.9, pitch: 68, bearing: 168 };
+    if (voloIdx === -1) {
+      map.flyTo({ ...CIELO, duration: 3800, essential: true } as any);
+      voloTimer.current = window.setTimeout(() => { if (vivo) setVoloIdx(0); }, 5600);
+    } else if (voloIdx < ROTTA.length) {
+      const v = ROTTA[voloIdx];
+      const g = bozze[v.id] || v.geo!;
+      map.flyTo({ center: [g[1], g[0]], zoom: 17.4, pitch: 64, bearing: 140 + voloIdx * 24, duration: 5200, curve: 1.25, essential: true } as any);
+      const arrivo = () => {
+        if (!vivo) return;
+        setVoloCasa(true);
+        // lenta orbita attorno alla casa mentre parla
+        map.easeTo({ bearing: map.getBearing() + 40, duration: 40000, easing: (t: number) => t, essential: true } as any);
+      };
+      map.once('moveend', arrivo);
+      return () => { vivo = false; map.off('moveend', arrivo); clearTimeout(voloTimer.current); };
+    } else {
+      map.flyTo({ ...CIELO, duration: 5000, essential: true } as any);
+    }
+    return () => { vivo = false; clearTimeout(voloTimer.current); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [volo, voloIdx]);
+
+  // la voce parte quando siamo sopra la casa; se il browser vuole un tocco, lo chiediamo
+  useEffect(() => {
+    const el = voloVid.current;
+    if (!volo || !voloCasa || !el) return;
+    const go = () => window.dispatchEvent(new CustomEvent('sm-voce', { detail: el }));
+    el.addEventListener('play', go);
+    el.play().catch(() => setVoloTap(true));
+    return () => { el.removeEventListener('play', go); window.dispatchEvent(new Event('sm-voce-off')); };
+  }, [volo, voloCasa, voloIdx]);
+
+  const avviaVolo = () => {
+    setVociOn(true); setVoceSel(null); setLegenda(false);
+    setVolo(true); setVoloIdx(-1);
+    setTimeout(() => mapRef.current?.resize(), 150);
+    try { wrapRef.current?.requestFullscreen?.()?.catch(() => {}); } catch { /* iOS: niente fullscreen, va bene lo stesso */ }
+  };
+  const fermaVolo = () => {
+    setVolo(false); setVoloIdx(-1); setVoloCasa(false);
+    setTimeout(() => mapRef.current?.resize(), 150);
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    mapRef.current?.easeTo({ center: [10.68466, 44.38851], zoom: 15.6, pitch: 55, bearing: 168, duration: 2200 } as any);
+  };
+  const prossimaCasa = () => setVoloIdx((i) => Math.min(i + 1, ROTTA.length));
+
+  // deep link: #/gemello?volo=1 fa partire il volo da solo (per la presentazione)
+  useEffect(() => {
+    if (!ready) return;
+    const q = location.hash.split('?')[1] || '';
+    if (new URLSearchParams(q).get('volo') === '1') { const t = setTimeout(avviaVolo, 1500); return () => clearTimeout(t); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready]);
+
+  // frecce: avanti / esci
+  useEffect(() => {
+    if (!volo) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); prossimaCasa(); }
+      if (e.key === 'Escape') fermaVolo();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [volo]);
+
   // schermo intero: la valle occupa tutto, la mappa si riadatta
   useEffect(() => {
     const on = () => {
@@ -481,7 +565,7 @@ export default function Gemello() {
   return (
     <div className="animate-fade-in-up pt-10 space-y-5">
       <h1 className="text-3xl font-bold text-white">Il gemello digitale</h1>
-      <div ref={wrapRef} className="relative gemello-wrap">
+      <div ref={wrapRef} className={"relative gemello-wrap" + (volo ? " volo-on" : "")}>
         <div id="gemello" className="h-[62vh] border border-neutral-800" />
         {hint && ready && (
           <div className="absolute top-16 left-1/2 -translate-x-1/2 z-10 max-w-[92%] sm:max-w-md bg-black/85 border border-[#C9A227]/50 backdrop-blur px-4 py-2.5 text-center hero-el"
@@ -544,6 +628,13 @@ export default function Gemello() {
           aria-label={pieno ? 'Esci dallo schermo intero' : 'Schermo intero'}>
           {pieno ? '\u2716' : '\u26F6'}
         </button>
+        {vociOn && !posiziona && !volo && (
+          <button onClick={avviaVolo}
+            className="absolute bottom-[10.6rem] right-3 z-10 bg-black/80 border border-[#C9A227]/70 text-amber-300 px-4 py-2.5 text-[11px] uppercase tracking-[0.2em] backdrop-blur hover:bg-[#C9A227] hover:text-black transition"
+            title="Dal cielo alle case: le voci del 1987 una dopo l'altra, come un film">
+            {'\u25B6'} Il volo delle voci
+          </button>
+        )}
         {vociOn && !posiziona && (
           <a href="#/camminata"
             className="absolute bottom-[7.4rem] right-3 z-10 bg-black/80 border border-neutral-600 text-white px-4 py-2.5 text-[11px] uppercase tracking-[0.2em] backdrop-blur hover:border-[#E0BF5C] transition"
@@ -557,6 +648,60 @@ export default function Gemello() {
           title="Le voci del 1987 compaiono nel paesaggio">
           {'\u266A'} Le voci del 1987
         </button>
+        {volo && (
+          <div className="volo-ui absolute inset-0 z-30 select-none" onClick={(e) => { if (!(e.target as HTMLElement).closest('video,button,a')) prossimaCasa(); }}>
+            <div className="volo-banda top-0" />
+            <div className="volo-banda bottom-0" />
+            <div className="grana" />
+            <button onClick={(e) => { e.stopPropagation(); fermaVolo(); }}
+              className="absolute top-[9%] right-3 z-40 text-neutral-400 hover:text-white text-sm px-2 py-1" title="Esci dal volo">{'\u2716'} esci</button>
+            {voloIdx === -1 && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 hero-el pointer-events-none">
+                <p className="text-[11px] tracked gold mb-3">San Martino Vallata &middot; dal cielo alle case</p>
+                <h2 className="font-display text-4xl sm:text-6xl text-white leading-tight">Il volo delle voci</h2>
+                <p className="text-neutral-300 text-sm sm:text-base mt-4 max-w-md">Ogni casa ha una voce del 1987. Il volo scende da una all&rsquo;altra e le lascia parlare.</p>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 mt-8">un tocco per andare avanti &middot; esc per uscire</p>
+              </div>
+            )}
+            {voloIdx >= 0 && voloIdx < ROTTA.length && (
+              <div className="absolute top-[9%] left-3 sm:left-6 z-40 hero-el pointer-events-none">
+                <p className="text-[10px] uppercase tracking-[0.25em] text-amber-300">{voloCasa ? 'Qui abitava \u00B7 la sua voce, 1987' : 'in volo verso\u2026'}</p>
+                <h2 className="font-display text-3xl sm:text-5xl text-white leading-tight drop-shadow">La casa di {ROTTA[voloIdx].nome}</h2>
+                <p className="text-[11px] text-neutral-400 mt-1">{ROTTA[voloIdx].dove}</p>
+              </div>
+            )}
+            {voloIdx >= 0 && voloIdx < ROTTA.length && voloCasa && (
+              <div className="absolute bottom-[9%] left-1/2 -translate-x-1/2 z-40 w-[min(92%,520px)] hero-el">
+                <video key={ROTTA[voloIdx].id} ref={voloVid} src={'./voci/' + ROTTA[voloIdx].id + '.mp4'} playsInline
+                  onEnded={prossimaCasa} onError={() => setTimeout(prossimaCasa, 1200)}
+                  className="w-full bg-black border border-[#C9A227]/40 shadow-2xl" />
+                {voloTap && (
+                  <button onClick={(e) => { e.stopPropagation(); voloVid.current?.play().then(() => setVoloTap(false)).catch(() => {}); }}
+                    className="absolute inset-0 flex items-center justify-center bg-black/60 text-white font-display text-2xl">
+                    {'\u25B6'} Tocca per ascoltare
+                  </button>
+                )}
+                <div className="flex items-center justify-between mt-2">
+                  <div className="flex gap-1.5">
+                    {ROTTA.map((r, k) => <span key={r.id} className={'h-1 rounded-full transition-all ' + (k === voloIdx ? 'w-6 bg-[#E0BF5C]' : k < voloIdx ? 'w-2 bg-[#C9A227]/60' : 'w-2 bg-neutral-700')} />)}
+                  </div>
+                  <button onClick={(e) => { e.stopPropagation(); prossimaCasa(); }} className="text-[10px] uppercase tracking-[0.2em] text-neutral-400 hover:text-white">prossima casa &rsaquo;</button>
+                </div>
+              </div>
+            )}
+            {voloIdx >= ROTTA.length && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 hero-el">
+                <p className="text-[11px] tracked gold mb-3">Il volo finisce qui, per ora</p>
+                <h2 className="font-display text-3xl sm:text-5xl text-white leading-tight max-w-2xl">Le altre voci del film le stiamo riportando a casa, una per una.</h2>
+                <div className="flex flex-wrap gap-3 justify-center mt-8">
+                  <button onClick={(e) => { e.stopPropagation(); setVoloIdx(-1); }} className="bg-white text-black px-6 py-3 text-[11px] uppercase tracking-[0.2em] font-semibold hover:bg-[#E0BF5C] transition">{'\u21BB'} Rivola</button>
+                  <a href="#/camminata" onClick={(e) => e.stopPropagation()} className="border border-neutral-500 text-white px-6 py-3 text-[11px] uppercase tracking-[0.2em] hover:border-white transition">{'\uD83D\uDEB6'} Vai a piedi: la camminata</a>
+                  <button onClick={(e) => { e.stopPropagation(); fermaVolo(); }} className="border border-neutral-700 text-neutral-400 px-6 py-3 text-[11px] uppercase tracking-[0.2em] hover:text-white transition">Esci</button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
         {voceSel && (
           <div className="absolute bottom-8 left-3 right-3 sm:right-auto sm:w-[340px] z-20 bg-black/90 border border-[#C9A227]/60 backdrop-blur p-3">
             <div className="flex items-start justify-between gap-3 mb-2">

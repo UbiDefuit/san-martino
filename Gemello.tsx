@@ -497,12 +497,14 @@ export default function Gemello() {
   const avviaVolo = () => {
     setVociOn(true); setVoceSel(null); setLegenda(false);
     setVolo(true); setVoloIdx(-1);
-    setTimeout(() => mapRef.current?.resize(), 150);
+    const m = mapRef.current; if (m) { m.dragPan.disable(); m.touchZoomRotate.disable(); m.scrollZoom.disable(); m.doubleClickZoom.disable(); m.keyboard.disable(); }
+    setTimeout(() => mapRef.current?.resize(), 200);
     try { wrapRef.current?.requestFullscreen?.()?.catch(() => {}); } catch { /* iOS: niente fullscreen, va bene lo stesso */ }
   };
   const fermaVolo = () => {
     setVolo(false); setVoloIdx(-1); setVoloCasa(false);
-    setTimeout(() => mapRef.current?.resize(), 150);
+    const m = mapRef.current; if (m) { m.dragPan.enable(); m.touchZoomRotate.enable(); m.scrollZoom.enable(); m.doubleClickZoom.enable(); m.keyboard.enable(); }
+    setTimeout(() => mapRef.current?.resize(), 200);
     if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
     mapRef.current?.easeTo({ center: [10.68466, 44.38851], zoom: 15.6, pitch: 55, bearing: 168, duration: 2200 } as any);
   };
@@ -654,27 +656,27 @@ export default function Gemello() {
             <div className="volo-banda bottom-0" />
             <div className="grana" />
             <button onClick={(e) => { e.stopPropagation(); fermaVolo(); }}
-              className="absolute top-[9%] right-3 z-40 text-neutral-400 hover:text-white text-sm px-2 py-1" title="Esci dal volo">{'\u2716'} esci</button>
+              className="absolute top-[6%] sm:top-[9%] right-3 z-40 text-neutral-400 hover:text-white text-sm px-2 py-1" title="Esci dal volo">{'\u2716'} esci</button>
             {voloIdx === -1 && (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 hero-el pointer-events-none">
                 <p className="text-[11px] tracked gold mb-3">San Martino Vallata &middot; dal cielo alle case</p>
-                <h2 className="font-display text-4xl sm:text-6xl text-white leading-tight">Il volo delle voci</h2>
+                <h2 className="font-display text-3xl sm:text-6xl text-white leading-tight">Il volo delle voci</h2>
                 <p className="text-neutral-300 text-sm sm:text-base mt-4 max-w-md">Ogni casa ha una voce del 1987. Il volo scende da una all&rsquo;altra e le lascia parlare.</p>
                 <p className="text-[10px] uppercase tracking-[0.2em] text-neutral-500 mt-8">un tocco per andare avanti &middot; esc per uscire</p>
               </div>
             )}
             {voloIdx >= 0 && voloIdx < ROTTA.length && (
-              <div className="absolute top-[9%] left-3 sm:left-6 z-40 hero-el pointer-events-none">
+              <div className="absolute top-[6%] sm:top-[9%] left-3 sm:left-6 right-16 z-40 hero-el pointer-events-none">
                 <p className="text-[10px] uppercase tracking-[0.25em] text-amber-300">{voloCasa ? 'Qui abitava \u00B7 la sua voce, 1987' : 'in volo verso\u2026'}</p>
-                <h2 className="font-display text-3xl sm:text-5xl text-white leading-tight drop-shadow">La casa di {ROTTA[voloIdx].nome}</h2>
+                <h2 className="font-display text-2xl sm:text-5xl text-white leading-tight drop-shadow">La casa di {ROTTA[voloIdx].nome}</h2>
                 <p className="text-[11px] text-neutral-400 mt-1">{ROTTA[voloIdx].dove}</p>
               </div>
             )}
             {voloIdx >= 0 && voloIdx < ROTTA.length && voloCasa && (
-              <div className="absolute bottom-[9%] left-1/2 -translate-x-1/2 z-40 w-[min(92%,520px)] hero-el">
+              <div className="absolute bottom-[6%] sm:bottom-[9%] left-1/2 -translate-x-1/2 z-40 w-[min(92%,520px)] hero-el">
                 <video key={ROTTA[voloIdx].id} ref={voloVid} src={'./voci/' + ROTTA[voloIdx].id + '.mp4'} playsInline
                   onEnded={prossimaCasa} onError={() => setTimeout(prossimaCasa, 1200)}
-                  className="w-full bg-black border border-[#C9A227]/40 shadow-2xl" />
+                  className="block mx-auto max-h-[32dvh] sm:max-h-none w-auto sm:w-full max-w-full bg-black border border-[#C9A227]/40 shadow-2xl" />
                 {voloTap && (
                   <button onClick={(e) => { e.stopPropagation(); voloVid.current?.play().then(() => setVoloTap(false)).catch(() => {}); }}
                     className="absolute inset-0 flex items-center justify-center bg-black/60 text-white font-display text-2xl">
@@ -692,7 +694,7 @@ export default function Gemello() {
             {voloIdx >= ROTTA.length && (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 hero-el">
                 <p className="text-[11px] tracked gold mb-3">Il volo finisce qui, per ora</p>
-                <h2 className="font-display text-3xl sm:text-5xl text-white leading-tight max-w-2xl">Le altre voci del film le stiamo riportando a casa, una per una.</h2>
+                <h2 className="font-display text-2xl sm:text-5xl text-white leading-tight max-w-2xl">Le altre voci del film le stiamo riportando a casa, una per una.</h2>
                 <div className="flex flex-wrap gap-3 justify-center mt-8">
                   <button onClick={(e) => { e.stopPropagation(); setVoloIdx(-1); }} className="bg-white text-black px-6 py-3 text-[11px] uppercase tracking-[0.2em] font-semibold hover:bg-[#E0BF5C] transition">{'\u21BB'} Rivola</button>
                   <a href="#/camminata" onClick={(e) => e.stopPropagation()} className="border border-neutral-500 text-white px-6 py-3 text-[11px] uppercase tracking-[0.2em] hover:border-white transition">{'\uD83D\uDEB6'} Vai a piedi: la camminata</a>

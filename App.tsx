@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { PROGETTI, STORIE, EVENTO_URL, WHATSAPP_URL, EMAIL, Progetto } from './data';
 import Gemello from './Gemello';
 import Gramignata from './Gramignata';
-import StaffEvento from './StaffEvento';
 import Idee from './Idee';
 import Memorie from './Memorie';
 import Voci from './Voci';
@@ -16,6 +15,17 @@ const routeFromHash = (): Route => {
   const h = location.hash.replace('#/', '').split('?')[0];
   return (['progetti', 'gemello', 'storie', 'memorie', 'voci', 'sostienici', 'chisiamo', 'gramignata', 'idee', 'staff', 'camminata', 'presentazione'].includes(h) ? h : 'home') as Route;
 };
+
+/** Pagine spostate nell'app delle feste: reindirizza (con link di riserva). */
+function VaiAllApp({ to, testo }: { to: string; testo: string }) {
+  useEffect(() => { location.replace(to); }, [to]);
+  return (
+    <div className="pt-24 text-center space-y-3">
+      <p className="text-neutral-400 text-sm">{testo} si è spostata nell'app delle feste.</p>
+      <a href={to} className="text-[11px] tracked text-neutral-200 underline underline-offset-4">Apri</a>
+    </div>
+  );
+}
 
 const eur = (n: number) => n.toLocaleString('it-IT') + ' €';
 
@@ -195,16 +205,15 @@ function Home() {
         <Card className="border-amber-400/40">
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="flex-1 text-center sm:text-left">
-              <Label>L'estate continua · venerdì 21 e 28 agosto</Label>
-              <h2 className="font-display text-3xl text-white">Ciaccio &amp; Slô</h2>
+              <Label>Domenica 15 novembre · ore 12:30</Label>
+              <h2 className="font-display text-3xl text-white">Festa di San Martino</h2>
               <p className="text-neutral-300 text-sm mt-2">
-                Apericena a buffet alla Chiesa di San Martino: spritz, birra, crescentine e ciacci —
-                e la specialità della casa, <span className="text-white">il ciaccio con gelato</span>,
-                tre gusti assortiti, come una focaccina da gelateria (lo "slô", per chi è della valle).
-                Musica 70–80–90: la playlist della valle. Aperto a tutti, <span className="text-white">paghi quanto vuoi</span>.
+                Il pranzo del paese alla Chiesa di San Martino: <span className="text-white">polenta con ragù o funghi</span>,
+                caldarroste e vino novello. 15 € adulti, 5 € bambini fino a 14 anni, si paga alla festa.
+                Posti limitati: prenota entro giovedì 12 novembre.
               </p>
             </div>
-            <BtnLink href={"https://wa.me/?text=" + encodeURIComponent("Ciaccio & Slô — venerdì 21 e 28 agosto alla Chiesa di San Martino Vallata. Apericena a buffet e ciaccio col gelato, musica 70-80-90. Aperto a tutti, paghi quanto vuoi! https://ubidefuit.github.io/san-martino/")} external primary>Passaparola</BtnLink>
+            <BtnLink href="./app/" primary>Prenota il pranzo</BtnLink>
           </div>
         </Card>
         <Card>
@@ -662,7 +671,7 @@ export default function App() {
         {route === 'sostienici' && <Sostienici />}
         {route === 'chisiamo' && <ChiSiamo />}
         {route === 'gramignata' && <Gramignata />}
-        {route === 'staff' && <StaffEvento />}
+        {route === 'staff' && <VaiAllApp to="./app/#/staff" testo="L'area staff" />}
         {route === 'idee' && <Idee />}
         {route === 'camminata' && <Camminata />}
       </main>

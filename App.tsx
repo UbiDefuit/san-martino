@@ -205,11 +205,12 @@ function Home() {
         <Card className="border-amber-400/40">
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="flex-1 text-center sm:text-left">
-              <Label>Domenica 15 novembre · ore 12:30</Label>
+              <Label>Domenica 15 novembre · ore 12</Label>
               <h2 className="font-display text-3xl text-white">Festa di San Martino</h2>
               <p className="text-neutral-300 text-sm mt-2">
-                Il pranzo del paese alla Chiesa di San Martino: <span className="text-white">polenta con ragù o funghi</span>,
-                caldarroste e vino novello. 15 € adulti, 5 € bambini fino a 14 anni, si paga alla festa.
+                Il pranzo del paese alla Chiesa di San Martino: aperitivo e antipasto,
+                <span className="text-white"> polenta al ragù, con funghi e salsiccia o solo funghi</span> (fino a due porzioni a testa),
+                poi caldarroste, vin brulé e dolci. 20 € adulti, 10 € bambini fino a 14 anni, si paga alla festa.
                 Posti limitati: prenota entro giovedì 12 novembre.
               </p>
             </div>

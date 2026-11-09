@@ -209,7 +209,7 @@ function Home() {
               <h2 className="font-display text-3xl text-white">Festa di San Martino</h2>
               <p className="text-neutral-300 text-sm mt-2">
                 Il pranzo del paese alla Chiesa di San Martino: aperitivo e antipasto,
-                <span className="text-white"> polenta al ragù, con funghi e salsiccia o solo funghi</span> (fino a due porzioni a testa),
+                <span className="text-white"> polenta al ragù, al cinghiale, con funghi e salsiccia o solo funghi</span> (fino a due porzioni a testa),
                 poi caldarroste, vin brulé e dolci. A offerta libera: tutto quello che raccogliamo va al progetto
                 <span className="text-white"> «Le voci di San Martino»</span>. Posti limitati: prenota entro giovedì 12 novembre.
               </p>

@@ -499,7 +499,7 @@ function ChiSiamo() {
       <Card>
         <Label>Otto anni di cose fatte</Label>
         <ul className="text-neutral-200 text-[15px] leading-relaxed space-y-2">
-          <li>· La <span className="text-white">Festa di San Martino</span> ogni novembre — polenta, vino novello e castagne</li>
+          <li>· La <span className="text-white">Festa di San Martino</span> ogni novembre — polenta e castagne</li>
           <li>· Il <span className="text-white">centro estivo</span> per i ragazzi della valle</li>
           <li>· Una dotazione tutta nostra: <span className="text-white">tensostruttura, tavoli, cucina attrezzata, luci esterne</span></li>
           <li>· La <span className="text-white">canonica</span> della parrocchia, nostra sede, di cui curiamo la manutenzione</li>

@@ -210,8 +210,8 @@ function Home() {
               <p className="text-neutral-300 text-sm mt-2">
                 Il pranzo del paese alla Chiesa di San Martino: aperitivo e antipasto,
                 <span className="text-white"> polenta al ragù, con funghi e salsiccia o solo funghi</span> (fino a due porzioni a testa),
-                poi caldarroste, vin brulé e dolci. 20 € adulti, 10 € bambini fino a 14 anni, si paga alla festa.
-                Posti limitati: prenota entro giovedì 12 novembre.
+                poi caldarroste, vin brulé e dolci. A offerta libera: tutto quello che raccogliamo va al progetto
+                <span className="text-white"> «Le voci di San Martino»</span>. Posti limitati: prenota entro giovedì 12 novembre.
               </p>
             </div>
             <BtnLink href="./app/" primary>Prenota il pranzo</BtnLink>
